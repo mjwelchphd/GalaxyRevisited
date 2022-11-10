@@ -126,12 +126,75 @@ In _Galaxy Revisited_, however, whenever the database is restored to its nominal
 
 ### <a id="f160e10e-3418-492f-8f01-839ef9af2f81">Setting up your Mac</a>
 
-You need a Mac and Xcode to build this project, unless you're already a skilled Mac developer.
+This project was designed to be developed on a Mac computer and deployed on an Amazon AWS EC2 instance using a Amazon Linux2 Server. If you don't have that setup, you can still use this document, but you'll have to figure out the differences between what you have and our suggested setup.
+
+The project documentation is comprised largely of two sections, development on a Mac with Xcode, and production (deployment) on an Amazon AWS EC2 server. The good news is that almost any Linux will work fine, but keep in mind that there are two ancestors to most Linux systems, RedHat and Debian. There will be small differences between them, such as, RedHat uses _yum_ and Debian uses _apt_. If you are experienced with Linux, you probably already know the differences and will have no trouble.
+
+Also, you can develop on the Linux system; it's just far less convenient and will cost you much more time. If you have a significant project, you will be well served by buying a Mac for Xcode development. It'll be much easier, save lots of time, and, most importantly, be more fun.
 
 ### <a id="d3d0186b-ced6-4856-8b86-a3afac8d8de9">Cloning Galaxy Revisited</a>
 
+You can find [_GalaxyRevisited_ on GitHub](https://github.com/mjwelchphd/GalaxyRevisited).
+
+Click the green _Code_ button, and from the dropdown, click the copy icon ![](Resources/Images/copy-icon.png).
+
+Open a terminal window on your Mac, and _cd_ to the place where you want the project to go. Enter:
+
+```script
+git clone ⌘v
+cd GalaxyRevisited
+ls -hAlt
+```
+
+You should get:
+
+```script
+total 320
+drwxr-xr-x  12 mike  staff   384B Nov  9 19:19 .git
+-rw-r--r--   1 mike  staff   1.8K Nov  9 19:19 docker-compose.yml
+drwxr-xr-x   3 mike  staff    96B Nov  9 19:19 Tests
+drwxr-xr-x   4 mike  staff   128B Nov  9 19:19 Sources
+drwxr-xr-x   4 mike  staff   128B Nov  9 19:19 Resources
+-rw-r--r--   1 mike  staff    98K Nov  9 19:19 README.md
+drwxr-xr-x   5 mike  staff   160B Nov  9 19:19 Public
+-rw-r--r--   1 mike  staff   1.3K Nov  9 19:19 Package.swift
+-rw-r--r--   1 mike  staff   7.2K Nov  9 19:19 Package.resolved
+-rw-r--r--   1 mike  staff    34K Nov  9 19:19 LICENSE
+-rw-r--r--   1 mike  staff   2.6K Nov  9 19:19 Dockerfile
+-rw-r--r--   1 mike  staff    97B Nov  9 19:19 .gitignore
+```
+
 ### <a id="b8756003-fa48-4203-8abf-b048349670d0">Building on Xcode</a>
 
+Double-click the _Package.swift_ icon. The project will open in Xcode. Click GalaxyRevisited in the navigator pane, and the Package.swift file should open.
+
+> **Important**
+
+> Click the schema editor dropdown menu ![](Resources/Images/schema-dropdown.png) and select _Edit Scheme_. In the scheme edit window, select _Run_ on the left hand side, and _Options_ at the top bar. Go down to _Working Directory_ and check _Use custom working directory_, and select the _GalaxyRevisited_ project folder. Repeat this for _Profile_. If you don't do this, some resources won't be found when you run the app.
+
+
+
+Click in the editor window, then type ```⌘U``` and the project will build and tests will run. This took less than 30 seconds the first time. After the first time, it takes only a few seconds.
+
+You should see the _Build Succeeded_ and _Test Succeeded_ windows pop up one at a time on the screen.
+
+Open the _output_ window at the bottom right of the Xcode editor window ![](Resources/Images/open-outputs.png), then type the Run command ```⌘R``` or click the run button ![](Resources/Images/run-button.png) and if the _Developer Tools Access_ dialog opens, enter your logon password and click _continue_, then you should see:
+
+```script
+[ NOTICE ] Server starting on http://127.0.0.1:8080
+```
+
+in the _output_ window. To test the app, run your browser and enter:
+
+```script
+http://localhost:8080/
+```
+
+and the welcome page should be displayed.
+
+![Home Page](Resources/Images/home-page.png)
+
+To stop execution, click the _stop_ button ![Home Page](Resources/Images/stop-button.png).
 
 <!--section-break-section-break-section-break-section-break-section-break-section-break-->
 
