@@ -145,7 +145,7 @@
 
 <p>Before going any further, it&#8217;s important to say that this app (with its documentation) doesn&#8217;t replace the official <a href="https://docs.vapor.codes">Vapor-Fluent documentation</a>; it clarifies and demonstrates it. My recommendation is to read through the official documentation quickly to get a feel for what&#8217;s there, but don&#8217;t dwell on it. Then come here and work with the <em>Galaxy Revisited</em> app to get hands-on experience. After you get the gist of it all, you can use both as reference materials.</p>
 
-<p>Below you can see a diagram of the app&#8217;s page flow. You can see how simple it is, yet it demonstrates the foundation of every server-side Swift app. It starts with a welcome page; that takes you to the galaxy page which in turn allows you to create, read, update, and delete galaxies&#8230; CRUD, as it&#8217;s commonly referred to. There are two database tables, galaxies, and stars which are used to demonstrate links using UUIDs in a one-to-many relationship.</p>
+<p>Below you can see a diagram of the app&#8217;s page flow. You can see how simple it is, yet it demonstrates the foundation of every server-side Swift app. It starts with a welcome page; that takes you to the galaxy page which in turn allows you to create, read, update, and delete galaxies&#8230; CRUD, as it&#8217;s commonly referred to. There are two database tables, galaxies, and stars which are used to demonstrate links using UUIDs in a one-to-many relationship (see <a href="https://en.wikipedia.org/wiki/Universally_unique_identifier">the Wikipedia article on UUIDs</a> for more information).</p>
 
 <figure>
 <img src="Resources/Images/galaxy-map.png" alt="Galaxy Map" />
@@ -156,7 +156,7 @@
 
 <p>Run it and examine the data flow. You can make changes to see what&#8217;ll happen, and at any time, revert it and start again. Experimentation of this sort is where you learn the most, especially when there&#8217;s nothing at risk. Note that the chart above doesn&#8217;t show the <em>home</em> links which you find on every page.</p>
 
-<p>As is common in Vapor-Fluent databases, the tables use a UUID for the primary key (see Addendum A). <em>Galaxy Revisited</em> is designed such that the user (nominally) never sees a UUID, but <em>show</em> pages show them just for instructional purposes. In a real application, the UUIDs in the database table are generally used by other tables to reference a record in this one. Normally, <em><strong>they would never change</strong></em> because that would break the link between tables.</p>
+<p>As is common in Vapor-Fluent databases, the tables use a UUID for the primary key. <em>Galaxy Revisited</em> is designed such that the user (nominally) never sees a UUID, but <em>show</em> pages show them just for instructional purposes. In a real application, the UUIDs in the database table are generally used by other tables to reference a record in this one. Normally, <em><strong>they would never change</strong></em> because that would break the link between tables.</p>
 
 <p>In <em>Galaxy Revisited</em>, however, whenever the database is restored to its nominal content, or a test is run, the database data is erased and replaced with fresh, new data in which all the UUIDs are also new. This ability is useful for testing, where you want to be able to have non-repeatable data to discover errors caused by stale data. In a real app, the test database and the production database would be separate, but in <em>Galaxy Revisited</em> no effort has been made to make them so. Here&#8217;s an area you could experiment with.</p>
 
@@ -328,7 +328,7 @@ drwxr-xr-x   5 mike  staff   160B Nov  9 19:19 Public
 
 <p>This style would be considered a model-view-controller (MVC) style, but Galaxy Revisited isn&#8217;t tightly bound to that style and considers MVC to be more of a <em>suggested pattern</em> of design. Do what&#8217;s best for your project; don&#8217;t manipulate your code to comply with a style strictly for the sake of compliance. Think pragmatically.</p>
 
-<p>A big difference you&#8217;ll see in <em>Galaxy Revisited</em> is the use of DTOs or Data Transfer Objects (see Addendum C); here we refer to them as <em>contexts</em>.</p>
+<p>A big difference you&#8217;ll see in <em>Galaxy Revisited</em> is the use of DTOs or Data Transfer Objects (see the <a href="#0537ec6b-30bf-4d3d-a84b-6492e321461b">section on DTOs</a> for more information); here we refer to them as <em>contexts</em>.</p>
 
 <p>The project folder for <em>Galaxy Revisited</em> looks like this:</p>
 <pre><code class="diagram">Project Folder
@@ -378,9 +378,7 @@ drwxr-xr-x   5 mike  staff   160B Nov  9 19:19 Public
 
 <p>Although the app &#8220;starts&#8221; here, in reality, the Swift code just sets up the Vapor environment and starts Vapor. Once Vapor is running, it listens for connections and handles requests. As part of the configuration process, this code calls <em>configure.swift</em>, and that opens the database, runs the migration, and initializes the routes tables.</p>
 
-<p>Main starts by calling <em>configure.swift</em>, and that opens the database first. If there isn&#8217;t a database, <em>sqlite</em> will create it. If the database gets created during the initial startup of <em>Galaxy Revisited</em>, it won&#8217;t have any tables in it. Those will get created during the migration process, but they&#8217;ll be empty tables.</p>
-
-<p>!TODO mention MySQL</p>
+<p>Main starts by calling <em>configure.swift</em>, and that opens the database first. If there isn&#8217;t a database, and you&#8217;re using <em>sqlite</em>, it will create it. If you&#8217;re using MySQL, you have to do that yourself manually using MySQL utilities (see <a href="#8bc06efc-2f30-425b-a65a-43ed44cb4add">how it&#8217;s done on AWS</a>). If the database gets created during the initial startup of <em>Galaxy Revisited</em>, it won&#8217;t have any tables in it. Those will get created during the migration process, but they&#8217;ll be empty tables.</p>
 
 <p>There are two migrations, one for <em>galaxies</em> and the other for <em>stars</em>. Note that migrations are run in the order they are defined, <em>galaxies</em> first, then <em>stars</em> because when creating the stars, the galaxies (the parents) must already be present. That&#8217;s evident in <em>createUniverses.swift</em>. Having a set of starting data makes it easier to jump right in and start learning.</p>
 

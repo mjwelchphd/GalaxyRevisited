@@ -95,7 +95,7 @@ _Galaxy Revisited_ is very basic. It's intended to be used in conjunction with T
 
 Before going any further, it's important to say that this app (with its documentation) doesn't replace the official [Vapor-Fluent documentation](https://docs.vapor.codes); it clarifies and demonstrates it. My recommendation is to read through the official documentation quickly to get a feel for what's there, but don't dwell on it. Then come here and work with the _Galaxy Revisited_ app to get hands-on experience. After you get the gist of it all, you can use both as reference materials.
 
-Below you can see a diagram of the app's page flow. You can see how simple it is, yet it demonstrates the foundation of every server-side Swift app. It starts with a welcome page; that takes you to the galaxy page which in turn allows you to create, read, update, and delete galaxies... CRUD, as it's commonly referred to. There are two database tables, galaxies, and stars which are used to demonstrate links using UUIDs in a one-to-many relationship.
+Below you can see a diagram of the app's page flow. You can see how simple it is, yet it demonstrates the foundation of every server-side Swift app. It starts with a welcome page; that takes you to the galaxy page which in turn allows you to create, read, update, and delete galaxies... CRUD, as it's commonly referred to. There are two database tables, galaxies, and stars which are used to demonstrate links using UUIDs in a one-to-many relationship (see [the Wikipedia article on UUIDs](https://en.wikipedia.org/wiki/Universally_unique_identifier) for more information).
 
 ![_Galaxy Map_](Resources/Images/galaxy-map.png)
 
@@ -103,7 +103,7 @@ As you experiment with this app, you can save your place using Git (Xcode Menu -
 
 Run it and examine the data flow. You can make changes to see what'll happen, and at any time, revert it and start again. Experimentation of this sort is where you learn the most, especially when there's nothing at risk. Note that the chart above doesn't show the _home_ links which you find on every page.
 
-As is common in Vapor-Fluent databases, the tables use a UUID for the primary key (see Addendum A). _Galaxy Revisited_ is designed such that the user (nominally) never sees a UUID, but _show_ pages show them just for instructional purposes. In a real application, the UUIDs in the database table are generally used by other tables to reference a record in this one. Normally, _**they would never change**_ because that would break the link between tables.
+As is common in Vapor-Fluent databases, the tables use a UUID for the primary key. _Galaxy Revisited_ is designed such that the user (nominally) never sees a UUID, but _show_ pages show them just for instructional purposes. In a real application, the UUIDs in the database table are generally used by other tables to reference a record in this one. Normally, _**they would never change**_ because that would break the link between tables.
 
 In _Galaxy Revisited_, however, whenever the database is restored to its nominal content, or a test is run, the database data is erased and replaced with fresh, new data in which all the UUIDs are also new. This ability is useful for testing, where you want to be able to have non-repeatable data to discover errors caused by stale data. In a real app, the test database and the production database would be separate, but in _Galaxy Revisited_ no effort has been made to make them so. Here's an area you could experiment with.
 
@@ -295,7 +295,7 @@ When you organize your code this way, you'll find that you spend most of your ti
 
 This style would be considered a model-view-controller (MVC) style, but Galaxy Revisited isn't tightly bound to that style and considers MVC to be more of a _suggested pattern_ of design. Do what's best for your project; don't manipulate your code to comply with a style strictly for the sake of compliance. Think pragmatically.
 
-A big difference you'll see in _Galaxy Revisited_ is the use of DTOs or Data Transfer Objects (see Addendum C); here we refer to them as _contexts_.
+A big difference you'll see in _Galaxy Revisited_ is the use of DTOs or Data Transfer Objects (see the [section on DTOs](#0537ec6b-30bf-4d3d-a84b-6492e321461b) for more information); here we refer to them as _contexts_.
 
 The project folder for _Galaxy Revisited_ looks like this:
 
@@ -354,9 +354,7 @@ The project structure in the _Xcode navigator_ is decidedly not top-down, but al
 
 Although the app "starts" here, in reality, the Swift code just sets up the Vapor environment and starts Vapor. Once Vapor is running, it listens for connections and handles requests. As part of the configuration process, this code calls _configure.swift_, and that opens the database, runs the migration, and initializes the routes tables.
 
-Main starts by calling _configure.swift_, and that opens the database first. If there isn't a database, _sqlite_ will create it. If the database gets created during the initial startup of _Galaxy Revisited_, it won't have any tables in it. Those will get created during the migration process, but they'll be empty tables.
-
-!TODO mention MySQL
+Main starts by calling _configure.swift_, and that opens the database first. If there isn't a database, and you're using _sqlite_, it will create it. If you're using MySQL, you have to do that yourself manually using MySQL utilities (see [how it's done on AWS](#8bc06efc-2f30-425b-a65a-43ed44cb4add)). If the database gets created during the initial startup of _Galaxy Revisited_, it won't have any tables in it. Those will get created during the migration process, but they'll be empty tables.
 
 There are two migrations, one for _galaxies_ and the other for _stars_. Note that migrations are run in the order they are defined, _galaxies_ first, then _stars_ because when creating the stars, the galaxies (the parents) must already be present. That's evident in _createUniverses.swift_. Having a set of starting data makes it easier to jump right in and start learning.
 
