@@ -22,14 +22,13 @@
     * [Is Galaxy Revisited a perfect example of how to write a Swift application?](#9b4e0c23-28cf-4c84-a4d1-5b2519a534f7)
 - [The Structure of a Swift-Vapor Web Server](#4ac343ac-7226-491e-a998-6fe3f11b7b3d)
 - [Taking a Top-Down Approach](#b697e262-34d1-49ad-b3bf-47397f099256)
-    * [Vapor starts at _main.swift_](#c8c787eb-a4e6-4c9a-a0b4-978fe378b598)
     * [All requests are handled in the same way](#acd964bf-49f2-4978-bc0e-1dfadd69e5b3)
 - [Writing HTML Using SwiftHtml](#169212cd-5a8c-4188-a99d-a0fd34529d04)
     * [Templates and Contexts](#5d5d3686-d439-4d3b-84c3-e1ee441be6bf)
 - [The Fluent Model---GalaxyModel.swift](#444859ab-bbb2-4004-a9c4-1002f11b3be5)
     * [Model Definition](#f31412bb-ddac-4e79-93d2-5da330fd3ed2)
     * [How data is passed between Models and Contexts](#edab8c0b-40ea-4084-86cc-943338b22822)
-    * [Vapor starts at _main.swift_](#c8c787eb-a4e6-4c9a-a0b4-978fe378b598)
+- [Vapor starts at _main.swift_](#c8c787eb-a4e6-4c9a-a0b4-978fe378b598)
 - [The Home page](#5c12f813-336a-4977-8a14-727949b4ae0b)
 - [The List All Galaxies Page](#91c02c29-ef1a-4ffa-bad4-bf55e98b6227)
     * [Show-1 Show a Galaxy](#050b0c8e-e579-4d21-b023-815c84d59c1a)
@@ -38,6 +37,7 @@
     * [List Stars](#49699549-3b9f-4ec8-b85e-e944ad53dd00)
     * [Show a galaxy given the UUID](#31517612-5650-4040-8068-a12ef7e27fe5)
     * [Summary of the Show Links and Button](#c4ca2448-cc48-43a9-bd56-38a1ddfcde18)
+- [Add a Galaxy Page](#ab2dbcea-ffd1-49c4-857a-dc7d02df1712)
 - [Show a Galaxy Page](#c1b25a9b-e2b7-4357-8192-fcea2cf58b6f)
     * [Update](#75279c44-4cc0-4dc9-85bf-d27b12a568bd)
     * [Delete](#3028b51f-45b7-4abb-b357-474c6ffecd75)
@@ -46,7 +46,7 @@
     * [_POST Delete_ request using a _form_](#ee8f64fa-2b8d-4624-b1a7-7e3e833dfee1)
     * [_POST Add_ request using a _form_](#470fd552-7859-4aec-ae5c-89d4573a2d92)
 - [List All Stars Page](#c507e1d9-7ddf-41ab-bb64-fc22f3ee11a6)
-    * [How to Query a Galaxy and its Stars](#1c107f53-534b-4836-b1e4-129c1f0c9c36)
+    * [How to Query a Galaxy and it's Stars](#1c107f53-534b-4836-b1e4-129c1f0c9c36)
     * [Show One Star](#1adfc405-a0e6-4d37-a7fd-62e24e9dd641)
     * [Add, Update and Delete A Star](#d6e27e60-b7e1-4a75-9415-3b9e45adea84)
 - [Add a Star Page](#582e1de9-bd73-446d-93a3-61a231b0f180)
@@ -350,24 +350,6 @@ The project structure in the _Xcode navigator_ is decidedly not top-down, but al
 <!--section-break-section-break-section-break-section-break-section-break-section-break-->
 
 
-### <a id="c8c787eb-a4e6-4c9a-a0b4-978fe378b598">Vapor starts at _main.swift_</a>
-
-Although the app "starts" here, in reality, the Swift code just sets up the Vapor environment and starts Vapor. Once Vapor is running, it listens for connections and handles requests. As part of the configuration process, this code calls _configure.swift_, and that opens the database, runs the migration, and initializes the routes tables.
-
-Main starts by calling _configure.swift_, and that opens the database first. If there isn't a database, and you're using _sqlite_, it will create it. If you're using MySQL, you have to do that yourself manually using MySQL utilities (see [how it's done on AWS](#8bc06efc-2f30-425b-a65a-43ed44cb4add)). If the database gets created during the initial startup of _Galaxy Revisited_, it won't have any tables in it. Those will get created during the migration process, but they'll be empty tables.
-
-There are two migrations, one for _galaxies_ and the other for _stars_. Note that migrations are run in the order they are defined, _galaxies_ first, then _stars_ because when creating the stars, the galaxies (the parents) must already be present. That's evident in _createUniverses.swift_. Having a set of starting data makes it easier to jump right in and start learning.
-
-That means that the very first time _Galaxy Revisited_ is run (before the database exists), you have to select _Create - restore the test galaxies and stars_ on the home page (unless, by chance you run the tests first, in which case the tests did the _Create_ function). If you want to use another database such as PostgreSQL or MySql, you may have other things you'll have to do to set up the database that is beyond the scope of this book.
-
-The last thing _configure_ does is load the routes, and after that, Vapor waits for requests. To see the main (Welcome) page, you have to start the app running in Xcode and enter the URL _http://localhost:8080/_ into your browser. From there, you can follow links all around the app.
-
-[back to contents](#contents)<hr/>
-
-
-<!--section-break-section-break-section-break-section-break-section-break-section-break-->
-
-
 ### <a id="acd964bf-49f2-4978-bc0e-1dfadd69e5b3">All requests are handled in the same way</a>
 
 All requests in controllers begin with a _Request_ object. They mostly follow the pattern
@@ -636,17 +618,15 @@ GalaxiesContext is just an array of GalaxyContexts. Notice that there is another
 <!--section-break-section-break-section-break-section-break-section-break-section-break-->
 
 
-### <a id="c8c787eb-a4e6-4c9a-a0b4-978fe378b598">Vapor starts at _main.swift_</a>
+## <a id="c8c787eb-a4e6-4c9a-a0b4-978fe378b598">Vapor starts at _main.swift_</a>
 
-Although the app "starts" here, in reality, the Swift code just sets up the Vapor environment and starts Vapor. Once Vapor is running, it listens for connections and handles requests. As part of the configuration process, this code calls _configure.swift_, and that opens the database, runs the migration, and initializes the routes table.
+Although the app "starts" here, in reality, the Swift code just sets up the Vapor environment and starts Vapor. Once Vapor is running, it listens for connections and handles requests. As part of the configuration process, this code calls _configure.swift_, and that opens the database, runs the migration, and initializes the routes tables.
 
-Main starts by calling _configure.swift_, and that opens the database first. If there isn't a database, _sqlite_ will create it. If the database gets created during the initial startup of _Galaxy Revisited_, it won't have any tables in it. Those will get created during the migration process, but they'll be empty tables.
-
-!TODO mention MySQL
+Main starts by calling _configure.swift_, and that opens the database first. If there isn't a database, and you're using _sqlite_, it will create it. If you're using MySQL, you have to do that yourself manually using MySQL utilities (see [how it's done on AWS](#8bc06efc-2f30-425b-a65a-43ed44cb4add)). If the database gets created during the initial startup of _Galaxy Revisited_, it won't have any tables in it. Those will get created during the migration process, but they'll be empty tables.
 
 There are two migrations, one for _galaxies_ and the other for _stars_. Note that migrations are run in the order they are defined, _galaxies_ first, then _stars_ because when creating the stars, the galaxies (the parents) must already be present. That's evident in _createUniverses.swift_. Having a set of starting data makes it easier to jump right in and start learning.
 
-That means that the very first time _Galaxy Revisited_ is run (before the database exists), you have to select _Create - restore the test galaxies and stars_ on the home page (unless, by chance you run the tests first, in which case the tests did the _Create_ function). If you want to use another database such as PostgreSQL or MySql, you may have other things you'll have to do to set up the database that are beyond the scope of this book.
+That means that the very first time _Galaxy Revisited_ is run (before the database exists), you have to select _Create - restore the test galaxies and stars_ on the home page (unless, by chance you run the tests first, in which case the tests did the _Create_ function). If you want to use another database such as PostgreSQL or MySql, you may have other things you'll have to do to set up the database that is beyond the scope of this book.
 
 The last thing _configure_ does is load the routes, and after that, Vapor waits for requests. To see the main (Welcome) page, you have to start the app running in Xcode and enter the URL _http://localhost:8080/_ into your browser. From there, you can follow links all around the app.
 
@@ -904,6 +884,16 @@ The read cycle is now complete. You've seen three different ways to pass the gal
 let galaxy = try await GalaxyModel.find(optionalUuid, on: req.db)
 return req.templates.renderHtml(GalaxyShowTemplate(GalaxyContext(model: galaxy)))
 ```
+
+[back to contents](#contents)<hr/>
+
+
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+
+## <a id="ab2dbcea-ffd1-49c4-857a-dc7d02df1712">Add a Galaxy Page</a>
+
+!TODO
 
 [back to contents](#contents)<hr/>
 
@@ -1879,6 +1869,7 @@ To stop it, use \<ctrl>C.
 
 #### <a id="a3e7dac7-6273-4c78-948a-320a95f48a66">Updating Galaxy Revisited on AWS After Initial Installation</a>
 
+!TODO
 
 [back to contents](#contents)<hr/>
 
@@ -1965,6 +1956,11 @@ Now enter `http://<your-aws-address>/hello` in your browser and see what you get
 Now your EC2 instance is a full-fledged Internet web server, and with Nginx, it'll be much easier to test it to see if everything is as you expect it to be.
 
 > **Warning**: You'll probably see your app reporting requests when you're running your `myProject`, but didn't do anything with your browser. There're thousands of hackers trying to find websites to break into from countries all around the globe. They're active 24/7 and they **will** find your `myProject` running and try to break into it (if you leave it running for a while). That's what you'll see. For now, there's nothing for them here, so ignore them. In future chapters, you'll learn how to protect your Swift website against hackers.
+
+[back to contents](#contents)<hr/>
+
+
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
 
 
 ### <a id="150500ab-3243-4a27-9526-61b157769741">Running Galaxy Revisited As A Daemon</a>

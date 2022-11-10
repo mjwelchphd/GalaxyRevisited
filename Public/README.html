@@ -37,7 +37,6 @@
 <li><a href="#b697e262-34d1-49ad-b3bf-47397f099256">Taking a Top-Down Approach</a>
 
 <ul>
-<li><a href="#c8c787eb-a4e6-4c9a-a0b4-978fe378b598">Vapor starts at <em>main.swift</em></a></li>
 <li><a href="#acd964bf-49f2-4978-bc0e-1dfadd69e5b3">All requests are handled in the same way</a></li>
 </ul></li>
 <li><a href="#169212cd-5a8c-4188-a99d-a0fd34529d04">Writing HTML Using SwiftHtml</a>
@@ -50,8 +49,8 @@
 <ul>
 <li><a href="#f31412bb-ddac-4e79-93d2-5da330fd3ed2">Model Definition</a></li>
 <li><a href="#edab8c0b-40ea-4084-86cc-943338b22822">How data is passed between Models and Contexts</a></li>
-<li><a href="#c8c787eb-a4e6-4c9a-a0b4-978fe378b598">Vapor starts at <em>main.swift</em></a></li>
 </ul></li>
+<li><a href="#c8c787eb-a4e6-4c9a-a0b4-978fe378b598">Vapor starts at <em>main.swift</em></a></li>
 <li><a href="#5c12f813-336a-4977-8a14-727949b4ae0b">The Home page</a></li>
 <li><a href="#91c02c29-ef1a-4ffa-bad4-bf55e98b6227">The List All Galaxies Page</a>
 
@@ -63,6 +62,7 @@
 <li><a href="#31517612-5650-4040-8068-a12ef7e27fe5">Show a galaxy given the UUID</a></li>
 <li><a href="#c4ca2448-cc48-43a9-bd56-38a1ddfcde18">Summary of the Show Links and Button</a></li>
 </ul></li>
+<li><a href="#ab2dbcea-ffd1-49c4-857a-dc7d02df1712">Add a Galaxy Page</a></li>
 <li><a href="#c1b25a9b-e2b7-4357-8192-fcea2cf58b6f">Show a Galaxy Page</a>
 
 <ul>
@@ -76,7 +76,7 @@
 <li><a href="#c507e1d9-7ddf-41ab-bb64-fc22f3ee11a6">List All Stars Page</a>
 
 <ul>
-<li><a href="#1c107f53-534b-4836-b1e4-129c1f0c9c36">How to Query a Galaxy and its Stars</a></li>
+<li><a href="#1c107f53-534b-4836-b1e4-129c1f0c9c36">How to Query a Galaxy and it&#8217;s Stars</a></li>
 <li><a href="#1adfc405-a0e6-4d37-a7fd-62e24e9dd641">Show One Star</a></li>
 <li><a href="#d6e27e60-b7e1-4a75-9415-3b9e45adea84">Add, Update and Delete A Star</a></li>
 </ul></li>
@@ -374,21 +374,6 @@ drwxr-xr-x   5 mike  staff   160B Nov  9 19:19 Public
 <p><a href="#contents">back to contents</a><hr/></p>
 <!--section-break-section-break-section-break-section-break-section-break-section-break-->
 
-<h3 id="aidc8c787eb-a4e6-4c9a-a0b4-978fe378b598vaporstartsatmain.swifta"><a id="c8c787eb-a4e6-4c9a-a0b4-978fe378b598">Vapor starts at <em>main.swift</em></a></h3>
-
-<p>Although the app &#8220;starts&#8221; here, in reality, the Swift code just sets up the Vapor environment and starts Vapor. Once Vapor is running, it listens for connections and handles requests. As part of the configuration process, this code calls <em>configure.swift</em>, and that opens the database, runs the migration, and initializes the routes tables.</p>
-
-<p>Main starts by calling <em>configure.swift</em>, and that opens the database first. If there isn&#8217;t a database, and you&#8217;re using <em>sqlite</em>, it will create it. If you&#8217;re using MySQL, you have to do that yourself manually using MySQL utilities (see <a href="#8bc06efc-2f30-425b-a65a-43ed44cb4add">how it&#8217;s done on AWS</a>). If the database gets created during the initial startup of <em>Galaxy Revisited</em>, it won&#8217;t have any tables in it. Those will get created during the migration process, but they&#8217;ll be empty tables.</p>
-
-<p>There are two migrations, one for <em>galaxies</em> and the other for <em>stars</em>. Note that migrations are run in the order they are defined, <em>galaxies</em> first, then <em>stars</em> because when creating the stars, the galaxies (the parents) must already be present. That&#8217;s evident in <em>createUniverses.swift</em>. Having a set of starting data makes it easier to jump right in and start learning.</p>
-
-<p>That means that the very first time <em>Galaxy Revisited</em> is run (before the database exists), you have to select <em>Create - restore the test galaxies and stars</em> on the home page (unless, by chance you run the tests first, in which case the tests did the <em>Create</em> function). If you want to use another database such as PostgreSQL or MySql, you may have other things you&#8217;ll have to do to set up the database that is beyond the scope of this book.</p>
-
-<p>The last thing <em>configure</em> does is load the routes, and after that, Vapor waits for requests. To see the main (Welcome) page, you have to start the app running in Xcode and enter the URL <em>http://localhost:8080/</em> into your browser. From there, you can follow links all around the app.</p>
-
-<p><a href="#contents">back to contents</a><hr/></p>
-<!--section-break-section-break-section-break-section-break-section-break-section-break-->
-
 <h3 id="aidacd964bf-49f2-4978-bc0e-1dfadd69e5b3allrequestsarehandledinthesamewaya"><a id="acd964bf-49f2-4978-bc0e-1dfadd69e5b3">All requests are handled in the same way</a></h3>
 
 <p>All requests in controllers begin with a <em>Request</em> object. They mostly follow the pattern</p>
@@ -638,17 +623,15 @@ struct GalaxyContext: Content {
 <p><a href="#contents">back to contents</a><hr/></p>
 <!--section-break-section-break-section-break-section-break-section-break-section-break-->
 
-<h3 id="aidc8c787eb-a4e6-4c9a-a0b4-978fe378b598vaporstartsatmain.swifta"><a id="c8c787eb-a4e6-4c9a-a0b4-978fe378b598">Vapor starts at <em>main.swift</em></a></h3>
+<h2 id="aidc8c787eb-a4e6-4c9a-a0b4-978fe378b598vaporstartsatmain.swifta"><a id="c8c787eb-a4e6-4c9a-a0b4-978fe378b598">Vapor starts at <em>main.swift</em></a></h2>
 
-<p>Although the app &#8220;starts&#8221; here, in reality, the Swift code just sets up the Vapor environment and starts Vapor. Once Vapor is running, it listens for connections and handles requests. As part of the configuration process, this code calls <em>configure.swift</em>, and that opens the database, runs the migration, and initializes the routes table.</p>
+<p>Although the app &#8220;starts&#8221; here, in reality, the Swift code just sets up the Vapor environment and starts Vapor. Once Vapor is running, it listens for connections and handles requests. As part of the configuration process, this code calls <em>configure.swift</em>, and that opens the database, runs the migration, and initializes the routes tables.</p>
 
-<p>Main starts by calling <em>configure.swift</em>, and that opens the database first. If there isn&#8217;t a database, <em>sqlite</em> will create it. If the database gets created during the initial startup of <em>Galaxy Revisited</em>, it won&#8217;t have any tables in it. Those will get created during the migration process, but they&#8217;ll be empty tables.</p>
-
-<p>!TODO mention MySQL</p>
+<p>Main starts by calling <em>configure.swift</em>, and that opens the database first. If there isn&#8217;t a database, and you&#8217;re using <em>sqlite</em>, it will create it. If you&#8217;re using MySQL, you have to do that yourself manually using MySQL utilities (see <a href="#8bc06efc-2f30-425b-a65a-43ed44cb4add">how it&#8217;s done on AWS</a>). If the database gets created during the initial startup of <em>Galaxy Revisited</em>, it won&#8217;t have any tables in it. Those will get created during the migration process, but they&#8217;ll be empty tables.</p>
 
 <p>There are two migrations, one for <em>galaxies</em> and the other for <em>stars</em>. Note that migrations are run in the order they are defined, <em>galaxies</em> first, then <em>stars</em> because when creating the stars, the galaxies (the parents) must already be present. That&#8217;s evident in <em>createUniverses.swift</em>. Having a set of starting data makes it easier to jump right in and start learning.</p>
 
-<p>That means that the very first time <em>Galaxy Revisited</em> is run (before the database exists), you have to select <em>Create - restore the test galaxies and stars</em> on the home page (unless, by chance you run the tests first, in which case the tests did the <em>Create</em> function). If you want to use another database such as PostgreSQL or MySql, you may have other things you&#8217;ll have to do to set up the database that are beyond the scope of this book.</p>
+<p>That means that the very first time <em>Galaxy Revisited</em> is run (before the database exists), you have to select <em>Create - restore the test galaxies and stars</em> on the home page (unless, by chance you run the tests first, in which case the tests did the <em>Create</em> function). If you want to use another database such as PostgreSQL or MySql, you may have other things you&#8217;ll have to do to set up the database that is beyond the scope of this book.</p>
 
 <p>The last thing <em>configure</em> does is load the routes, and after that, Vapor waits for requests. To see the main (Welcome) page, you have to start the app running in Xcode and enter the URL <em>http://localhost:8080/</em> into your browser. From there, you can follow links all around the app.</p>
 
@@ -869,6 +852,13 @@ let galaxyId = UUID(starIdContext.galaxyId)!</code></pre>
 </blockquote>
 <pre><code class="swift">let galaxy = try await GalaxyModel.find(optionalUuid, on: req.db)
 return req.templates.renderHtml(GalaxyShowTemplate(GalaxyContext(model: galaxy)))</code></pre>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h2 id="aidab2dbcea-ffd1-49c4-857a-dc7d02df1712addagalaxypagea"><a id="ab2dbcea-ffd1-49c4-857a-dc7d02df1712">Add a Galaxy Page</a></h2>
+
+<p>!TODO</p>
 
 <p><a href="#contents">back to contents</a><hr/></p>
 <!--section-break-section-break-section-break-section-break-section-break-section-break-->
@@ -1775,6 +1765,8 @@ If you try to repeat the build first without stopping an app that&#8217;s runnin
 
 <h4 id="aida3e7dac7-6273-4c78-948a-320a95f48a66updatinggalaxyrevisitedonawsafterinitialinstallationa"><a id="a3e7dac7-6273-4c78-948a-320a95f48a66">Updating Galaxy Revisited on AWS After Initial Installation</a></h4>
 
+<p>!TODO</p>
+
 <p><a href="#contents">back to contents</a><hr/></p>
 <!--section-break-section-break-section-break-section-break-section-break-section-break-->
 
@@ -1839,6 +1831,9 @@ sudo systemctl restart nginx.service</code></pre>
 <blockquote>
 <p><strong>Warning</strong>: You&#8217;ll probably see your app reporting requests when you&#8217;re running your <code>myProject</code>, but didn&#8217;t do anything with your browser. There&#8217;re thousands of hackers trying to find websites to break into from countries all around the globe. They&#8217;re active 24/7 and they <strong>will</strong> find your <code>myProject</code> running and try to break into it (if you leave it running for a while). That&#8217;s what you&#8217;ll see. For now, there&#8217;s nothing for them here, so ignore them. In future chapters, you&#8217;ll learn how to protect your Swift website against hackers.</p>
 </blockquote>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
 
 <h3 id="aid150500ab-3243-4a27-9526-61b157769741runninggalaxyrevisitedasadaemona"><a id="150500ab-3243-4a27-9526-61b157769741">Running Galaxy Revisited As A Daemon</a></h3>
 
