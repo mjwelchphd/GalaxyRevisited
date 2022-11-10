@@ -1,0 +1,79 @@
+figure {
+	margin-left: 0px;
+}
+
+figure img{
+	width: 625px;
+	border: solid 1px black;
+	background-color: #f8f8f8;
+	border-radius: 10px
+}
+
+figcaption {
+    font-weight: bold;  
+    font-style: italic;
+}
+
+blockquote {
+    padding: 7px;
+    border: 1px dotted black;
+    border-radius: 7px;
+    background-color: Azure;
+}
+
+monospace {
+    font-family: monospace, monospace;
+    font-size: 67%;
+    padding: 7px;
+    border: 1px dotted black;
+    border-radius: 7px;
+    background-color: #f8f8f8;
+}
+
+yellow-highlight {
+    background-color: LightGoldenRodYellow;
+}
+
+pink-highlight {
+    background-color: Pink;
+}
+
+pre {
+	padding: 2px;
+	border: 1px dotted black;
+	border-radius: 7px;
+	background-color: #f8f8f8;
+    overflow: auto;
+	white-space: pre-wrap;
+}
+
+pre code {
+  display: block;
+  padding: 0.625rem 1rem;
+  overflow-wrap: break-word;
+}
+
+.swift {
+    font-family: monospace, monospace;
+    font-size: 0.7em;
+}
+
+.script {
+	color: green;
+    font-family: monospace, monospace;
+    font-size: 0.7em;
+}
+
+.html {
+	color: blue;
+    font-family: monospace, monospace;
+    font-size: 0.7em;
+}
+
+hr {
+    margin-top: 5em;
+}
+
+h1, h2, h3, h4, h5 {
+    color: blue;
+}
