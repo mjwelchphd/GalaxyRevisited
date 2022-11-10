@@ -9,7 +9,7 @@
 
 > **ROUGH DRAFT**
 
-> This is a rough draft. I put it up early on Github to finish all the documentation on setup and installation. Expect an improved version in the future. Also, I'll be adding other pieces like authentication soon. The app itself won't change much until I add new capabilities like authentication.
+> This is a rough draft. I put it up early on Github to finish all the documentation on setup and installation. Expect an improved version in the future. Also, I'll be adding other pieces like authentication soon. The app itself won't change much until I add new capabilities like authentication. And, by the way, the README lacks CSS in the GitHub viewer because GitHub doesn't allow it, but the README will render correctly when viewed locally after cloning the project.
 
 ## Contents
 
