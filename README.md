@@ -9,13 +9,13 @@
 
 > **ROUGH DRAFT**
 
-> This is a rough draft. I put it up early on Github in order to finish all the documentation on setup and installation. Expect an improved version in the future. Also, I'll be adding other pieces like authentication soon. The app itself won't change much untill I add new capabilities like authentication.
+> This is a rough draft. I put it up early on Github to finish all the documentation on setup and installation. Expect an improved version in the future. Also, I'll be adding other pieces like authentication soon. The app itself won't change much until I add new capabilities like authentication.
 
 ## Contents
 
 <!-- begin contents -->
 - [Introduction](#aeababf9-e04d-47e8-9716-0e62caf19260)
-- [Developing GalaxyRevisited on a Mac Using XCode](#f6cb17c7-cf24-453c-846a-46991d815634)
+- [Developing Galaxy Revisited on a Mac Using XCode](#f6cb17c7-cf24-453c-846a-46991d815634)
     * [Setting up your Mac](#f160e10e-3418-492f-8f01-839ef9af2f81)
     * [Cloning Galaxy Revisited](#d3d0186b-ced6-4856-8b86-a3afac8d8de9)
     * [Building on Xcode](#b8756003-fa48-4203-8abf-b048349670d0)
@@ -46,7 +46,7 @@
     * [_POST Delete_ request using a _form_](#ee8f64fa-2b8d-4624-b1a7-7e3e833dfee1)
     * [_POST Add_ request using a _form_](#470fd552-7859-4aec-ae5c-89d4573a2d92)
 - [List All Stars Page](#c507e1d9-7ddf-41ab-bb64-fc22f3ee11a6)
-    * [How to Query a Galaxy and it's Stars](#1c107f53-534b-4836-b1e4-129c1f0c9c36)
+    * [How to Query a Galaxy and its Stars](#1c107f53-534b-4836-b1e4-129c1f0c9c36)
     * [Show One Star](#1adfc405-a0e6-4d37-a7fd-62e24e9dd641)
     * [Add, Update and Delete A Star](#d6e27e60-b7e1-4a75-9415-3b9e45adea84)
 - [Add a Star Page](#582e1de9-bd73-446d-93a3-61a231b0f180)
@@ -55,7 +55,7 @@
     * [A Few Words About Testing](#36973807-3365-43c1-8809-9eab1d4bbfdc)
     * [Testing Links and Buttons on a Page](#f4935ac8-21a6-4d23-ada2-2cdf507b6986)
 - [Data Transfer Objects (DTOs)](#0537ec6b-30bf-4d3d-a84b-6492e321461b)
-- [Run GalaxyRevisited on an Amazon Linux 2 Server](#45bf0627-8fc0-4291-8f78-0e8a6dc5b15e)
+- [Run Galaxy Revisited on an Amazon Linux 2 Server](#45bf0627-8fc0-4291-8f78-0e8a6dc5b15e)
     * [Start at the Lightsail page](#51fd8a5e-8260-4f98-8f16-ee5eae59b647)
         * [At the `Home` page, click the `Create Instance` button.](#5f61da11-cc42-4918-b52d-a190506d6899)
         * [Creating Keys](#25500332-0d24-406d-b566-e5c4bfe9bb21)
@@ -68,19 +68,19 @@
         * [Start by checking the release of your EC-2 instance](#8d84d5a7-4f39-406d-a102-fe49d12a73bd)
         * [Install the repository](#b7d5f596-df05-44d2-9e0a-65712e00c965)
         * [Install the MySQL package and start the server](#ceaac5ea-c0a3-4e57-aaa8-3bd2bec6867f)
-        * [Change the new root password and add a user password for GalaxyRevisited](#02eab657-2444-42c5-9ff8-82e54f662a86)
+        * [Change the new root password and add a user password for Galaxy Revisited](#02eab657-2444-42c5-9ff8-82e54f662a86)
     * [Installing Swift](#15a71478-a6e2-404c-9f88-1796360f6785)
         * [Downloading Swift](#a43c71aa-1b5c-44b9-bfe1-998260572227)
         * [Finishing the Install](#56bf8150-65e2-4d41-832a-f015d735923e)
         * [Verifying Swift version](#4e5e5b2a-bce6-46cd-96bc-dfae42761300)
     * [Installing Swift Package Manager](#5c86b8d2-6bb8-4ca3-a126-28b7d017e411)
         * [Installing Dependancies](#ef70d3d4-3e4a-4297-8e6e-fe6c883ef85b)
-    * [Uploading GalaxyRevisited](#5d492dd9-54b0-48ea-9005-6df5cbdda58b)
+    * [Uploading Galaxy Revisited](#5d492dd9-54b0-48ea-9005-6df5cbdda58b)
         * [Building and Running](#7f8f8ca4-2ebd-4a11-ab18-6e8a89ccd0f0)
         * [Accessing From A Browser](#040b70f9-1910-43ec-b622-5cf79890c84f)
-        * [Updating GalaxyRevisited on AWS After Initial Installation](#a3e7dac7-6273-4c78-948a-320a95f48a66)
+        * [Updating Galaxy Revisited on AWS After Initial Installation](#a3e7dac7-6273-4c78-948a-320a95f48a66)
     * [Installing Nginx](#084799b1-400d-4b79-bf89-a2d5ced10c3f)
-    * [Running GalaxyRevisited As A Daemon](#150500ab-3243-4a27-9526-61b157769741)
+    * [Running Galaxy Revisited As A Daemon](#150500ab-3243-4a27-9526-61b157769741)
 <!-- end contents -->
 
 
@@ -89,13 +89,13 @@
 
 ## <a id="aeababf9-e04d-47e8-9716-0e62caf19260">Introduction</a>
 
-The purpose of _Galaxy Revisited_ is to introduce you to most of the basic concepts of Swift-Vapor-Fluent-SwiftHtml programming. It's basic purpose is to jump-start your learning experience with Server Side Swift. Galaxy Revisited was built and tested using macOS Ventura 13.0 and Xcode Version 14.0.
+The purpose of _Galaxy Revisited_ is to introduce you to most of the basic concepts of Swift-Vapor-Fluent-SwiftHtml programming. Its basic purpose is to jump-start your learning experience with Server Side Swift. Galaxy Revisited was built and tested using macOS Ventura 13.0 and Xcode Version 14.0.
 
-_Galaxy Revisited_ is very basic. It's intended to be used in conjunctio]n with Tibor Bödecs's book [_Practical Server Side Swift_](https://theswiftdev.com/practical-server-side-swift-using-vapor-4-book/) (hereafter PSSS), which goes into many more-advanced topics. You should consider this more like a self-paced tutorial on the _basics_, not an exhaustive treatise on the subject. Once you understand this app, everything else should make more sense.
+_Galaxy Revisited_ is very basic. It's intended to be used in conjunction with Tibor Bödecs's book [_Practical Server Side Swift_](https://theswiftdev.com/practical-server-side-swift-using-vapor-4-book/) (hereafter PSSS), which goes into many more-advanced topics. You should consider this more like a self-paced tutorial on the _basics_, not an exhaustive treatise on the subject. Once you understand this app, everything else should make more sense.
 
 Before going any further, it's important to say that this app (with its documentation) doesn't replace the official [Vapor-Fluent documentation](https://docs.vapor.codes); it clarifies and demonstrates it. My recommendation is to read through the official documentation quickly to get a feel for what's there, but don't dwell on it. Then come here and work with the _Galaxy Revisited_ app to get hands-on experience. After you get the gist of it all, you can use both as reference materials.
 
-Below you can see a diagram of the app's page flow. You can see how simple it is, yet it demonstrates the foundation of every server-side Swift app. It starts with a welcome page; that takes you to the galaxy page which in turn allows you to create, read, update, and delete galaxies... CRUD, as it's commonly referred to. There are two tables, galaxies and stars which are used to demonstrate links using UUIDs in a one-to-many relationship.
+Below you can see a diagram of the app's page flow. You can see how simple it is, yet it demonstrates the foundation of every server-side Swift app. It starts with a welcome page; that takes you to the galaxy page which in turn allows you to create, read, update, and delete galaxies... CRUD, as it's commonly referred to. There are two database tables, galaxies, and stars which are used to demonstrate links using UUIDs in a one-to-many relationship.
 
 ![_Galaxy Map_](Resources/Images/galaxy-map.png)
 
@@ -103,38 +103,38 @@ As you experiment with this app, you can save your place using Git (Xcode Menu -
 
 Run it and examine the data flow. You can make changes to see what'll happen, and at any time, revert it and start again. Experimentation of this sort is where you learn the most, especially when there's nothing at risk. Note that the chart above doesn't show the _home_ links which you find on every page.
 
-As is common in Vapor-Fluent databases, the tables use a UUID for the primary key (see Addendum A). _Galaxy Revisited_ is designed such that the user (nominally) never sees a UUID, but _show_ pages show them just for instructional purposes. In a real application, the UUIDs in the database table are generally used by other tables to reference a record in this one. Normallt, _**they would never change**_ because that would break the link between tables.
+As is common in Vapor-Fluent databases, the tables use a UUID for the primary key (see Addendum A). _Galaxy Revisited_ is designed such that the user (nominally) never sees a UUID, but _show_ pages show them just for instructional purposes. In a real application, the UUIDs in the database table are generally used by other tables to reference a record in this one. Normally, _**they would never change**_ because that would break the link between tables.
 
-In _Galaxy Revisited_, however, whenever the database is restored to its nominal content, or a test is run, the database data is erased and replaced with fresh, new data in which all the UUIDs are also new. This ability is useful for testing, where you want to be able to have non-repeatable data to discover errors caused by stale data. In a real app, the test database andthe production database would be separate, but in _Galaxy Revisited_ no effort has been made to make them so. Here's an area you could experiment with.
+In _Galaxy Revisited_, however, whenever the database is restored to its nominal content, or a test is run, the database data is erased and replaced with fresh, new data in which all the UUIDs are also new. This ability is useful for testing, where you want to be able to have non-repeatable data to discover errors caused by stale data. In a real app, the test database and the production database would be separate, but in _Galaxy Revisited_ no effort has been made to make them so. Here's an area you could experiment with.
 
 > **Warning**
 
-> You can't meaningfully sort on a UUID because they are (nominally) random. You may want to consider adding an integer key to the table which is automatically incremented which you can use for sorting by insertion order. Otherwise, there is no practical way to pick up the _first_ or _last_ record by order of insertion, or return a series of records in insertion order.
+> You can't meaningfully sort on a UUID because they are (nominally) random. You may want to consider adding an integer key to the table which is automatically incremented which you can use for sorting by insertion order. Otherwise, there is no practical way to pick up the _first_ or _last_ record by order of insertion or return a series of records in insertion order.
 
 > Also, remember that _first_ in a Fluent query means _the first record found which meets the search criteria_, not the first record inserted into the table (although it may coincidentally be the same record). MySQL and some other databases _do not guarantee_ that records will be returned in any particular order without an _ORDER_ clause. Hic sunt dracones.
 
-> In one post, the poster also pointed out that you need a sequential number in insertion order in order to be able to pick up the _prior_ and the _following_ records by subtracting 1 or adding 1 to the sequential key value. The flaw here is that if you have records A, B, C, D, and E, and you read record C, the technique will work to read records B and D, but if for some reason record B or D gets deleted, the method will fail with a _record not found_. Oops, back to the drawing board!
+> In one post, the poster also pointed out that you need a sequential number in insertion order to be able to pick up the _prior_ and the _following_ records by subtracting 1 or adding 1 to the sequential key value. The flaw here is that if you have records A, B, C, D, and E, and you read record C, the technique will work to read records B and D, but if for some reason record B or D gets deleted, the method will fail with a _record not found_. Oops, back to the drawing board!
 
-> The only reliable way of reading the table in reverse insertion order is to sort it by insertion order descending, or keep two insertion keys, one ascending and one descending. For the example above, you'd need two queries to accomplish this. These and any other techniques for retrieving records in reverse order of insertion are least-worst solutions (unfortunately). The best solution is to design software that doesn't rely on reading tables in reverse order of insertion.
+> The only reliable way of reading the table in reverse insertion order is to sort it by insertion order descending or keep two insertion keys, one ascending and one descending. For the example above, you'd need two queries to accomplish this. These and any other techniques for retrieving records in reverse order of insertion are the least-worst solutions (unfortunately). The best solution is to design software that doesn't rely on reading tables in reverse order of insertion.
 
 [back to contents](#contents)<hr/>
 
 <!--section-break-section-break-section-break-section-break-section-break-section-break-->
 
 
-## <a id="f6cb17c7-cf24-453c-846a-46991d815634">Developing GalaxyRevisited on a Mac Using XCode</a>
+## <a id="f6cb17c7-cf24-453c-846a-46991d815634">Developing Galaxy Revisited on a Mac Using XCode</a>
 
 ### <a id="f160e10e-3418-492f-8f01-839ef9af2f81">Setting up your Mac</a>
 
-This project was designed to be developed on a Mac computer and deployed on an Amazon AWS EC2 instance using a Amazon Linux2 Server. If you don't have that setup, you can still use this document, but you'll have to figure out the differences between what you have and our suggested setup.
+This project was designed to be developed on a Mac computer and deployed on an Amazon AWS EC2 instance using an Amazon Linux2 Server. If you don't have that setup, you can still use this document, but you'll have to figure out the differences between what you have and our suggested setup.
 
-The project documentation is comprised largely of two sections, development on a Mac with Xcode, and production (deployment) on an Amazon AWS EC2 server. The good news is that almost any Linux will work fine, but keep in mind that there are two ancestors to most Linux systems, RedHat and Debian. There will be small differences between them, such as, RedHat uses _yum_ and Debian uses _apt_. If you are experienced with Linux, you probably already know the differences and will have no trouble.
+The project documentation is comprised largely of two sections, development on a Mac with Xcode, and production (deployment) on an Amazon AWS EC2 server. The good news is that almost any Linux will work fine, but keep in mind that there are two ancestors to most Linux systems, RedHat and Debian. There will be small differences between them; for example, RedHat uses _yum_ and Debian uses _apt_. If you are experienced with Linux, you probably already know the differences and will have no trouble.
 
 Also, you can develop on the Linux system; it's just far less convenient and will cost you much more time. If you have a significant project, you will be well served by buying a Mac for Xcode development. It'll be much easier, save lots of time, and, most importantly, be more fun.
 
 ### <a id="d3d0186b-ced6-4856-8b86-a3afac8d8de9">Cloning Galaxy Revisited</a>
 
-You can find [_GalaxyRevisited_ on GitHub](https://github.com/mjwelchphd/GalaxyRevisited).
+You can find [_Galaxy Revisited_ on GitHub](https://github.com/mjwelchphd/GalaxyRevisited).
 
 Click the green _Code_ button, and from the dropdown, click the copy icon ![](Resources/Images/copy-icon.png).
 
@@ -170,7 +170,7 @@ Double-click the _Package.swift_ icon. The project will open in Xcode. Click Gal
 
 > **Important**
 
-> Click the schema editor dropdown menu ![](Resources/Images/schema-dropdown.png) and select _Edit Scheme_. In the scheme edit window, select _Run_ on the left hand side, and _Options_ at the top bar. Go down to _Working Directory_ and check _Use custom working directory_, and select the _GalaxyRevisited_ project folder. Repeat this for _Profile_. If you don't do this, some resources won't be found when you run the app.
+> Click the schema editor dropdown menu ![](Resources/Images/schema-dropdown.png) and select _Edit Scheme_. In the scheme edit window, select _Run_ on the left-hand side, and _Options_ at the top bar. Go down to _Working Directory_ and check _Use custom working directory_, and select the _GalaxyRevisited_ project folder. Repeat this for _Profile_. If you don't do this, some resources won't be found when you run the app.
 
 
 
@@ -178,7 +178,7 @@ Click in the editor window, then type ```⌘U``` and the project will build and 
 
 You should see the _Build Succeeded_ and _Test Succeeded_ windows pop up one at a time on the screen.
 
-Open the _output_ window at the bottom right of the Xcode editor window ![](Resources/Images/open-outputs.png), then type the Run command ```⌘R``` or click the run button ![](Resources/Images/run-button.png) and if the _Developer Tools Access_ dialog opens, enter your logon password and click _continue_, then you should see:
+Open the _output_ window at the bottom right of the Xcode editor window ![](Resources/Images/open-outputs.png), then type the Run command ```⌘R``` or click the run button ![](Resources/Images/run-button.png) and if the _Developer Tools Access_ dialog opens, enter your login password and click _continue_, then you should see:
 
 ```script
 [ NOTICE ] Server starting on http://127.0.0.1:8080
@@ -194,7 +194,7 @@ and the welcome page should be displayed.
 
 ![Home Page](Resources/Images/home-page.png)
 
-To stop execution, click the _stop_ button ![Home Page](Resources/Images/stop-button.png).
+To stop the execution, click the _stop_ button ![Home Page](Resources/Images/stop-button.png).
 
 <!--section-break-section-break-section-break-section-break-section-break-section-break-->
 
@@ -260,7 +260,7 @@ try app.test(.POST, "/galaxy/delete",
 )
 ```
 
-Notice that the closures, beforeRequest, and afterResponse, can more easily be visualized as independent blocks of code?
+Notice that the closures, beforeRequest, and afterResponse, can more easily be visualized as independent blocks of code.
 
 The bottom line is that a generic set of rules can't cover every possible case, and you'll just have to use your judgment in some situations, but remember, if you reformat this code using \<ctrl>i, you'll get this ugly and difficult to read code (which follows the rules):
 
@@ -360,7 +360,7 @@ Main starts by calling _configure.swift_, and that opens the database first. If 
 
 There are two migrations, one for _galaxies_ and the other for _stars_. Note that migrations are run in the order they are defined, _galaxies_ first, then _stars_ because when creating the stars, the galaxies (the parents) must already be present. That's evident in _createUniverses.swift_. Having a set of starting data makes it easier to jump right in and start learning.
 
-That means that the very first time _Galaxy Revisited_ is run (before the database exists), you have to select _Create - restore the test galaxies and stars_ on the home page (unless, by chance you run the tests first, in which case the tests did the _Create_ function). If you want to use another database such as PostgreSQL or MySql, you may have other things you'll have to do to set up the database that are beyond the scope of this book.
+That means that the very first time _Galaxy Revisited_ is run (before the database exists), you have to select _Create - restore the test galaxies and stars_ on the home page (unless, by chance you run the tests first, in which case the tests did the _Create_ function). If you want to use another database such as PostgreSQL or MySql, you may have other things you'll have to do to set up the database that is beyond the scope of this book.
 
 The last thing _configure_ does is load the routes, and after that, Vapor waits for requests. To see the main (Welcome) page, you have to start the app running in Xcode and enter the URL _http://localhost:8080/_ into your browser. From there, you can follow links all around the app.
 
@@ -660,7 +660,7 @@ The last thing _configure_ does is load the routes, and after that, Vapor waits 
 
 ## <a id="5c12f813-336a-4977-8a14-727949b4ae0b">The Home page</a>
 
-Once you have the app running, use your browser to go to http://localhost:8080/; the first page that comes up is the Home page from the WelcomeController that looks like this:
+Once you have the app running, use your browser to go to http://localhost:8080/; the first page that comes up is the Home page from the WelcomeController which looks like this:
 
 ![Home Page](Resources/Images/home-page.png)
 
@@ -703,7 +703,7 @@ This page demonstrates how to pass parameters in a GET call. There are three way
 - by adding it to the URL as a _query_ in a _link_;
 - by adding it to the URL as a _query_ in a _button_.
 
-HTML4 only supported a single submit button for a form, and a single _action_. HTML5 added a _button_ (which acts like an _\<input type=submit>_) to forms. The _formaction_ attribute in a button can specify a different _action_ for each button, thus allowing the same form to be sent to different endpoints. The _Show-3_ and _List Stars_ forms use buttons.
+HTML4 only supported a single submit button for a form and a single _action_. HTML5 added a _button_ (which acts like an _\<input type=submit>_) to forms. The _formaction_ attribute in a button can specify a different _action_ for each button, thus allowing the same form to be sent to different endpoints. The _Show-3_ and _List Stars_ forms use buttons.
 
 ![ListAll Galaxies page](Resources/Images/list-all-galaxies-page.png)
 
@@ -819,13 +819,13 @@ let galaxyIdContext = try req.query.decode(GalaxyIdContext.self)
 let galaxyId = UUID(galaxyIdContext.galaxyId)!
 ```
 
-The astute reader will have noticed that the URL links to _/galaxy/show2_ which is the same as the _show-2_ link. The reason is that the _show-3_ form/button produces a query identical to the _show-2_ query, and means that it can be decoded by the same (Show-2) code.
+The astute reader will have noticed that the URL links to _/galaxy/show2_ which is the same as the _show-2_ link. The reason is that the _show-3_ form/button produces a query identical to the _show-2_ query, which means that it can be decoded by the same (Show-2) code.
 
 When Vapor gets this, it decodes the request into _req.query_ just as was done for the _show-2_ link. We use it accordingly.
 
 ### <a id="49699549-3b9f-4ec8-b85e-e944ad53dd00">List Stars</a>
 
-The _List Stars_ button transfers to the _List All Stars Page_. It demonstrates the way to pass multiple parameters through a URL _query_ and works basically the same as the way _Show-3_ button works, but has more parameters and transfers to _show/index_.
+The _List Stars_ button transfers to the _List All Stars Page_. It demonstrates the way to pass multiple parameters through a URL _query_ and works in a way similar to the way the _Show-3_ button works, but has more parameters and transfers to _show/index_.
     
 The SwiftHtml coding is:
 
@@ -898,7 +898,7 @@ The read cycle is now complete. You've seen three different ways to pass the gal
 
 > **Point of Personal Preference**
 
-> It's easier for the user if the target of updates is diplayed on the page. if you ever updated two accounts, one for yourself and one for your partner _at the same time_, you know how easy it is to get them mixed up, and enter data for one in the window for the other. Displaying the name of the person on the page being updated eliminates this problem.
+> It's easier for the user if the target of updates is displayed on the page. if you ever updated two accounts, one for yourself and one for your partner _at the same time_, you know how easy it is to get them mixed up and enter data for one in the window for the other. Displaying the name of the person on the page being updated eliminates this problem.
 
 > In this case, the name of the galaxy (the parent) is displayed on the star's (the child) pages.
 
@@ -919,18 +919,18 @@ return req.templates.renderHtml(GalaxyShowTemplate(GalaxyContext(model: galaxy))
 
 ### <a id="75279c44-4cc0-4dc9-85bf-d27b12a568bd">Update</a>
 
-To operate the _Update_ button, change anything in the input fields above, and click on the button. The update will be performed with no warning dialog (althought one would be advised in a real app).
+To operate the _Update_ button, change anything in the input fields above, and click on the button. The update will be performed with no warning dialog (although one would be advised in a real app).
 
-- The galaxy being updated is looked up first to verify it's existance, and get the current state of the record.
+- The galaxy being updated is looked up first to verify its existence, and get the current state of the record.
 - The galaxy is then updated with the input fields, excluding those fields which are not user updatable, such as the primary key and other control information.
 - The galaxy is written back.
 - The page transfers back to the _List All Galaxies_ page.
 
 ### <a id="3028b51f-45b7-4abb-b357-474c6ffecd75">Delete</a>
 
-When the _Delete_ button is clicked, the galaxy is looked up first to verify it's existance, and get the current state of the record. <yellow-highlight>Since the galaxy can have stars and the stars cannot exist without the galaxy, the stars (if any) must be deleted first.</yellow-highlight>
+When the _Delete_ button is clicked, the galaxy is looked up first to verify its existence and get the current state of the record. <yellow-highlight>Since the galaxy can have stars and the stars cannot exist without the galaxy, the stars (if any) must be deleted first.</yellow-highlight>
 
-- The galaxy being updated is looked up first to verify it's existance, and get the current state of the record.
+- The galaxy being updated is looked up first to verify its existence, and get the current state of the record.
 - The galaxy's stars are deleted.
 - The galaxy is deleted.
 - The page transfers back to the _List All Galaxies_ page.
@@ -1139,7 +1139,7 @@ Here are the differences between _GalaxyController_ and _StarController_:
 - One error message is different.
 - The routes collection has only one _show_ (a button).
 - The _index_, _show_, _add_, _save_, and _delete_ endpoints in the StarController require a StarIdContext, and the _update_ endpoint expects a StarContext. Both contexts require a _galaxy_id_, a _galaxyName_, and a _starId_. In the case of _add_ and _save_, the _starId_ is an empty string because it's unused in these two functions.
-- The _index_ function uses a different query from the one in GalaxyController because here the galaxy and all of its stars are going to be retrieved all in one operation. More on that below.
+- The _index_ function uses a different query from the one in GalaxyController because here the galaxy and all of its stars are going to be retrieved all in one operation. More on that is below.
 
 ### <a id="1c107f53-534b-4836-b1e4-129c1f0c9c36">How to Query a Galaxy and it's Stars</a>
 
@@ -1221,17 +1221,17 @@ This, for me, is a question of following the path of least resistance because cl
 
 Following this path means tests exist to validate that the code still works after later fixes and modifications. Too often developers make an insignificant change to fix something, test it manually, then commit the change without realizing that some other part of the code was affected and failed after the new version goes live. This is _exactly_ the situation all managers fear. The costs of managing the disastrous release far exceed the costs of writing good tests.
 
-The tests here are incomplete because _Galaxy Revisited_ is a demonstration app and the tests included with it are designed to teach principles of writing tests so you can write them for your app. Also, the existing literature on writing Server Side Swift tests is inadequate, especially where testing of links and buttons are concerned, and _Galaxy Revisited_ hopes to provide new solutions for that.
+The tests here are incomplete because _Galaxy Revisited_ is a demonstration app and the tests included with it are designed to teach principles of writing tests so you can write them for your app. Also, the existing literature on writing Server Side Swift tests is inadequate, especially where testing of links and buttons is concerned, and _Galaxy Revisited_ hopes to provide new solutions for that.
 
 > **Note**
 
 > When calling the _test(.GET, url, ...)_ function, it will do you the favor of adding a "/" at the beginning of the URL if it doesn't have one. The upshot is that if you have a bad link, i.e., one missing a "/" at the beginning, your tests will work fine, but your app will fail. It's my opinion that testing software should not magically fix your errors during tests in such a way as to make a test pass when the app will fail. You're welcome to your own opinion on this.
 
-The approach I'm taking here is, given a known endpoint (_/galaxy/index_, for example), attempt to retrieve the page first. If the page retrieval fails, stop the tests for this endpoint (page); otherwise, test links and buttons to see if they retrieve the pages they're linked to. Only one link of any given type gets tested, so if I retrieve a page with seven galaxies, only the first will be tested.
+The approach I'm taking here is, given a known endpoint (_/galaxy/index_, for example), to attempt to retrieve the page first. If the page retrieval fails, stop the tests for this endpoint (page); otherwise, test links and buttons to see if they retrieve the pages they're linked to. Only one link of any given type gets tested, so if I retrieve a page with seven galaxies, only the first will be tested.
 
-I could have written tests to see if the database is working, but that would be redundant because the enpoint tests use the database, and therefore, test it, too. Also, I didn't try to rereieve the records written by _add_ or _save_ directly from the database for the same reason.
+I could have written tests to see if the database is working, but that would be redundant because the endpoint tests use the database, and therefore, test it, too. Also, I didn't try to retrieve the records written by _add_ or _save_ directly from the database for the same reason.
 
-_Galaxy Revisited_ doesn't have a bunch of testable helper methods, but I could have written tests for those, if there were any.
+_Galaxy Revisited_ doesn't have a bunch of testable helper methods, but I could have written tests for those if there were any.
 
 ### <a id="f4935ac8-21a6-4d23-ada2-2cdf507b6986">Testing Links and Buttons on a Page</a>
 
@@ -1239,7 +1239,7 @@ Once the page HTML is retrieved, the big problem is extracting the target link o
 
 - cleanHtml: this function is used to remove redundant whitespace and newlines.
 
-- findRegex: this function searches for an embedded string and returns it; if none is found, it returns _nil_. If the string being searched for doesn't exist, or the wrong number of parameters are present, it adds an error message to the test results.
+- findRegex: this function searches for an embedded string and returns it; if none is found, it returns _nil_. If the string being searched for doesn't exist, or the wrong number of parameters is present, it adds an error message to the test results.
 
 - findLink: this searches for an embedded _\<a name="...">...\</a>_ and returns the entire link.
 
@@ -1259,7 +1259,7 @@ You can use these in your tests, too, Test them and discover how they work. You'
 
 _ControllerTests_ also has three functions that retrieve the pages, test the links, and test the buttons. Here are some examples, but look at the code to get a better idea of how they're used.
 
-- retrievePageHtml: given a URL, this retrieves and returns the page HTML or nil. If a page is retrieved, it validates the page by looking for the validationString within the page. _GalaxyRevisited_ uses the page's title.
+- retrievePageHtml: given a URL, this retrieves and returns the page HTML or nil. If a page is retrieved, it validates the page by looking for the validationString within the page. _Galaxy Revisited_ uses the page's title.
 
 ```swift
 let galaxyIndexPageHtml =
@@ -1270,7 +1270,7 @@ try retrievePageHtml(
 )
 ```
 
-- testLink: given the page HTML and a link name, extracts the link and passes the URL to retrievePageHtml. If the URL isn't valid, or the page doesn't validate, errors will be recorded in the log file.
+- testLink: given the page HTML and a link name, extract the link and pass the URL to retrievePageHtml. If the URL isn't valid, or the page doesn't validate, errors will be recorded in the log file.
 
 ```swift
 try testLink(
@@ -1281,7 +1281,7 @@ try testLink(
 )
 ```
 
-- testButton: this works basically the same as _testLink_, except that it looks for a button.
+- testButton: this works the same as _testLink_, except that it looks for a button.
 
 ```swift
 try testButton(
@@ -1338,13 +1338,13 @@ Here's why we use DTOs:
 <!--section-break-section-break-section-break-section-break-section-break-section-break-->
 
 
-## <a id="45bf0627-8fc0-4291-8f78-0e8a6dc5b15e">Run GalaxyRevisited on an Amazon Linux 2 Server</a>
+## <a id="45bf0627-8fc0-4291-8f78-0e8a6dc5b15e">Run Galaxy Revisited on an Amazon Linux 2 Server</a>
 
-This guide is for the reader who has never used Amazon Web Services (AWS) before, and just wants to get started learning server side Swift. It goes through the process of setting up a web server with only an administrator (who has root privileges) and _no_ users.
+This guide is for the reader who has never used Amazon Web Services (AWS) before and just wants to get started learning Server Side Swift. It goes through the process of setting up a web server with only an administrator (who has root privileges) and _no_ users.
 
 The next step, setting up users and assigning them privileges using [IAM](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html) is left as an exercise for the reader.
 
-Keep in mind that the server's root user will have `sudo` privileges, including `sudo -i` which signs on as root. As such, while this account may be used for learning server side Swift, if you want to put your own work into production on this server, you'll need to use [IAM](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html) to create user accounts that don't have root privileges.
+Keep in mind that the server's root user will have `sudo` privileges, including `sudo -i` which signs on as root. As such, while this account may be used for learning Server Side Swift, if you want to put your work into production on this server, you'll need to use [IAM](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html) to create user accounts that don't have root privileges.
 
 So, let's get started.
 
@@ -1353,12 +1353,12 @@ So, let's get started.
 - Go to the [Lightsail sign-in page](https://lightsail.aws.amazon.com/).
 ![](Resources/images/aws/lightsail-login.png)
 
-- Click `Create a new AWS account` and follow the instructions to create your AWS account. This will be your _permanent_ AWS account logon that you'll use for all AWS services, so keep the email address and password in a safe place.
+- Click `Create a new AWS account` and follow the instructions to create your AWS account. This will be your _permanent_ AWS account login that you'll use for all AWS services, so keep the email address and password in a safe place.
 
 Once you have an AWS account:
 
 - Enter your AWS root user mail address (the one you used to create your AWS account above) and sign in.
-- If you are asked to do so, complete the "Security check" (Captcha).
+- If you are asked to do so, complete the "Security Check" (Captcha).
 - This will take you to your "Home" page.
 
 ![](Resources/images/aws/home-page-1.png)
@@ -1379,7 +1379,7 @@ Once you have an AWS account:
 ![](Resources/images/aws/create-optional.png)
 
 > A little note here:  
-  The "Default key" will only work for the Amazon browser-based console. This console is the one you'll use for emergencies, if any. For logging in from a Linux or MacOS "terminal" window, and for setting up an "sshfs" folder later, you'll need to create another key pair for remote access. Also, create only one (1) key here.
+  The "Default key" will only work for the Amazon browser-based console. This console is the one you'll use for emergencies if any. For logging in from a Linux or macOS "terminal" window, and for setting up an "sshfs" folder later, you'll need to create another key pair for remote access. Also, create only one (1) key here.
     
 Note also that the client (you) retains the `private` key, and the server (AWS) retains only the `public` key. That's why, after generation, the private key can only be downloaded once, and why AWS doesn't remember it. It's a security precaution that guarantees only you have the private key.
     
@@ -1412,9 +1412,9 @@ That _private_ key is here in your Downloads folder. Don't worry about it being 
 #### <a id="b8668941-f36e-437f-ab18-e97b04dc2a5c">Choosing a Plan</a>
 
 - Under "Choose your instance plan," select whichever one you prefer. If you want to just create one for the duration of studying this book, I recommend the $10 plan. If you plan to keep the instance after studying this book, pick a plan that's right for your needs.
-- Under "Identify your instance," create a name which describes the site you're creating: for example, "ChicagoOfficeWest," or "JohnHancocksBlog." If you plan on having more than one AWS server in the future, be sure you select a name carefully: you can only have one instance per unique name.
+- Under "Identify your instance," create a name that describes the site you're creating: for example, "ChicagoOfficeWest," or "JohnHancocksBlog." If you plan on having more than one AWS server in the future, be sure you select a name carefully: you can only have one instance per unique name.
 - Leave the "x" as 1, and ignore the tagging options.
-- Click to `Create instance` button.
+- Click the `Create instance` button.
 
 #### <a id="9b964e3b-8df9-494f-96ac-71ce90b249ed">Your Instance Is Up And Running</a>
 
@@ -1458,17 +1458,17 @@ At "Static IP location," you'll usually see the location where your server is ru
 
 ![](Resources/images/aws/manage-page-view.png)
 
-Here you see your instance, and the IP addresses associated with it. The "Connect using SSH" button brings up Amazon's in-browser terminal window. This terminal is good for many things, but generally inadequate for developers (you can't copy text from the window, for example). This is the browser you'll use if something goes drastically wrong, and you need to get back into your instance to fix things.
+Here you see your instance and the IP addresses associated with it. The "Connect using SSH" button brings up Amazon's in-browser terminal window. This terminal is good for many things, but generally inadequate for developers (you can't copy text from the window, for example). This is the browser you'll use if something goes drastically wrong, and you need to get back into your instance to fix things.
 
-Don't worry about the section labeled "Use your own SSH client." I'll show you how to do that soon.
+Don't worry about the section labeled "Use your SSH client." I'll show you how to do that soon.
 
-> Wait! What's that other "Private IP" address in the upper right hand corner? That's an address you can use to communicate between multiple instances at AWS ( if you have more than one, and they need to communicate).
+> Wait! What's that other "Private IP" address in the upper right-hand corner? That's an address you can use to communicate between multiple instances at AWS ( if you have more than one, and they need to communicate).
 
 ![AWS browser-based terminal](Resources/images/aws/logged-in-to-instance.png)
 
 #### <a id="51728c3d-b4f8-4d6a-959d-ce7bacc582eb">Setting up the client (your computer's terminal and sshfs)</a>
 
-First, you have to move the private key you created to a safe place, usually ~/.ssh, then change it's protections, and lastly, you can log in. Let's look at how this is done.
+First, you have to move the private key you created to a safe place, usually ~/.ssh, then change its protections, and lastly, you can log in. Let's look at how this is done.
 
 In the examples below, replace "chicago-office-west.pem" with your secret key's name, and replace 44.224.174.213 with your instance's public IP address.
 
@@ -1482,7 +1482,7 @@ I know, it's all starting to fall into place now. Who would have guessed all thi
 
 ![](Resources/images/aws/logged-into-ec2-instance.png)
 
-And we're in! Just to see if it's _really_ working, we'll create a test file.
+And we're in! Just to see if it's working, we'll create a test file.
 
 ![](Resources/images/aws/create-a-test-file.png)
 
@@ -1504,7 +1504,7 @@ I'm going to summarize what we need from that article below.
 
 #### <a id="8d84d5a7-4f39-406d-a102-fe49d12a73bd">Start by checking the release of your EC-2 instance</a>
 
-You can check the release of your server by running the following command in the terminal. Amazon Linux is a derivative of CentOS 7 Linux server with few extra repositories and packages for improved performance and integrations with other AWS cloud services. You can check the release of your server by running the following command in the terminal.
+You can check the release of your server by running the following command in the terminal. Amazon Linux is a derivative of CentOS 7 Linux server with a few extra repositories and packages for improved performance and integrations with other AWS cloud services. You can check the release of your server by running the following command in the terminal.
 
 ```script
 $ cat /etc/os-release
@@ -1527,7 +1527,7 @@ Add _MySQL yum repository_ to Amazon Linux 2.
 $ sudo yum install https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm
 ```
 
-You can also view list of configured repositories with yum command.
+You can also view a list of configured repositories with the yum command.
 
 ```script
 $ sudo yum repolist
@@ -1540,7 +1540,7 @@ mysql80-community/x86_64                  MySQL 8.0 Community Server            
 repolist: 28114
 ```
 
-The install should display _Complete!_ if all goes as planned.
+The installation should display _Complete!_ if all goes as planned.
 
 A new repository file should have been created inside the /etc/yum.repos.d directory
 
@@ -1582,9 +1582,9 @@ Oct 27 04:48:04 ip-172-26-0-5.us-west-2.compute.internal systemd[1]: Starting My
 Oct 27 04:48:11 ip-172-26-0-5.us-west-2.compute.internal systemd[1]: Started MySQL Server.
 ```
 
-#### <a id="02eab657-2444-42c5-9ff8-82e54f662a86">Change the new root password and add a user password for GalaxyRevisited</a>
+#### <a id="02eab657-2444-42c5-9ff8-82e54f662a86">Change the new root password and add a user password for Galaxy Revisited</a>
 
-A superuser account _'root’@’localhost'_ is created with initial password set and stored in the error log file. To reveal it, use the following command:
+A superuser account _'root’@’localhost'_ is created with an initial password set and stored in the error log file. To reveal it, use the following command:
 
 ```script
 $ sudo grep 'temporary password' /var/log/mysqld.log
@@ -1615,7 +1615,7 @@ Remove test database and access to it? (Press y|Y for Yes, any other key for No)
 Reload privilege tables now? (Press y|Y for Yes, any other key for No) : y
 ```
 
-The database for GalaxyRevisited is more easily created now since we're already here. Create a user named _coco_ and use a password _Milky-1-Way_. This will match the values in _Sources/App/configure.swift_.
+The database for Galaxy Revisited is more easily created now since we're already here. Create a user named _coco_ and use a password _Milky-1-Way_. This will match the values in _Sources/App/configure.swift_.
 
 
 outside of the app itself, since we're already executing commands in the database.
@@ -1679,7 +1679,7 @@ tar -xzf swift-5.7-RELEASE-amazonlinux2.tar.gz
 
 This creates an **extracted-folder** `<VERSION><PLATFORM>` in the same place as your archive (`swift-5.7-RELEASE-amazonlinux2` in this example).
 
-The last step is to export the location of the binary. The **full pathname** followed by **/usr/bin** is needed here. We need to put this into the Bash Profile so it'll load next time you log in:
+The last step is to export the location of the binary. The **full pathname** followed by **/usr/bin** is needed here. We need to put this into the Bash Profile so it'll load the next time you log in:
 
 ```shell
 ## add the PATH command to the Bash Profile
@@ -1720,7 +1720,7 @@ That was pretty easy, and now I'd like to show you one more tool since it's a cr
 
 #### <a id="ef70d3d4-3e4a-4297-8e6e-fe6c883ef85b">Installing Dependancies</a>
 
-Before we install Swift Package Manager (SPM), we have to install the required dependencies. 
+Before installing Swift Package Manager (SPM), we must install the required dependencies. 
 
 ```shell
 # e.g. Swift dependencies on Amazon Linux 2 (install as root using sudo).
@@ -1777,12 +1777,12 @@ Run this command to install a specific Swift version:
 swiftenv install 5.7
 ```
 
-### <a id="5d492dd9-54b0-48ea-9005-6df5cbdda58b">Uploading GalaxyRevisited</a>
+### <a id="5d492dd9-54b0-48ea-9005-6df5cbdda58b">Uploading Galaxy Revisited</a>
 
-From a Mac, the easiest way to transfer files to the AWS system is using CyberDuck.
+On a Mac, the easiest way to transfer files to the AWS system is using CyberDuck.
 ![Cyberduck.app](Resources/Images/aws/cyberduck.png)
 
-Open Cyberduck and log into your aws in Cyberduck's _Open Connection_ window.
+Open Cyberduck and log into your AWS in Cyberduck's _Open Connection_ window.
 ![](Resources/Images/aws/open-connection.png)
 
 At the Cyberduck ec2-user home window:
@@ -1818,7 +1818,7 @@ The line "[1] 6534" says that the app is running as background job 1, and the PI
 
 A \<return> will show the $ prompt again.
 
-The run command builds the package first, then executes the GalaxyRevisited project _in the background_ (that's what the ampersand at the end of the command means). It'll take some time to build everything the first time you build, but after the first time, only sources that change will need to be rebuilt, and builds will go fast.
+The run command builds the package first, then executes the Galaxy Revisited project _in the background_ (that's what the ampersand at the end of the command means). It'll take some time to build everything the first time you build, but after the first time, only sources that change will need to be rebuilt, and builds will go fast.
 
 Alternatively, you can build the app first, then run it from the build folder by hand:
 
@@ -1865,7 +1865,7 @@ Notice that the `jobs` command produces no response because we stopped the serve
 
 #### <a id="040b70f9-1910-43ec-b622-5cf79890c84f">Accessing From A Browser</a>
 
-If you have GalaxyRevisited running on a local Linux or macOS computer that has a browser, visit http://localhost:8080/ in your browser. You should see the Hello Vapor! message.
+If you have Galaxy Revisited running on a local Linux or macOS computer that has a browser, visit http://localhost:8080/ in your browser. You should see the Hello Vapor! message.
 
 If the build completed, try running the app. It should look like this:
 
@@ -1879,7 +1879,7 @@ If the build completed, try running the app. It should look like this:
 
 To stop it, use \<ctrl>C.
 
-#### <a id="a3e7dac7-6273-4c78-948a-320a95f48a66">Updating GalaxyRevisited on AWS After Initial Installation</a>
+#### <a id="a3e7dac7-6273-4c78-948a-320a95f48a66">Updating Galaxy Revisited on AWS After Initial Installation</a>
 
 
 [back to contents](#contents)<hr/>
@@ -1892,7 +1892,7 @@ To stop it, use \<ctrl>C.
 
 > NGINX (pronounced "engine-X") is open-source software for web serving, reverse proxying, caching, load balancing, media streaming, and more. It started as a web server designed for maximum performance and stability. In addition to its HTTP server capabilities, NGINX can also function as a proxy server for email (IMAP, POP3, and SMTP) and a reverse proxy and load balancer for HTTP, TCP, and UDP servers. --- [https://www.nginx.com/resources/glossary/nginx/](https://www.nginx.com/resources/glossary/nginx/)
 
-Vapor will serve pages on port 8080, but you can't see port 8080 from outside your machine environment. To see what your pages look like in a browser, you need a _reverse proxy web server_. Nginx is the fastest web server available and is used on over 400 million web servers around the world. We'll use it to see our private port 8080 at the public port 80. Nginx also provides other valuable services, but the full capability of Nginx is beyond the scope of this document.
+Vapor will serve pages on port 8080, but you can't see port 8080 from outside your machine environment. To see what your pages look like in a browser, you need a _reverse proxy web server_. Nginx is the fastest web server available and is used on over 400 million web servers in the world. We'll use it to see our private port 8080 at the public port 80. Nginx also provides other valuable services, but the full capability of Nginx is beyond the scope of this document.
 
 So, let's install Nginx!
 
@@ -1943,7 +1943,7 @@ Now we can restart Nginx with
 sudo systemctl restart nginx
 ```
 
-Now, start GalaxyRevisited again.
+Now, start Galaxy Revisited again.
 
 ```script
 swift run
@@ -1956,7 +1956,7 @@ You should see:
 [ NOTICE ] Server starting on http://127.0.0.1:8080
 ```
 
-> Note: Our Vapor project still runs on port 8080, and Nginx passes port 8080 both ways to and from port 80. This isolates the Vapor from the client at one more level, and it means Vapor doesn't have to implement TLS: that's done by Nginx (but we didn't set it up here).
+> Note: Our Vapor project still runs on port 8080, and Nginx passes port 8080 both ways to and from port 80. This isolates Vapor from the client at one more level, and it means Vapor doesn't have to implement TLS: that's done by Nginx (but we didn't set it up here).
 
 Now enter `http://<your-aws-address>/` into your browser, and you should get: ![](Resources/Images/aws/welcome-page.png/)
 
@@ -1969,11 +1969,11 @@ Now your EC2 instance is a full-fledged Internet web server, and with Nginx, it'
 > **Warning**: You'll probably see your app reporting requests when you're running your `myProject`, but didn't do anything with your browser. There're thousands of hackers trying to find websites to break into from countries all around the globe. They're active 24/7 and they **will** find your `myProject` running and try to break into it (if you leave it running for a while). That's what you'll see. For now, there's nothing for them here, so ignore them. In future chapters, you'll learn how to protect your Swift website against hackers.
 
 
-### <a id="150500ab-3243-4a27-9526-61b157769741">Running GalaxyRevisited As A Daemon</a>
+### <a id="150500ab-3243-4a27-9526-61b157769741">Running Galaxy Revisited As A Daemon</a>
 
-To run the server continuously, you need to run it as a _daemon_, a task monitored by the system. If GalaxyRevisited stops for any reason, it'll be automatically re-spawned.
+To run the server continuously, you need to run it as a _daemon_, a task monitored by the system. If Galaxy Revisited stops for any reason, it'll be automatically re-spawned.
 
-To do this, first you need a _service_ file. Create (or edit) it like this:
+To do this, first, you need a _service_ file. Create (or edit) it like this:
 
 ```script
 sudo nano /lib/systemd/system/galaxy.service
@@ -1996,7 +1996,7 @@ Restart=always
 WantedBy=multi-user.target
 ```
 
-Change it's permissions, reload the daemons (including this one), and enable it like this:
+Change its permissions, reload the daemons (including this one), and enable it like this:
 
 ```script
 chmod +x /lib/systemd/system/galaxy.service
@@ -2004,7 +2004,7 @@ systemctl daemon-reload
 systemctl enable galaxy.service
 ```
 
-Now you can start or stop GalaxyRevisited as a daemon like this:
+Now you can start or stop Galaxy Revisited as a daemon like this:
 
 ```script
 sudo systemctl start galaxy
@@ -2012,6 +2012,6 @@ sudo systemctl stop galaxy
 systemctl -l status galaxy
 ```
 
-> Remember then Nginx is controlled separately, and both must be running to test. Normally, Nginx is always running, and if you don't do anything to it, it will just run. But you can either run GalaxyRevisited using the _swift run_ command when you're working on it, or as a daemon when you just want to leave it running.
+> Remember then Nginx is controlled separately, and both must be running to test. Normally, Nginx is always running, and if you don't do anything to it, it will just run. But you can either run Galaxy Revisited using the _swift run_ command when you're working on it, or as a daemon when you just want to leave it running.
 
 <center>--- Fin ---</center>
