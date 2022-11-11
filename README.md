@@ -15,9 +15,9 @@
 
 <!-- begin contents -->
 - [Introduction](#aeababf9-e04d-47e8-9716-0e62caf19260)
-- [Developing Galaxy Revisited on a Mac Using XCode](#f6cb17c7-cf24-453c-846a-46991d815634)
+- [Developing Galaxy Revisited on a Mac Using Xcode](#f6cb17c7-cf24-453c-846a-46991d815634)
     * [Setting up your Mac](#f160e10e-3418-492f-8f01-839ef9af2f81)
-    * [Cloning Galaxy Revisited](#d3d0186b-ced6-4856-8b86-a3afac8d8de9)
+    * [Cloning Galaxy Revisited from GitHub](#d3d0186b-ced6-4856-8b86-a3afac8d8de9)
     * [Building on Xcode](#b8756003-fa48-4203-8abf-b048349670d0)
     * [Is Galaxy Revisited a perfect example of how to write a Swift application?](#9b4e0c23-28cf-4c84-a4d1-5b2519a534f7)
 - [The Structure of a Swift-Vapor Web Server](#4ac343ac-7226-491e-a998-6fe3f11b7b3d)
@@ -37,7 +37,6 @@
     * [List Stars](#49699549-3b9f-4ec8-b85e-e944ad53dd00)
     * [Show a galaxy given the UUID](#31517612-5650-4040-8068-a12ef7e27fe5)
     * [Summary of the Show Links and Button](#c4ca2448-cc48-43a9-bd56-38a1ddfcde18)
-- [Add a Galaxy Page](#ab2dbcea-ffd1-49c4-857a-dc7d02df1712)
 - [Show a Galaxy Page](#c1b25a9b-e2b7-4357-8192-fcea2cf58b6f)
     * [Update](#75279c44-4cc0-4dc9-85bf-d27b12a568bd)
     * [Delete](#3028b51f-45b7-4abb-b357-474c6ffecd75)
@@ -45,12 +44,10 @@
     * [_POST Update_ request using a _form_</a>](#ef8712c5-fcf4-4590-86ff-39e3a482bde8)
     * [_POST Delete_ request using a _form_](#ee8f64fa-2b8d-4624-b1a7-7e3e833dfee1)
     * [_POST Add_ request using a _form_](#470fd552-7859-4aec-ae5c-89d4573a2d92)
+- [Add a Star Page](#582e1de9-bd73-446d-93a3-61a231b0f180)
 - [List All Stars Page](#c507e1d9-7ddf-41ab-bb64-fc22f3ee11a6)
     * [How to Query a Galaxy and it's Stars](#1c107f53-534b-4836-b1e4-129c1f0c9c36)
-    * [Show One Star](#1adfc405-a0e6-4d37-a7fd-62e24e9dd641)
-    * [Add, Update and Delete A Star](#d6e27e60-b7e1-4a75-9415-3b9e45adea84)
-- [Add a Star Page](#582e1de9-bd73-446d-93a3-61a231b0f180)
-- [Show a Star Page](#b63c4317-19ab-4559-b0eb-b43d946664ec)
+- [Show One Star](#1adfc405-a0e6-4d37-a7fd-62e24e9dd641)
 - [Testing](#32db6b7a-ffd0-4de7-95f3-a824a739aef2)
     * [A Few Words About Testing](#36973807-3365-43c1-8809-9eab1d4bbfdc)
     * [Testing Links and Buttons on a Page](#f4935ac8-21a6-4d23-ada2-2cdf507b6986)
@@ -81,7 +78,6 @@
         * [Updating Galaxy Revisited on AWS After Initial Installation](#a3e7dac7-6273-4c78-948a-320a95f48a66)
     * [Installing Nginx](#084799b1-400d-4b79-bf89-a2d5ced10c3f)
     * [Running Galaxy Revisited As A Daemon](#150500ab-3243-4a27-9526-61b157769741)
-- [SOURCE STUFF HERE FROM AWS](#4180f06d-8a20-413f-bcb1-b8aca0f7ae34)
 <!-- end contents -->
 
 
@@ -123,7 +119,7 @@ In _Galaxy Revisited_, however, whenever the database is restored to its nominal
 <!--section-break-section-break-section-break-section-break-section-break-section-break-->
 
 
-## <a id="f6cb17c7-cf24-453c-846a-46991d815634">Developing Galaxy Revisited on a Mac Using XCode</a>
+## <a id="f6cb17c7-cf24-453c-846a-46991d815634">Developing Galaxy Revisited on a Mac Using Xcode</a>
 
 ### <a id="f160e10e-3418-492f-8f01-839ef9af2f81">Setting up your Mac</a>
 
@@ -133,7 +129,7 @@ The project documentation is comprised largely of two sections, development on a
 
 Also, you can develop on the Linux system; it's just far less convenient and will cost you much more time. If you have a significant project, you will be well served by buying a Mac for Xcode development. It'll be much easier, save lots of time, and, most importantly, be more fun.
 
-### <a id="d3d0186b-ced6-4856-8b86-a3afac8d8de9">Cloning Galaxy Revisited</a>
+### <a id="d3d0186b-ced6-4856-8b86-a3afac8d8de9">Cloning Galaxy Revisited from GitHub</a>
 
 You can find [_Galaxy Revisited_ on GitHub](https://github.com/mjwelchphd/GalaxyRevisited).
 
@@ -892,16 +888,6 @@ return req.templates.renderHtml(GalaxyShowTemplate(GalaxyContext(model: galaxy))
 <!--section-break-section-break-section-break-section-break-section-break-section-break-->
 
 
-## <a id="ab2dbcea-ffd1-49c4-857a-dc7d02df1712">Add a Galaxy Page</a>
-
-!TODO
-
-[back to contents](#contents)<hr/>
-
-
-<!--section-break-section-break-section-break-section-break-section-break-section-break-->
-
-
 ## <a id="c1b25a9b-e2b7-4357-8192-fcea2cf58b6f">Show a Galaxy Page</a>
 
 ![Show A Galaxy Page](Resources/Images/show-a-galaxy-page.png)
@@ -1117,6 +1103,18 @@ Don't forget that you must declare _let newGalaxyUuid: String_ outside of the do
 <!--section-break-section-break-section-break-section-break-section-break-section-break-->
 
 
+## <a id="582e1de9-bd73-446d-93a3-61a231b0f180">Add a Star Page</a>
+
+![Add A Star Page](Resources/Images/add-a-new-star-page.png)
+
+![List All Stars After Add](Resources/Images/list-all-stars-small-magellanic-cloud-page.png)
+
+[back to contents](#contents)<hr/>
+
+
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+
 ## <a id="c507e1d9-7ddf-41ab-bb64-fc22f3ee11a6">List All Stars Page</a>
 
 ![List All Stars Page](Resources/Images/list-all-stars-milky-way-page.png)
@@ -1158,7 +1156,12 @@ Notice that the _first(&nbsp;)_ function is used: it's because only one galaxy i
 let starsContext = StarsContext(many: galaxy.stars, parent: galaxy)
 ```
 
-### <a id="1adfc405-a0e6-4d37-a7fd-62e24e9dd641">Show One Star</a>
+[back to contents](#contents)<hr/>
+
+
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+## <a id="1adfc405-a0e6-4d37-a7fd-62e24e9dd641">Show One Star</a>
 
 When the _show_ button is clicked on the _List All Stars_ page, the _Show a Star_ page displays.
 
@@ -1166,33 +1169,11 @@ When the _show_ button is clicked on the _List All Stars_ page, the _Show a Star
 
 Notice that the _Galaxy ID_ (the galaxy's UUID) and the _Star ID_ (the star's UUID) are displayed here. These would never be displayed in a production app, but since this is a demonstration app, they're displayed here so you can see what they look like.
 
+The _Update_ and _Delete_ stars buttons work like the corresponding galaxy buttons.
+
 If the galaxy has no stars yet, this page displays:
 
 ![Galaxy With No Stars](Resources/Images/list-all-stars-empty-page.png)
-
-### <a id="d6e27e60-b7e1-4a75-9415-3b9e45adea84">Add, Update and Delete A Star</a>
-
-Adding, showing, updating, and deleting stars works the same way as with galaxies.
-
-[back to contents](#contents)<hr/>
-
-
-<!--section-break-section-break-section-break-section-break-section-break-section-break-->
-
-
-## <a id="582e1de9-bd73-446d-93a3-61a231b0f180">Add a Star Page</a>
-
-![Add A Star Page](Resources/Images/add-a-new-star-page.png)
-
-[back to contents](#contents)<hr/>
-
-
-<!--section-break-section-break-section-break-section-break-section-break-section-break-->
-
-
-## <a id="b63c4317-19ab-4559-b0eb-b43d946664ec">Show a Star Page</a>
-
-![Show A Star Page](Resources/Images/show-a-star-page.png)
 
 [back to contents](#contents)<hr/>
 
@@ -1396,9 +1377,9 @@ You'll see your newly created key here. The "chicago-office-west" in the list re
 
 That _private_ key is here in your Downloads folder. Don't worry about it being there. We'll move it soon.
 
-![](Resources/images/aws/choose-instance-plan.png)
-
 #### <a id="b8668941-f36e-437f-ab18-e97b04dc2a5c">Choosing a Plan</a>
+
+![](Resources/images/aws/choose-instance-plan.png)
 
 - Under "Choose your instance plan," select whichever one you prefer. If you want to just create one for the duration of studying this book, I recommend the $10 plan. If you plan to keep the instance after studying this book, pick a plan that's right for your needs.
 - Under "Identify your instance," create a name that describes the site you're creating: for example, "ChicagoOfficeWest," or "JohnHancocksBlog." If you plan on having more than one AWS server in the future, be sure you select a name carefully: you can only have one instance per unique name.
@@ -2079,42 +2060,3 @@ systemctl -l status galaxy
 > Remember then Nginx is controlled separately, and both must be running to test. Normally, Nginx is always running, and if you don't do anything to it, it will just run. But you can either run Galaxy Revisited using the _swift run_ command when you're working on it, or as a daemon when you just want to leave it running.
 
 <center>--- Fin ---</center>
-
-
-## <a id="4180f06d-8a20-413f-bcb1-b8aca0f7ae34">SOURCE STUFF HERE FROM AWS</a>
-
-
-$ git clone https://github.com/mjwelchphd/GalaxyRevisited.git
-Cloning into 'GalaxyRevisited'...
-remote: Enumerating objects: 182, done.
-...
-Resolving deltas: 100% (47/47), done.
-
-$ cd GalaxyRevisited
-
-$ ls
-docker-compose.yml  Dockerfile  LICENSE  Package.resolved  Package.swift  Public  README.md  Resources  Sources  Tests
-
-$ swift build
-Fetching https://github.com/vapor/async-kit.git from cache
-Fetched https://github.com/vapor/async-kit.git (0.48s)
-...
-Creating working copy for https://github.com/vapor/fluent-mysql-driver
-Working copy of https://github.com/vapor/fluent-mysql-driver resolved at 4.1.0
-Building for debugging...
-[2323/2323] Linking Run
-Build complete! (343.14s)
-
-$ swift run
-Building for debugging...
-Build complete! (0.97s)
-[ NOTICE ] Server starting on http://127.0.0.1:8080
-[ INFO ] GET / [request-id: 5AFD0853-3D45-40CD-8A3D-984523162495]
-[ INFO ] GET / [request-id: A7A1163E-B64C-4074-A4B3-5544C48E8E6B]
-^C
-
-$ git status
-On branch main
-Your branch is up to date with 'origin/main'.
-
-nothing to commit, working tree clean
