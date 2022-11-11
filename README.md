@@ -75,12 +75,13 @@
         * [Verifying Swift version](#4e5e5b2a-bce6-46cd-96bc-dfae42761300)
     * [Installing Swift Package Manager](#5c86b8d2-6bb8-4ca3-a126-28b7d017e411)
         * [Installing Dependancies](#ef70d3d4-3e4a-4297-8e6e-fe6c883ef85b)
-    * [Uploading Galaxy Revisited](#5d492dd9-54b0-48ea-9005-6df5cbdda58b)
+    * [Cloning Galaxy Revisited from GitHub](#5d492dd9-54b0-48ea-9005-6df5cbdda58b)
         * [Building and Running](#7f8f8ca4-2ebd-4a11-ab18-6e8a89ccd0f0)
         * [Accessing From A Browser](#040b70f9-1910-43ec-b622-5cf79890c84f)
         * [Updating Galaxy Revisited on AWS After Initial Installation](#a3e7dac7-6273-4c78-948a-320a95f48a66)
     * [Installing Nginx](#084799b1-400d-4b79-bf89-a2d5ced10c3f)
     * [Running Galaxy Revisited As A Daemon](#150500ab-3243-4a27-9526-61b157769741)
+- [SOURCE STUFF HERE FROM AWS](#4180f06d-8a20-413f-bcb1-b8aca0f7ae34)
 <!-- end contents -->
 
 
@@ -1765,7 +1766,7 @@ Run this command to install a specific Swift version:
 swiftenv install 5.7
 ```
 
-### <a id="5d492dd9-54b0-48ea-9005-6df5cbdda58b">Uploading Galaxy Revisited</a>
+### <a id="5d492dd9-54b0-48ea-9005-6df5cbdda58b">Cloning Galaxy Revisited from GitHub</a>
 
 To get the _Galaxy Revisited_ project, just clone it from GitHub as follows:
 
@@ -1880,7 +1881,34 @@ To stop it, use \<ctrl>C.
 
 #### <a id="a3e7dac7-6273-4c78-948a-320a95f48a66">Updating Galaxy Revisited on AWS After Initial Installation</a>
 
-You can check for updates like this:
+You can check for updates as follows. If there are updates, they will be installed into the project.
+
+```script
+$ git pull
+remote: Enumerating objects: 21, done.
+remote: Counting objects: 100% (21/21), done.
+remote: Compressing objects: 100% (5/5), done.
+remote: Total 11 (delta 5), reused 11 (delta 5), pack-reused 0
+Unpacking objects: 100% (11/11), 2.89 KiB | 269.00 KiB/s, done.
+From https://github.com/mjwelchphd/GalaxyRevisited
+   0493f1c..7cfb57a  main       -> origin/main
+Updating 0493f1c..7cfb57a
+Fast-forward
+ Public/README.html                                        | 90 +++...---
+ README.md                                                 | 97 +++...---
+ Sources/App/Modules/Star/Controllers/StarController.swift |  1 +
+ 3 files changed, 154 insertions(+), 34 deletions(-)
+$ 
+```
+
+If there are no updates, you just get a message:
+
+```script
+Already up to date.
+$ 
+```
+
+You can check updates you've made lis this:
 
 ```script
 $ git status
@@ -1896,7 +1924,22 @@ nothing to commit, working tree clean
 $
 ```
 
-!TODO
+Otherwise, the updates will be listed:
+
+```script
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+      modified:   Sources/App/Modules/Star/Controllers/StarController.swift
+
+no changes added to commit (use "git add" and/or "git commit -a")
+$ 
+```
+
+If you modify something which has a modification at the origin, you'll be asked to merge the updates together when you execute a _git pull_. It's beyond the scope of this document to explain how that is done.
 
 [back to contents](#contents)<hr/>
 
@@ -2038,7 +2081,7 @@ systemctl -l status galaxy
 <center>--- Fin ---</center>
 
 
-## SOURCE STUFF HERE FROM AWS
+## <a id="4180f06d-8a20-413f-bcb1-b8aca0f7ae34">SOURCE STUFF HERE FROM AWS</a>
 
 
 $ git clone https://github.com/mjwelchphd/GalaxyRevisited.git
@@ -2075,4 +2118,3 @@ On branch main
 Your branch is up to date with 'origin/main'.
 
 nothing to commit, working tree clean
-
