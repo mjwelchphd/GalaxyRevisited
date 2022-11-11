@@ -1767,22 +1767,33 @@ swiftenv install 5.7
 
 ### <a id="5d492dd9-54b0-48ea-9005-6df5cbdda58b">Uploading Galaxy Revisited</a>
 
-On a Mac, the easiest way to transfer files to the AWS system is using CyberDuck.
-![Cyberduck.app](Resources/Images/aws/cyberduck.png)
+To get the _Galaxy Revisited_ project, just clone it from GitHub as follows:
 
-Open Cyberduck and log into your AWS in Cyberduck's _Open Connection_ window.
-![](Resources/Images/aws/open-connection.png)
+```script
+$ git clone https://github.com/mjwelchphd/GalaxyRevisited.git
+Cloning into 'GalaxyRevisited'...
+remote: Enumerating objects: 182, done.
+...
+Resolving deltas: 100% (47/47), done.
+$
+```
 
-At the Cyberduck ec2-user home window:
-
-![](Resources/Images/aws/aws-home-ec2-user.png)
-
-Drag the GalaxyRevisited folder you cloned to the Cyberduck window to upload it.
- 
-In the terminal window, CD (change directory) into the GalaxyRevisited folder.
+Next, _cd_ into the _Galaxy Revisited_ project and build it:
 
 ```script
 $ cd GalaxyRevisited
+$ ls
+docker-compose.yml  Dockerfile  LICENSE  Package.resolved  Package.swift  Public  README.md  Resources  Sources  Tests
+$ swift build
+Fetching https://github.com/vapor/async-kit.git from cache
+Fetched https://github.com/vapor/async-kit.git (0.48s)
+...
+Creating working copy for https://github.com/vapor/fluent-mysql-driver
+Working copy of https://github.com/vapor/fluent-mysql-driver resolved at 4.1.0
+Building for debugging...
+[2323/2323] Linking Run
+Build complete! (343.14s)
+$
 ```
 
 #### <a id="7f8f8ca4-2ebd-4a11-ab18-6e8a89ccd0f0">Building and Running</a>
@@ -1811,7 +1822,7 @@ The run command builds the package first, then executes the Galaxy Revisited pro
 Alternatively, you can build the app first, then run it from the build folder by hand:
 
 ```shell
-swift build
+$ swift build
 ```
 
 The terminal shows this:
@@ -1819,19 +1830,19 @@ The terminal shows this:
 ```script
 Building for debugging...
 Build complete! (0.35s)
-[ec2-user@ip-172-26-7-101 GalaxyRevisited]$
+$
 ```
 
 And to run:
 
 ```script
-swift run &
+$ swift run &
 ```
 
 To test if your application is working, use curl in the foreground:
 
 ```script
-curl localhost:8080
+$ curl localhost:8080
 ```
 
 You'll see a bunch of HTML starting with _\<!DOCTYPE html>_
@@ -1868,6 +1879,22 @@ If the build completed, try running the app. It should look like this:
 To stop it, use \<ctrl>C.
 
 #### <a id="a3e7dac7-6273-4c78-948a-320a95f48a66">Updating Galaxy Revisited on AWS After Initial Installation</a>
+
+You can check for updates like this:
+
+```script
+$ git status
+```
+
+If there are no updates, you'll get:
+
+```script
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+$
+```
 
 !TODO
 
@@ -2009,3 +2036,43 @@ systemctl -l status galaxy
 > Remember then Nginx is controlled separately, and both must be running to test. Normally, Nginx is always running, and if you don't do anything to it, it will just run. But you can either run Galaxy Revisited using the _swift run_ command when you're working on it, or as a daemon when you just want to leave it running.
 
 <center>--- Fin ---</center>
+
+
+## SOURCE STUFF HERE FROM AWS
+
+
+$ git clone https://github.com/mjwelchphd/GalaxyRevisited.git
+Cloning into 'GalaxyRevisited'...
+remote: Enumerating objects: 182, done.
+...
+Resolving deltas: 100% (47/47), done.
+
+$ cd GalaxyRevisited
+
+$ ls
+docker-compose.yml  Dockerfile  LICENSE  Package.resolved  Package.swift  Public  README.md  Resources  Sources  Tests
+
+$ swift build
+Fetching https://github.com/vapor/async-kit.git from cache
+Fetched https://github.com/vapor/async-kit.git (0.48s)
+...
+Creating working copy for https://github.com/vapor/fluent-mysql-driver
+Working copy of https://github.com/vapor/fluent-mysql-driver resolved at 4.1.0
+Building for debugging...
+[2323/2323] Linking Run
+Build complete! (343.14s)
+
+$ swift run
+Building for debugging...
+Build complete! (0.97s)
+[ NOTICE ] Server starting on http://127.0.0.1:8080
+[ INFO ] GET / [request-id: 5AFD0853-3D45-40CD-8A3D-984523162495]
+[ INFO ] GET / [request-id: A7A1163E-B64C-4074-A4B3-5544C48E8E6B]
+^C
+
+$ git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+

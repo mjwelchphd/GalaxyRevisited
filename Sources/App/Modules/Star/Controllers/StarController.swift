@@ -81,6 +81,7 @@ struct StarController: RouteCollection {
             starIdContext = try req.content.decode(StarIdContext.self)
         } catch { throw StarControllerError.idParameterMissing }
 
+        // The context scope needs to be outside the 'do'
         var starContext: StarContext
         do {
             starContext = try req.content.decode(StarContext.self)

@@ -1686,22 +1686,28 @@ swiftenv install 5.7</code></pre>
 
 <h3 id="aid5d492dd9-54b0-48ea-9005-6df5cbdda58buploadinggalaxyrevisiteda"><a id="5d492dd9-54b0-48ea-9005-6df5cbdda58b">Uploading Galaxy Revisited</a></h3>
 
-<p>On a Mac, the easiest way to transfer files to the AWS system is using CyberDuck.<br/>
-<img src="Resources/Images/aws/cyberduck.png" alt="Cyberduck.app" /></p>
+<p>To get the <em>Galaxy Revisited</em> project, just clone it from GitHub as follows:</p>
+<pre><code class="script">$ git clone https://github.com/mjwelchphd/GalaxyRevisited.git
+Cloning into &apos;GalaxyRevisited&apos;...
+remote: Enumerating objects: 182, done.
+...
+Resolving deltas: 100% (47/47), done.
+$</code></pre>
 
-<p>Open Cyberduck and log into your AWS in Cyberduck&#8217;s <em>Open Connection</em> window.<br/>
-<img src="Resources/Images/aws/open-connection.png" alt="" /></p>
-
-<p>At the Cyberduck ec2-user home window:</p>
-
-<figure>
-<img src="Resources/Images/aws/aws-home-ec2-user.png" alt="" />
-</figure>
-
-<p>Drag the GalaxyRevisited folder you cloned to the Cyberduck window to upload it.</p>
-
-<p>In the terminal window, CD (change directory) into the GalaxyRevisited folder.</p>
-<pre><code class="script">$ cd GalaxyRevisited</code></pre>
+<p>Next, <em>cd</em> into the <em>Galaxy Revisited</em> project and build it:</p>
+<pre><code class="script">$ cd GalaxyRevisited
+$ ls
+docker-compose.yml  Dockerfile  LICENSE  Package.resolved  Package.swift  Public  README.md  Resources  Sources  Tests
+$ swift build
+Fetching https://github.com/vapor/async-kit.git from cache
+Fetched https://github.com/vapor/async-kit.git (0.48s)
+...
+Creating working copy for https://github.com/vapor/fluent-mysql-driver
+Working copy of https://github.com/vapor/fluent-mysql-driver resolved at 4.1.0
+Building for debugging...
+[2323/2323] Linking Run
+Build complete! (343.14s)
+$</code></pre>
 
 <h4 id="aid7f8f8ca4-2ebd-4a11-ab18-6e8a89ccd0f0buildingandrunninga"><a id="7f8f8ca4-2ebd-4a11-ab18-6e8a89ccd0f0">Building and Running</a></h4>
 
@@ -1721,18 +1727,18 @@ Build complete! (0.35s)
 <p>The run command builds the package first, then executes the Galaxy Revisited project <em>in the background</em> (that&#8217;s what the ampersand at the end of the command means). It&#8217;ll take some time to build everything the first time you build, but after the first time, only sources that change will need to be rebuilt, and builds will go fast.</p>
 
 <p>Alternatively, you can build the app first, then run it from the build folder by hand:</p>
-<pre><code class="shell">swift build</code></pre>
+<pre><code class="shell">$ swift build</code></pre>
 
 <p>The terminal shows this:</p>
 <pre><code class="script">Building for debugging...
 Build complete! (0.35s)
-[ec2-user@ip-172-26-7-101 GalaxyRevisited]$</code></pre>
+$</code></pre>
 
 <p>And to run:</p>
-<pre><code class="script">swift run &amp;</code></pre>
+<pre><code class="script">$ swift run &amp;</code></pre>
 
 <p>To test if your application is working, use curl in the foreground:</p>
-<pre><code class="script">curl localhost:8080</code></pre>
+<pre><code class="script">$ curl localhost:8080</code></pre>
 
 <p>You&#8217;ll see a bunch of HTML starting with <em>&lt;!DOCTYPE html&gt;</em></p>
 
@@ -1764,6 +1770,16 @@ If you try to repeat the build first without stopping an app that&#8217;s runnin
 <p>To stop it, use &lt;ctrl&gt;C.</p>
 
 <h4 id="aida3e7dac7-6273-4c78-948a-320a95f48a66updatinggalaxyrevisitedonawsafterinitialinstallationa"><a id="a3e7dac7-6273-4c78-948a-320a95f48a66">Updating Galaxy Revisited on AWS After Initial Installation</a></h4>
+
+<p>You can check for updates like this:</p>
+<pre><code class="script">$ git status</code></pre>
+
+<p>If there are no updates, you&#8217;ll get:</p>
+<pre><code class="script">On branch main
+Your branch is up to date with &apos;origin/main&apos;.
+
+nothing to commit, working tree clean
+$</code></pre>
 
 <p>!TODO</p>
 
@@ -1870,6 +1886,42 @@ systemctl -l status galaxy</code></pre>
 <p>Remember then Nginx is controlled separately, and both must be running to test. Normally, Nginx is always running, and if you don&#8217;t do anything to it, it will just run. But you can either run Galaxy Revisited using the <em>swift run</em> command when you&#8217;re working on it, or as a daemon when you just want to leave it running.</p>
 </blockquote>
 <center>&#8212; Fin &#8212;</center>
+
+<h2 id="sourcestuffherefromaws">SOURCE STUFF HERE FROM AWS</h2>
+
+<p>$ git clone https://github.com/mjwelchphd/GalaxyRevisited.git<br/>
+Cloning into &#8216;GalaxyRevisited&#8217;&#8230;<br/>
+remote: Enumerating objects: 182, done.<br/>
+&#8230;<br/>
+Resolving deltas: 100% (47/47), done.</p>
+
+<p>$ cd GalaxyRevisited</p>
+
+<p>$ ls<br/>
+docker-compose.yml Dockerfile LICENSE Package.resolved Package.swift Public README.md Resources Sources Tests</p>
+
+<p>$ swift build<br/>
+Fetching https://github.com/vapor/async-kit.git from cache<br/>
+Fetched https://github.com/vapor/async-kit.git (0.48s)<br/>
+&#8230;<br/>
+Creating working copy for https://github.com/vapor/fluent-mysql-driver<br/>
+Working copy of https://github.com/vapor/fluent-mysql-driver resolved at 4.1.0<br/>
+Building for debugging&#8230;<br/>
+[2323/2323] Linking Run<br/>
+Build complete! (343.14s)</p>
+
+<p>$ swift run<br/>
+Building for debugging&#8230;<br/>
+Build complete! (0.97s)<br/>
+[ NOTICE ] Server starting on http://127.0.0.1:8080<br/>
+[ INFO ] GET / [request-id: 5AFD0853&#8211;3D45&#8211;40CD&#8211;8A3D&#8211;984523162495][ INFO ] GET / [request-id: A7A1163E-B64C&#8211;4074-A4B3&#8211;5544C48E8E6B]<br/>
+^C</p>
+
+<p>$ git status<br/>
+On branch main<br/>
+Your branch is up to date with &#8216;origin/main&#8217;.</p>
+
+<p>nothing to commit, working tree clean</p>
 
 </body>
 </html>
