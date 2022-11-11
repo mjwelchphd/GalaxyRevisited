@@ -21,7 +21,7 @@ struct WelcomeTemplate: TemplateRepresentable {
                 H3("Vapor's Fluent Demonstration Project")
                 P("Your choices are:")
                 Ul {
-                    Li { A("Show the README").name("readme").href("http://localhost:8080/README.html") }
+                    Li { A("Show the README").name("readme").href("README.html") }
                     Li { A("List - list all galaxies").name("show").href("/galaxy/index") }
                     Li { A("Add - add a new galaxy").name("add").href("/galaxy/add") }
                 }
