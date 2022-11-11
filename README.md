@@ -1321,7 +1321,7 @@ So, let's get started.
 ### <a id="51fd8a5e-8260-4f98-8f16-ee5eae59b647">Start at the Lightsail page</a>
 
 - Go to the [Lightsail sign-in page](https://lightsail.aws.amazon.com/).
-![](Resources/images/aws/lightsail-login.png)
+![](Resources/Images/aws/lightsail-login.png)
 
 - Click `Create a new AWS account` and follow the instructions to create your AWS account. This will be your _permanent_ AWS account login that you'll use for all AWS services, so keep the email address and password in a safe place.
 
@@ -1331,11 +1331,11 @@ Once you have an AWS account:
 - If you are asked to do so, complete the "Security Check" (Captcha).
 - This will take you to your "Home" page.
 
-![](Resources/images/aws/home-page-1.png)
+![](Resources/Images/aws/home-page-1.png)
 
 #### <a id="5f61da11-cc42-4918-b52d-a190506d6899">At the `Home` page, click the `Create Instance` button.</a>
 
-![](Resources/images/aws/create-an-instance.png)
+![](Resources/Images/aws/create-an-instance.png)
 
 - At "Instance location," choose the server you want to have your instance on.
 - At "Select a platform," choose `Linux/Unix`.
@@ -1346,7 +1346,7 @@ Once you have an AWS account:
 
 - Scroll down to "SSH key pair manager," click `Change SSH key pair`, and the "SSH key pair manager" will open up.
 
-![](Resources/images/aws/create-optional.png)
+![](Resources/Images/aws/create-optional.png)
 
 > A little note here:  
   The "Default key" will only work for the Amazon browser-based console. This console is the one you'll use for emergencies if any. For logging in from a Linux or macOS "terminal" window, and for setting up an "sshfs" folder later, you'll need to create another key pair for remote access. Also, create only one (1) key here.
@@ -1355,31 +1355,31 @@ Note also that the client (you) retains the `private` key, and the server (AWS) 
     
 - Click the `Create new +` link.
 
-![](Resources/images/aws/select-a-region.png)
+![](Resources/Images/aws/select-a-region.png)
 
 - Click the `Create` button to dismiss the dialog window.
 
-![](Resources/images/aws/create-ssh-pair.png)
+![](Resources/Images/aws/create-ssh-pair.png)
 
 Choose a unique name for the new key: I recommend using one that relates to the name you'll choose for the AWS instance: for example, "chicago-office-west" for "ChicagoOfficeWest" we'll use below. You'll be prompted to download the secret part of the key, and you only get ONE (1) chance. It'll go to your Downloads folder, and we'll move it later. It'll be named \<your-key-pair-name\>.pem (~/Downloads/chicago-office-west.pem in this example).
 
 > Be careful not to lose this key! You can only create one (1) root login for an instance. To create user logins later, refer to the [IAM User's Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html).
     
-![](Resources/images/aws/key-pair-created.png)
+![](Resources/Images/aws/key-pair-created.png)
 
 After your key is downloaded (to your Downloads folder), you'll go back to the "SSH key pair manager" page.
 
-![](Resources/images/aws/create-key-created.png)
+![](Resources/Images/aws/create-key-created.png)
 
 You'll see your newly created key here. The "chicago-office-west" in the list refers both to the _public_ key that AWS keeps, and the _private_ key that you keep.
 
-![](Resources/images/aws/finder-downloads.png)
+![](Resources/Images/aws/finder-downloads.png)
 
 That _private_ key is here in your Downloads folder. Don't worry about it being there. We'll move it soon.
 
 #### <a id="b8668941-f36e-437f-ab18-e97b04dc2a5c">Choosing a Plan</a>
 
-![](Resources/images/aws/choose-instance-plan.png)
+![](Resources/Images/aws/choose-instance-plan.png)
 
 - Under "Choose your instance plan," select whichever one you prefer. If you want to just create one for the duration of studying this book, I recommend the $10 plan. If you plan to keep the instance after studying this book, pick a plan that's right for your needs.
 - Under "Identify your instance," create a name that describes the site you're creating: for example, "ChicagoOfficeWest," or "JohnHancocksBlog." If you plan on having more than one AWS server in the future, be sure you select a name carefully: you can only have one instance per unique name.
@@ -1388,7 +1388,7 @@ That _private_ key is here in your Downloads folder. Don't worry about it being 
 
 #### <a id="9b964e3b-8df9-494f-96ac-71ce90b249ed">Your Instance Is Up And Running</a>
 
-![](Resources/images/aws/home-after-create.png)
+![](Resources/Images/aws/home-after-create.png)
 
 Your server creation is complete and your server is up and running.
 
@@ -1400,11 +1400,11 @@ The next thing we need to do is create a static IP address for the instance. Oth
 
 - Select the "Networking" tab to do this.
 
-![](Resources/images/aws/home-networking.png)
+![](Resources/Images/aws/home-networking.png)
 
 - Click the `Create static IP` button.
 
-![](Resources/images/aws/create-static-ip.png)
+![](Resources/Images/aws/create-static-ip.png)
 
 At "Static IP location," you'll usually see the location where your server is running. Normally, you won't change this.
 
@@ -1412,21 +1412,21 @@ At "Static IP location," you'll usually see the location where your server is ru
 - Under "Identify your static IP," enter a more meaningful name for it (chicago-office-west-ip to match the server name in this example).
 - Click the `Create` button to create the static IP.
 
-![](Resources/images/aws/static-ip-created.png)
+![](Resources/Images/aws/static-ip-created.png)
 
 #### <a id="fa96c869-b543-4e18-8cc9-d647868b86f2">Examining The New Instance</a>
 
 - Click the `Home` button to go back to your home page.
 
-![](Resources/images/aws/home-before-keys.png)
+![](Resources/Images/aws/home-before-keys.png)
 
 - Click the name of your instance (ChicagoOfficeWest in this example), or ...
 
-![](Resources/images/aws/home-select-manage.png)
+![](Resources/Images/aws/home-select-manage.png)
 
 ... click the `More` menu (three vertical dots at the top-right of the instance), and select `Manage`.
 
-![](Resources/images/aws/manage-page-view.png)
+![](Resources/Images/aws/manage-page-view.png)
 
 Here you see your instance and the IP addresses associated with it. The "Connect using SSH" button brings up Amazon's in-browser terminal window. This terminal is good for many things, but generally inadequate for developers (you can't copy text from the window, for example). This is the browser you'll use if something goes drastically wrong, and you need to get back into your instance to fix things.
 
@@ -1434,7 +1434,7 @@ Don't worry about the section labeled "Use your SSH client." I'll show you how t
 
 > Wait! What's that other "Private IP" address in the upper right-hand corner? That's an address you can use to communicate between multiple instances at AWS ( if you have more than one, and they need to communicate).
 
-![AWS browser-based terminal](Resources/images/aws/logged-in-to-instance.png)
+![AWS browser-based terminal](Resources/Images/aws/logged-in-to-instance.png)
 
 #### <a id="51728c3d-b4f8-4d6a-959d-ce7bacc582eb">Setting up the client (your computer's terminal and sshfs)</a>
 
@@ -1450,18 +1450,18 @@ In the examples below, replace "chicago-office-west.pem" with your secret key's 
 
 I know, it's all starting to fall into place now. Who would have guessed all this?
 
-![](Resources/images/aws/logged-into-ec2-instance.png)
+![](Resources/Images/aws/logged-into-ec2-instance.png)
 
 And we're in! Just to see if it's working, we'll create a test file.
 
-![](Resources/images/aws/create-a-test-file.png)
+![](Resources/Images/aws/create-a-test-file.png)
 
 - Just copy the commands you see above to create and check the test file.
 
-![](Resources/images/aws/mount-using-ssh-and-test.png)
+![](Resources/Images/aws/mount-using-ssh-and-test.png)
 
 And if you have `sshfs` installed (how to do this is beyond the scope of this document), you can use the commands above. (If you have macOS, just use _Cyberduck_.)
-![](Resources/images/aws/cyberduck.png)
+![](Resources/Images/aws/cyberduck.png)
 
 > IMPORTANT NOTE  \
 Your "root" user login is not recommended for production use. For setting up working logins, you should use [IAM](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html). Setting up IAM is beyond the scope of this guide.
