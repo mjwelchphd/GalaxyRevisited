@@ -140,6 +140,12 @@
 
 <p><em>Galaxy Revisited</em> is very basic. It&#8217;s intended to be used in conjunction with Tibor Bödecs&#8217;s book <a href="https://theswiftdev.com/practical-server-side-swift-using-vapor-4-book/"><em>Practical Server Side Swift</em></a> (hereafter PSSS), which goes into many more-advanced topics. You should consider this more like a self-paced tutorial on the <em>basics</em>, not an exhaustive treatise on the subject. Once you understand this app, everything else should make more sense.</p>
 
+<blockquote>
+<p><strong>Important</strong></p>
+
+<p>This documentation doesn&#8217;t show the actual source code for the project. You have to clone the project using <em>git</em> and build it using <em>Xcode</em> (see the section below labeled <strong>Cloning Galaxy Revisited from GitHub</strong>). As you read this document, you have to refer to the code in the app to get a full understanding. If you don&#8217;t clone and build the app, but just read this document, you may learn a few things, but you&#8217;ll miss so much.</p>
+</blockquote>
+
 <p>Before going any further, it&#8217;s important to say that this app (with its documentation) doesn&#8217;t replace the official <a href="https://docs.vapor.codes">Vapor-Fluent documentation</a>; it clarifies and demonstrates it. My recommendation is to read through the official documentation quickly to get a feel for what&#8217;s there, but don&#8217;t dwell on it. Then come here and work with the <em>Galaxy Revisited</em> app to get hands-on experience. After you get the gist of it all, you can use both as reference materials.</p>
 
 <p>Below you can see a diagram of the app&#8217;s page flow. You can see how simple it is, yet it demonstrates the foundation of every server-side Swift app. It starts with a welcome page; that takes you to the galaxy page which in turn allows you to create, read, update, and delete galaxies&#8230; CRUD, as it&#8217;s commonly referred to. There are two database tables, galaxies, and stars which are used to demonstrate links using UUIDs in a one-to-many relationship (see <a href="https://en.wikipedia.org/wiki/Universally_unique_identifier">the Wikipedia article on UUIDs</a> for more information).</p>
@@ -711,9 +717,9 @@ struct GalaxyContext: Content {
 <pre><code class="swift">A(&quot;Show-1&quot;).name(&quot;show-1-link&quot;).href(&quot;/galaxy/show1/\(galaxyContext.galaxyId)&quot;)</code></pre>
 
 <p>and generates this HTML:</p>
-<pre><code class="html">&lt;a name=&quot;show-1-link&quot; href=&quot;/galaxy/show1/DAD88103-2D25-4078-8C58-72D6B72276BB&quot;&gt;Show-1&lt;/a&gt;</code></pre>
+<pre><code class="html">&lt;a name=&quot;show-1-link&quot; href=&quot;/galaxy/show1/1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10&quot;&gt;Show-1&lt;/a&gt;</code></pre>
 
-<p>where the UUID DAD88103–2D25–4078–8C58–72D6B72276BB was read from the database in <em>/galaxy/index/</em>. </p>
+<p>where the UUID 1E3E85B9&#8211;7C17&#8211;4BAA-A2F8&#8211;2C67B73CDC10 was read from the database in <em>/galaxy/index/</em>. </p>
 
 <blockquote>
 <p><em><strong>Important Tip:</strong> SwiftHtml &#8220;A&#8221; Tag Needs To Be Extended</em></p>
@@ -726,11 +732,11 @@ struct GalaxyContext: Content {
 <p><em>Show&#8211;1</em> link gets defined in the <em>routes</em> table like this:</p>
 <pre><code class="swift">galaxyRoutes.get(&quot;show1&quot;, &quot;:galaxyId&quot;, use: show1)  // maps: &quot;/galaxy/show/&lt;galaxyId&gt;&quot;</code></pre>
 
-<p>You can see the value <em>3FD3A941&#8211;9B57&#8211;4A15&#8211;8A3E&#8211;1C0FA9D62FF1</em> in the GET request that will get decoded by Vapor into the <em>parameters</em>.</p>
+<p>You can see the value <em>1E3E85B9&#8211;7C17&#8211;4BAA-A2F8&#8211;2C67B73CDC10</em> in the GET request that will get decoded by Vapor into the <em>parameters</em>.</p>
 
 <p>At <em>func show1(&#8230;)</em> the incoming GET request gets processed and stored in the request like this:</p>
 <pre><code class="script">RoutingKit.Parameters(
-  values: [&quot;galaxyId&quot;: &quot;F3C61225-87E1-486A-875E-D4BD8CD40B7A&quot;],
+  values: [&quot;galaxyId&quot;: &quot;1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10&quot;],
   catchall: RoutingKit.Parameters.(unknown context at $100ff480c)
   .Catchall(values: [], isPercentEncoded: true), logger: Logging.Logger(
   handler: ConsoleKit.ConsoleLogger(
@@ -749,7 +755,7 @@ struct GalaxyContext: Content {
 <pre><code class="swift">A(&quot;Show-2&quot;).name(&quot;show-2-link&quot;).href(&quot;/galaxy/show2?galaxyId=\(galaxyContext.galaxyId)&quot;)</code></pre>
 
 <p>and generates:</p>
-<pre><code class="html">	&lt;a name=&quot;show-2-link&quot; href=&quot;/galaxy/show2?galaxyId=DAD88103-2D25-4078-8C58-72D6B72276BB&quot;&gt;Show-2&lt;/a&gt;</code></pre>
+<pre><code class="html">	&lt;a name=&quot;show-2-link&quot; href=&quot;/galaxy/show2?galaxyId=1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10&quot;&gt;Show-2&lt;/a&gt;</code></pre>
 
 <p>Again, the UUID is passed in the URL, but not as a part of the URL proper, but as a query string following the &#8220;?&#8221; and is decoded differently.</p>
 
@@ -775,7 +781,7 @@ guard ...
 
 <p>and generates:</p>
 <pre><code class="html">&lt;form name=&quot;show-3-form&quot;&gt;
-	&lt;input type=&quot;hidden&quot; name=&quot;galaxyId&quot; value=&quot;DAD88103-2D25-4078-8C58-72D6B72276BB&quot;&gt;
+	&lt;input type=&quot;hidden&quot; name=&quot;galaxyId&quot; value=&quot;1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10&quot;&gt;
 	&lt;button name=&quot;show-3-submit&quot; type=&quot;submit&quot; formaction=&quot;/galaxy/show2&quot; formmethod=&quot;get&quot;
 		formenctype=&quot;application/x-www-form-urlencoded&quot;&gt;Show-3&lt;/button&gt;
 &lt;/form&gt;</code></pre>
@@ -808,7 +814,7 @@ let galaxyId = UUID(galaxyIdContext.galaxyId)!</code></pre>
 
 <p>and generates:</p>
 <pre><code class="html">&lt;form name=\&quot;show-stars-form\&quot;&gt;
-    &lt;input type=\&quot;hidden\&quot; name=\&quot;galaxyId\&quot; value=\&quot;154C7507-3F33-4207-9E62-ED468595CB2C\&quot;&gt;
+    &lt;input type=\&quot;hidden\&quot; name=\&quot;galaxyId\&quot; value=\&quot;1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10\&quot;&gt;
     &lt;input type=\&quot;hidden\&quot; name=\&quot;galaxyName\&quot; value=\&quot;Large Magellanic Cloud\&quot;&gt;
     &lt;input type=\&quot;hidden\&quot; name=\&quot;starId\&quot; value=\&quot;\&quot;&gt;
     &lt;button type=\&quot;submit\&quot; name=\&quot;show-stars-submit\&quot; formaction=\&quot;/star/index\&quot; formmethod=\&quot;get\&quot; formenctype=\&quot;application/x-www-form-urlencoded\&quot;&gt;List Stars&lt;/button&gt;
