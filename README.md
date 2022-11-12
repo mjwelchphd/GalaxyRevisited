@@ -90,6 +90,10 @@ The purpose of _Galaxy Revisited_ is to introduce you to most of the basic conce
 
 _Galaxy Revisited_ is very basic. It's intended to be used in conjunction with Tibor Bödecs's book [_Practical Server Side Swift_](https://theswiftdev.com/practical-server-side-swift-using-vapor-4-book/) (hereafter PSSS), which goes into many more-advanced topics. You should consider this more like a self-paced tutorial on the _basics_, not an exhaustive treatise on the subject. Once you understand this app, everything else should make more sense.
 
+> **Important**
+
+> This documentation doesn't show the actual source code for the project. You have to clone the project using _git_ and build it using _Xcode_ (see the section below labeled **Cloning Galaxy Revisited from GitHub**). As you read this document, you have to refer to the code in the app to get a full understanding. If you don't clone and build the app, but just read this document, you may learn a few things, but you'll miss so much.
+
 Before going any further, it's important to say that this app (with its documentation) doesn't replace the official [Vapor-Fluent documentation](https://docs.vapor.codes); it clarifies and demonstrates it. My recommendation is to read through the official documentation quickly to get a feel for what's there, but don't dwell on it. Then come here and work with the _Galaxy Revisited_ app to get hands-on experience. After you get the gist of it all, you can use both as reference materials.
 
 Below you can see a diagram of the app's page flow. You can see how simple it is, yet it demonstrates the foundation of every server-side Swift app. It starts with a welcome page; that takes you to the galaxy page which in turn allows you to create, read, update, and delete galaxies... CRUD, as it's commonly referred to. There are two database tables, galaxies, and stars which are used to demonstrate links using UUIDs in a one-to-many relationship (see [the Wikipedia article on UUIDs](https://en.wikipedia.org/wiki/Universally_unique_identifier) for more information).
@@ -697,10 +701,10 @@ A("Show-1").name("show-1-link").href("/galaxy/show1/\(galaxyContext.galaxyId)")
 and generates this HTML:
 
 ```html
-<a name="show-1-link" href="/galaxy/show1/DAD88103-2D25-4078-8C58-72D6B72276BB">Show-1</a>
+<a name="show-1-link" href="/galaxy/show1/1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10">Show-1</a>
 ```
 
-where the UUID DAD88103–2D25–4078–8C58–72D6B72276BB was read from the database in _/galaxy/index/_. 
+where the UUID 1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10 was read from the database in _/galaxy/index/_. 
 
 > _**Important Tip:** SwiftHtml "A" Tag Needs To Be Extended_
 
@@ -714,13 +718,13 @@ _Show-1_ link gets defined in the _routes_ table like this:
 galaxyRoutes.get("show1", ":galaxyId", use: show1)  // maps: "/galaxy/show/<galaxyId>"
 ```
 
-You can see the value _3FD3A941-9B57-4A15-8A3E-1C0FA9D62FF1_ in the GET request that will get decoded by Vapor into the _parameters_.
+You can see the value _1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10_ in the GET request that will get decoded by Vapor into the _parameters_.
 
 At _func show1(...)_ the incoming GET request gets processed and stored in the request like this:
 
 ```script
 RoutingKit.Parameters(
-  values: ["galaxyId": "F3C61225-87E1-486A-875E-D4BD8CD40B7A"],
+  values: ["galaxyId": "1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10"],
   catchall: RoutingKit.Parameters.(unknown context at $100ff480c)
   .Catchall(values: [], isPercentEncoded: true), logger: Logging.Logger(
   handler: ConsoleKit.ConsoleLogger(
@@ -745,7 +749,7 @@ A("Show-2").name("show-2-link").href("/galaxy/show2?galaxyId=\(galaxyContext.gal
 and generates:
 
 ```html
-	<a name="show-2-link" href="/galaxy/show2?galaxyId=DAD88103-2D25-4078-8C58-72D6B72276BB">Show-2</a>
+	<a name="show-2-link" href="/galaxy/show2?galaxyId=1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10">Show-2</a>
 ```
 
 Again, the UUID is passed in the URL, but not as a part of the URL proper, but as a query string following the "?" and is decoded differently.
@@ -781,7 +785,7 @@ and generates:
 
 ```html
 <form name="show-3-form">
-	<input type="hidden" name="galaxyId" value="DAD88103-2D25-4078-8C58-72D6B72276BB">
+	<input type="hidden" name="galaxyId" value="1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10">
 	<button name="show-3-submit" type="submit" formaction="/galaxy/show2" formmethod="get"
 		formenctype="application/x-www-form-urlencoded">Show-3</button>
 </form>
@@ -823,7 +827,7 @@ and generates:
 
 ```html
 <form name=\"show-stars-form\">
-    <input type=\"hidden\" name=\"galaxyId\" value=\"154C7507-3F33-4207-9E62-ED468595CB2C\">
+    <input type=\"hidden\" name=\"galaxyId\" value=\"1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10\">
     <input type=\"hidden\" name=\"galaxyName\" value=\"Large Magellanic Cloud\">
     <input type=\"hidden\" name=\"starId\" value=\"\">
     <button type=\"submit\" name=\"show-stars-submit\" formaction=\"/star/index\" formmethod=\"get\" formenctype=\"application/x-www-form-urlencoded\">List Stars</button>
