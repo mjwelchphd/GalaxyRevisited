@@ -1404,7 +1404,7 @@ That _private_ key is here in your Downloads folder. Don't worry about it being 
 
 ![](Resources/Images/aws/choose-instance-plan.png)
 
-- Under "Choose your instance plan," select whichever one you prefer. If you want to just create one for the duration of studying this book, I recommend the $10 plan. If you plan to keep the instance after studying this book, pick a plan that's right for your needs.
+- Under "Choose your instance plan," select whichever one you prefer. If you want to just create one for the duration of studying this book, I recommend the $10 plan (this is the smallest plan that will work with GalaxyRevisited). If you plan to keep the instance after studying this book, pick a plan that's right for your needs.
 - Under "Identify your instance," create a name that describes the site you're creating: for example, "ChicagoOfficeWest," or "JohnHancocksBlog." If you plan on having more than one AWS server in the future, be sure you select a name carefully: you can only have one instance per unique name.
 - Leave the "x" as 1, and ignore the tagging options.
 - Click the `Create instance` button.
