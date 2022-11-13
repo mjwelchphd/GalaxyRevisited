@@ -7,9 +7,9 @@
 ##### <center>Michael J. Welch, PhD, author and<br/>Tibor Bödecs, technical contributor</center>
 <hr/>
 
-> **ROUGH DRAFT**
+> **FIRST DRAFT**
 
-> This is a rough draft. I put it up early on Github to finish all the documentation on setup and installation. Expect an improved version in the future. Also, I'll be adding other pieces like authentication soon. The app itself won't change much until I add new capabilities like authentication. And, by the way, the README lacks CSS in the GitHub viewer because GitHub doesn't allow it, but the README will render correctly when viewed locally after cloning the project.
+> This is a first draft. The README lacks CSS in the GitHub viewer because GitHub doesn't allow it, but the README will render correctly when viewed locally with a markdown viewer (like Marked2) after cloning the project. In the future, I'll be adding some more stuff (like authentication) to the project, but I wanted to get this up on GitHub so that people could learn from it.
 
 ## Contents
 
@@ -51,6 +51,7 @@
 - [Testing](#32db6b7a-ffd0-4de7-95f3-a824a739aef2)
     * [A Few Words About Testing](#36973807-3365-43c1-8809-9eab1d4bbfdc)
     * [Testing Links and Buttons on a Page](#f4935ac8-21a6-4d23-ada2-2cdf507b6986)
+- [Universally Unique Identifiers (UUIDs)](#3706d5ae-5b59-4465-b9c0-ab729a518055)
 - [Data Transfer Objects (DTOs)](#0537ec6b-30bf-4d3d-a84b-6492e321461b)
 - [Run Galaxy Revisited on an Amazon Linux 2 Server](#45bf0627-8fc0-4291-8f78-0e8a6dc5b15e)
     * [Start at the Lightsail page](#51fd8a5e-8260-4f98-8f16-ee5eae59b647)
@@ -213,7 +214,7 @@ As I was programming the tests (and that turned out to be more code than I antic
 
 This applies to writing Swift also. Good code has several characteristics:
 
-- The most important characteristic is _reliability_; it must always work as expected. This may seem obvious, but it's easy to overlook places where unexpected errors can occur, and it often involves nil-optionals and throws. Careful design up-front can reduce this problem. Try making a small change to your code that you know will cause a failure, such as passing a UUID for which the is no database record, then see if the error gets caught. This can be put into a _test_, although there is none in Galaxy Revisited. Try Adding a test like that.
+- The most important characteristic is _reliability_; it must always work as expected. This may seem obvious, but it's easy to overlook places where unexpected errors can occur, and it often involves nil-optionals and throws. Careful design up-front can reduce this problem. Try making a small change to your code that you know will cause a failure, such as passing a UUID for which there is no database record, then see if the error gets caught. This can be put into a _test_, although there is none in Galaxy Revisited. Try Adding a test like that.
 
 - Simplicity is the next important characteristic, and this usually brings to mind Occam's Razor, which is simply: the simplest solution is usually the best. Crafting code that uses the full power of Swift can lead to simpler, more expressive, code.
 
@@ -261,7 +262,7 @@ try app.test(.POST, "/galaxy/delete",
 )
 ```
 
-Notice that the closures, beforeRequest, and afterResponse, can more easily be visualized as independent blocks of code.
+Notice that the closures, beforeRequest and afterResponse, can more easily be visualized as independent blocks of code.
 
 The bottom line is that a generic set of rules can't cover every possible case, and you'll just have to use your judgment in some situations, but remember, if you reformat this code using \<ctrl>i, you'll get this ugly and difficult to read code (which follows the rules):
 
@@ -378,7 +379,7 @@ func endPoint(_ req: Request) async throws -> Response {
 
 ## <a id="169212cd-5a8c-4188-a99d-a0fd34529d04">Writing HTML Using SwiftHtml</a>
 
-This is all about rendering HTML docs using a brand new domain-specific library (DSL) called SwiftHtml and the Vapor web framework. The code is pretty straightforward, especially if you know a bit about HTML. The SwiftHtml library tries to follow the naming conventions as closely as possible, so if you've written HTML before this syntax should be very familiar, except that you don't have to write opening and closing tags: instead, we utilize the Swift compiler to do the boring repetitive tasks instead of us.
+GalaxyRevisited renders HTML docs using a brand new domain-specific library (DSL) called SwiftHtml and the Vapor web framework. The code is pretty straightforward, especially if you know a bit about HTML. The SwiftHtml library tries to follow the naming conventions as closely as possible, so if you've written HTML before this syntax should be very familiar, except that you don't have to write opening and closing tags: instead, we utilize the Swift compiler to do the boring repetitive tasks for us.
 
 Since we're using a DSL in Swift, the compiler can type-check everything at build-time: this way it's 100% sure that our HTML code won't have syntax issues. Of course, you can still make semantic mistakes, but that's also possible if you're not using a DSL.
 
@@ -690,7 +691,9 @@ HTML4 only supported a single submit button for a form and a single _action_. HT
 
 The _Show-1_ link transfers to the _Show a Galaxy Page_. It demonstrates how to pass a parameter through a URL and is the first of three different ways to pass one or more parameters in a GET request by including them in the URL. An example of a UUID passed through a URL (where the parameter is highlighted) is:
 
-<monospace>http://localhost:8080/galaxy/show1<yellow-highlight>/1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10</yellow-highlight>/</monospace>
+<monospace>
+http://localhost:8080/galaxy/show1<yellow-highlight>/1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10</yellow-highlight>/
+</monospace>
 
 The SwiftHtml coding in _GalaxyIndexTemplate.swift_ is:
 
@@ -852,7 +855,7 @@ let galaxyId = UUID(starIdContext.galaxyId)!
 Once the galaxy UUID has been decoded, a common code can be used to retrieve the galaxy and load the template. (See _showGalaxy_ in GalaxyController.) Function _index_ demonstrated how to read _all_ galaxies from the database: _showGalaxy_ demonstrates how to retrieve one galaxy given its UUID.
 
 ```swift
-guard let galaxy = try await GalaxyModel.find(optionalUuid, on: req.db) else {
+guard let galaxy = try await GalaxyModel.find(galaxyId, on: req.db) else {
     ...
 }
 ```
@@ -862,7 +865,7 @@ The _let galaxy_ will either have the requested galaxy or _nil_ depending on whe
 Since there is now a unique key (the primary key in this example), the Model.find function can be used to look up the galaxy.
 
 ```swift
-let galaxy = try await GalaxyModel.find(optionalUuid, on: req.db)
+let galaxy = try await GalaxyModel.find(galaxyId, on: req.db)
 ```
 
 The _galaxy_ is next passed to the GalaxyContext, then the context is passed to the template, and finally, that is what gets passed back to Vapor.
@@ -877,14 +880,9 @@ The read cycle is now complete. You've seen three different ways to pass the gal
 
 > **Point of Personal Preference**
 
-> It's easier for the user if the target of updates is displayed on the page. if you ever updated two accounts, one for yourself and one for your partner _at the same time_, you know how easy it is to get them mixed up and enter data for one in the window for the other. Displaying the name of the person on the page being updated eliminates this problem.
+> When updating a record, it's easier for the user if the target is displayed on the page. if you ever updated two accounts, one for yourself and one for your partner _at the same time_, you know how easy it is to get them mixed up and enter data for one in the window for the other. Displaying the name of the person on the page being updated eliminates this problem.
 
 > In this case, the name of the galaxy (the parent) is displayed on the star's (the child) pages.
-
-```swift
-let galaxy = try await GalaxyModel.find(optionalUuid, on: req.db)
-return req.templates.renderHtml(GalaxyShowTemplate(GalaxyContext(model: galaxy)))
-```
 
 [back to contents](#contents)<hr/>
 
@@ -894,11 +892,21 @@ return req.templates.renderHtml(GalaxyShowTemplate(GalaxyContext(model: galaxy))
 
 ## <a id="c1b25a9b-e2b7-4357-8192-fcea2cf58b6f">Show a Galaxy Page</a>
 
+This page demonstrates a _show_ page. Note that there are three ways to get to this page because I wanted to show the three ways to pass parameters in a GET call. In _Show Star_, there's only one button, so the decode and the show can be done in one endpoint.
+
+A _show_ page serves multiple functions:
+
+- it shows detail for the object, allowing the user to verify visually that (s)he has the right object;
+- from this page, an update can be performed;
+- from this page, a delete can be performed, and
+- other object related functions, _List Stars_ in this case, or
+- go back (_List All Galaxies_).
+
 ![Show A Galaxy Page](Resources/Images/show-a-galaxy-page.png)
 
 ### <a id="75279c44-4cc0-4dc9-85bf-d27b12a568bd">Update</a>
 
-To operate the _Update_ button, change anything in the input fields above, and click on the button. The update will be performed with no warning dialog (although one would be advised in a real app).
+To operate the _Update_ button, change anything in the input fields above, and click on the button. The update will be performed with no warning dialog (although one would be advised in a real app). (See [_POST Update_ request using a _form_</a>](#ef8712c5-fcf4-4590-86ff-39e3a482bde8) below.)
 
 - The galaxy being updated is looked up first to verify its existence, and get the current state of the record.
 - The galaxy is then updated with the input fields, excluding those fields which are not user updatable, such as the primary key and other control information.
@@ -910,7 +918,7 @@ To operate the _Update_ button, change anything in the input fields above, and c
 When the _Delete_ button is clicked, the galaxy is looked up first to verify its existence and get the current state of the record. <yellow-highlight>Since the galaxy can have stars and the stars cannot exist without the galaxy, the stars (if any) must be deleted first.</yellow-highlight>
 
 - The galaxy being updated is looked up first to verify its existence, and get the current state of the record.
-- The galaxy's stars are deleted.
+- The galaxy's stars are deleted (if any).
 - The galaxy is deleted.
 - The page transfers back to the _List All Galaxies_ page.
 
@@ -1003,7 +1011,7 @@ Accept-Language: en-US,en;q=0.9
 galaxyId=3FD3A941-9B57-4A15-8A3E-1C0FA9D62FF1&galaxyName=Milky+Way+Galaxy&starId=&name=Milky+Way+Galaxy&magnitude=-6.5&distance=123&constellation=Sagittarius&update=
 ```
 
-We decode it like this:
+We decode it into a _context_ like this:
 
 ```swift
 let galaxyContext = try req.content.decode(GalaxyContext.self)
@@ -1015,7 +1023,7 @@ galaxyContext then contains:
 GalaxyContext(galaxyId: "3FD3A941-9B57-4A15-8A3E-1C0FA9D62FF1", name: "Milky Way Galaxy", magnitude: -6.5, distance: 123, constellation: "Sagittarius")
 ```
 
-At this point, the possibility exists (through hacking or other interference) that the galaxyId is not valid, and besides, the galaxy has to be looked up in Fluent to post updates, so we use this code to read the galaxy, then write the new contents:
+At this point, the possibility exists (through hacking or other interference) that the galaxyId is not valid, and besides, the galaxy has to be looked up in Fluent to post updates, so we use this code to update the galaxy, then write the new contents:
 
 ```swift
 galaxyModel.update(update: galaxyContext)
@@ -1111,7 +1119,11 @@ Don't forget that you must declare _let newGalaxyUuid: String_ outside of the do
 
 ![Add A Star Page](Resources/Images/add-a-new-star-page.png)
 
+The _Add a New Star_ page works esentially the same as the _Add a New GalaxtY_ page. (See [_POST Add_ request using a _form_](#470fd552-7859-4aec-ae5c-89d4573a2d92)).
+
 ![List All Stars After Add](Resources/Images/list-all-stars-small-magellanic-cloud-page.png)
+
+Look for the _Nebula N81_ in the Stars list.
 
 [back to contents](#contents)<hr/>
 
@@ -1131,6 +1143,11 @@ Here are the differences between _GalaxyController_ and _StarController_:
 - The routes collection has only one _show_ (a button).
 - The _index_, _show_, _add_, _save_, and _delete_ endpoints in the StarController require a StarIdContext, and the _update_ endpoint expects a StarContext. Both contexts require a _galaxy_id_, a _galaxyName_, and a _starId_. In the case of _add_ and _save_, the _starId_ is an empty string because it's unused in these two functions.
 - The _index_ function uses a different query from the one in GalaxyController because here the galaxy and all of its stars are going to be retrieved all in one operation. More on that is below.
+
+[back to contents](#contents)<hr/>
+
+
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
 
 ### <a id="1c107f53-534b-4836-b1e4-129c1f0c9c36">How to Query a Galaxy and it's Stars</a>
 
@@ -1191,15 +1208,17 @@ If the galaxy has no stars yet, this page displays:
 
 Many developers recommend writing a test before writing the function being tested. When developing web apps with Swift+Vapor+Fluent+SwiftHtml, I find that writing the function first, then  writing the test works out better because when the outputs are complex, I'm not _exactly_ sure of what the result is going to look like until _after_ the function is "working."
 
-This, for me, is a question of following the path of least resistance because clients usually ask for changes during at least a few of the early write-review-revise cycles anyway. If I want to test and see if I got the right page, I can just examine the title returned from the test. After I see what's coming back from the endpoint, that's easier to do.
+This, for me, is a question of following the path of least resistance because clients usually ask for changes during at least a few of the early write-review-revise cycles anyway. If I want to test and see if I got the right page, I just examine the title returned from the test. After I see what's coming back from the endpoint, that's easier to do.
 
-Following this path means tests exist to validate that the code still works after later fixes and modifications. Too often developers make an insignificant change to fix something, test it manually, then commit the change without realizing that some other part of the code was affected and failed after the new version goes live. This is _exactly_ the situation all managers fear. The costs of managing the disastrous release far exceed the costs of writing good tests.
+Following this path means tests exist to validate that the code still works after later fixes and modifications, as opposed to testing to see if the code performs as it was anticipated before writing the code. Too often developers make an insignificant change to fix something, test it manually, then commit the change without realizing that some other part of the code was affected and failed after the new version goes live. This is _exactly_ the situation all managers fear. The costs of managing the disastrous release far exceed the costs of writing good tests.
 
-The tests here are incomplete because _Galaxy Revisited_ is a demonstration app and the tests included with it are designed to teach principles of writing tests so you can write them for your app. Also, the existing literature on writing Server Side Swift tests is inadequate, especially where testing of links and buttons is concerned, and _Galaxy Revisited_ hopes to provide new solutions for that.
+The tests here are incomplete because _Galaxy Revisited_ is a demonstration app and the tests included with it are designed to teach principles of writing tests so you can write them for your app.
+
+The existing literature on writing Server Side Swift tests is inadequate, especially where testing of links and buttons is concerned, and _Galaxy Revisited_ hopes to provide new solutions for that.
 
 > **Note**
 
-> When calling the _test(.GET, url, ...)_ function, it will do you the favor of adding a "/" at the beginning of the URL if it doesn't have one. The upshot is that if you have a bad link, i.e., one missing a "/" at the beginning, your tests will work fine, but your app will fail. It's my opinion that testing software should not magically fix your errors during tests in such a way as to make a test pass when the app will fail. You're welcome to your own opinion on this.
+> When calling the _test(.GET, url, ...)_ function, it will do you the favor of adding a "/" at the beginning of the URL if yours doesn't have one. The upshot is that if you have a bad link, i.e., one missing a "/" at the beginning, your tests will work fine, but your app will fail. It's my opinion that testing software should not magically fix your errors during tests in such a way as to make a test pass when the app will fail. You're welcome to your own opinion on this.
 
 The approach I'm taking here is, given a known endpoint (_/galaxy/index_, for example), to attempt to retrieve the page first. If the page retrieval fails, stop the tests for this endpoint (page); otherwise, test links and buttons to see if they retrieve the pages they're linked to. Only one link of any given type gets tested, so if I retrieve a page with seven galaxies, only the first will be tested.
 
@@ -1275,7 +1294,7 @@ try testButton(
 <!--section-break-section-break-section-break-section-break-section-break-section-break-->
  
 
-a## <a id="3706d5ae-5b59-4465-b9c0-ab729a518055">Universally Unique Identifiers (UUIDs)</a>
+## <a id="3706d5ae-5b59-4465-b9c0-ab729a518055">Universally Unique Identifiers (UUIDs)</a>
 
 UUIDs in Fluent are used by a record in one table to link to a record in another table. Depending on how these links are used, different relationships can be created. In a database, these UUIDs _**must never**_ be changed or relationships will be broken. In _Galaxy Revisited_, when the database is re-created, either manually or during a test, all the tables are discarded, re-created, and re-loaded. All the relationships are re-created correctly, but with new UUIDs, meaning that you can't depend on them to be the same as they were previously. You would never re-create UUIDs in a real application.
 
@@ -1893,7 +1912,7 @@ Already up to date.
 $ 
 ```
 
-You can check updates you've made lis this:
+You can check updates you've made with this:
 
 ```script
 $ git status
@@ -1960,7 +1979,7 @@ nginx -v
 sudo systemctl restart nginx.service
 ```
 
-Look at your server with your browser (and remember to use HTTP, not HTTPS) by entering `http://<your-aws-address>/` and you should see![](Resources/Images/aws/nginx-after-install.png/)
+Look at your server with your browser (and remember to use HTTP, not HTTPS) by entering `http://<your-aws-address>/` and you should see the Nginx startup page.
 
 Next, we want to configure Nginx to forward our Vapor server to the open Internet. The configuration file we're going to create is in `/etc`, so I suggest creating it with
 
