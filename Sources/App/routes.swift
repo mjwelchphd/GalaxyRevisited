@@ -12,6 +12,7 @@ func routes(_ app: Application) throws {
     try app.register(collection: WelcomeController())
     try app.register(collection: GalaxyController())
     try app.register(collection: StarController())
+    try app.register(collection: UserController())
 
     // Display the routes for debugging the routes list
 /*    print("--- routes ---")

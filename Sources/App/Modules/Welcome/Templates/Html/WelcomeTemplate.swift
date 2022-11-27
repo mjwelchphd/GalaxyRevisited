@@ -24,10 +24,16 @@ struct WelcomeTemplate: TemplateRepresentable {
                     Li { A("Show the README").name("readme").href("README.html") }
                     Li { A("List - list all galaxies").name("show").href("/galaxy/index") }
                     Li { A("Add - add a new galaxy").name("add").href("/galaxy/add") }
+                    Li { A("Create - restore the test galaxies and stars").name("create").href("/create-universes") }
                 }
+
                 // Tag("Other text not encapsuled in HTML tag.")
                 //  ^ use this to add text into the HTML without additional tags ^
-                P(A("Create - restore the test galaxies and stars").name("create").href("/create-universes"))
+
+                P("Your admin testing choices are:")
+                Ul {
+                    Li { A("List All Users").name("list-all-users").href("/user/index") }
+                }
             }
         }
         .lang("en-US")
