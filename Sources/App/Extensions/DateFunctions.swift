@@ -27,9 +27,9 @@ extension Date {
 extension String {
 
     /// Convert a string (local zone) to a date (UTC)
-    func toDate(format: String) -> Date {
+    func toDate(format: String) -> Date? {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = format
-        return dateFormatter.date(from: self)!
+        return dateFormatter.date(from: self)
     }
 }

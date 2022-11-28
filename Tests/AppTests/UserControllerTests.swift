@@ -57,10 +57,10 @@ extension ControllerTests {
 
         try app.test(.POST, "/user/save",
             beforeRequest: { req in
+            userContext.userId = ""
                 userContext.userId = ""
-                try req.content.encode(userContext, as: .urlEncodedForm)
-//                let userDecodeContext = UserDecodeContext(encoded: userContext)
-//                try req.content.encode(userDecodeContext, as: .urlEncodedForm).self
+                let userDecodeContext = UserDecodeContext(encoded: userContext)
+                try req.content.encode(userDecodeContext, as: .urlEncodedForm)
             },
             afterResponse: { res in
                 XCTAssertEqual(res.status, .seeOther)
@@ -71,7 +71,8 @@ extension ControllerTests {
         try app.test(.POST, "/user/update",
             beforeRequest: { req in
                 userContext.userId = noNameUuid
-                try req.content.encode(userContext, as: .urlEncodedForm)
+                let userDecodeContext = UserDecodeContext(encoded: userContext)
+                try req.content.encode(userDecodeContext, as: .urlEncodedForm)
             },
             afterResponse: { res in
                 XCTAssertEqual(res.status, .seeOther)

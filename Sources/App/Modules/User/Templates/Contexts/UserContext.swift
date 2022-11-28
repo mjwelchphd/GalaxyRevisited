@@ -49,10 +49,10 @@ struct UserContext: Content {
         self.userId = user.userId
         self.userName = user.userName
         self.userPassword = user.userPassword
-        self.userPasswordExpires = user.userPasswordExpires.toDate(format: "MM/dd/yyyy")
+        self.userPasswordExpires = user.userPasswordExpires.toDate(format: "MM/dd/yyyy")!
         self.temporaryPassword = user.temporaryPassword
-        self.temporaryPasswordExpires = user.temporaryPasswordExpires.toDate(format: "MM/dd/yyyy")
+        self.temporaryPasswordExpires = user.temporaryPasswordExpires.toDate(format: "MM/dd/yyyy")!
         self.userToken = user.userToken
-        self.userTokenExpires = user.userTokenExpires.toDate(format: "MM/dd/yyyy")
+        self.userTokenExpires = user.userTokenExpires.toDate(format: "MM/dd/yyyy")!
     }
 }
