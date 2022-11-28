@@ -65,7 +65,7 @@ struct UserController: RouteCollection {
     func save(req: Request) async throws -> Response {
         var userContext = UserContext()
         do {
-            let userDecodeContext1 = try req.content.decode(UserDecodeContext.self)
+            let userDecodeContext1 = try req.content.decode(UserContextUsingStringsForDates.self)
             userContext = UserContext(decoded: userDecodeContext1)
         } catch { throw UserControllerError.invalidForm }
         do {
@@ -83,7 +83,7 @@ struct UserController: RouteCollection {
     /// then copies the fields from the decoded record into the model. The "userId" is already populated, so
     /// Fluent will update the existing record as opposed to creating a new one.
     func update(req: Request) async throws -> Response {
-        let userDecodeContext = try req.content.decode(UserDecodeContext.self)
+        let userDecodeContext = try req.content.decode(UserContextUsingStringsForDates.self)
         let userContext = UserContext(decoded: userDecodeContext)
         guard let userModel = try await UserModel.find(UUID(uuidString: userContext.userId), on: req.db) else {
             throw UserControllerError.missingUser

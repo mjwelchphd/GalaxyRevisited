@@ -59,7 +59,7 @@ extension ControllerTests {
             beforeRequest: { req in
             userContext.userId = ""
                 userContext.userId = ""
-                let userDecodeContext = UserDecodeContext(encoded: userContext)
+                let userDecodeContext = UserContextUsingStringsForDates(encoded: userContext)
                 try req.content.encode(userDecodeContext, as: .urlEncodedForm)
             },
             afterResponse: { res in
@@ -71,7 +71,7 @@ extension ControllerTests {
         try app.test(.POST, "/user/update",
             beforeRequest: { req in
                 userContext.userId = noNameUuid
-                let userDecodeContext = UserDecodeContext(encoded: userContext)
+                let userDecodeContext = UserContextUsingStringsForDates(encoded: userContext)
                 try req.content.encode(userDecodeContext, as: .urlEncodedForm)
             },
             afterResponse: { res in

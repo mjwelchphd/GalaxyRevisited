@@ -45,7 +45,7 @@ struct UserContext: Content {
 
     // Fills in the UserContext from a UserModel
     // The model must contain a valid user
-    init(decoded user: UserDecodeContext) {
+    init(decoded user: UserContextUsingStringsForDates) {
         self.userId = user.userId
         self.userName = user.userName
         self.userPassword = user.userPassword

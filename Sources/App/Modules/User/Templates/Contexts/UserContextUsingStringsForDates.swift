@@ -6,7 +6,7 @@
 
 import Vapor
 
-struct UserDecodeContext: Content {
+struct UserContextUsingStringsForDates: Content {
     var userId: String = ""
     var userName: String = ""
     var userPassword: String = ""
