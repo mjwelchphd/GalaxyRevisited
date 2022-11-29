@@ -7,7 +7,7 @@
 import Vapor
 import Fluent
 
-final class UserModel: Model, Content {
+final class UserModel: Model, Content, Authenticatable {
     // Name of the table or collection
     static let schema = "users"
 
