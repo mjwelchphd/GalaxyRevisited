@@ -13,11 +13,17 @@ struct WelcomeController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         routes.get(use: index)
         routes.get("create-universes", use: create)
+        routes.get("sign-in", use: signIn)
     }
 
-    /// Displays the welcome page.
+    /// Display the welcome (home) page.
     func index(req: Request) async throws -> Response {
         return req.templates.renderHtml(WelcomeTemplate())
+    }
+
+    /// Display the sign in page
+    func signIn(req: Request) async throws -> Response {
+        return req.templates.renderHtml(SignInTemplate())
     }
 
     /// (Re)create the test data in the database.

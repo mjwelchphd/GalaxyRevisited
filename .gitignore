@@ -9,3 +9,5 @@ db.sqlite
 .env
 README.bak
 notes.md
+jwtRS256.key.pub
+jwtRS256.key

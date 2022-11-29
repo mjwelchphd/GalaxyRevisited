@@ -33,6 +33,7 @@ struct WelcomeTemplate: TemplateRepresentable {
                 P("Your admin testing choices are:")
                 Ul {
                     Li { A("List All Users").name("list-all-users").href("/user/index") }
+                    Li { A("Sign In for Admin Functions").name("sign-in").href("/sign-in") }
                 }
             }
         }
