@@ -22,21 +22,40 @@ struct SignInTemplate: TemplateRepresentable {
                     Table {
                         Tr {
                             Td {
-                                Label("User Name:").for("userName")
+                                Label("User Name:").for("name")
                             }
                             Td {
-                                Input().type(.text).name("userName").value("")
+                                Input().type(.text).name("name").value("")
                             }
                         }.style("background-color: #F0F0FF")
 
                         Tr {
                             Td {
-                                Label("User Password:").for("userPassword")
+                                Label("EMail:").for("email")
                             }
                             Td {
-                                Input().type(.text).name("userPassword").value("")
+                                Input().type(.text).name("email").value("")
                             }
                         }.style("background-color: #F0F0FF")
+
+                        Tr {
+                            Td {
+                                Label("Password:").for("password")
+                            }
+                            Td {
+                                Input().type(.password).name("password").value("")
+                            }
+                        }.style("background-color: #F0F0FF")
+
+                        Tr {
+                            Td {
+                                Label("Confirm Password:").for("confirmPassword")
+                            }
+                            Td {
+                                Input().type(.password).name("confirmPassword").value("")
+                            }
+                        }.style("background-color: #F0F0FF")
+
                         Tr {
                             Td {
                                 Button("Sign In")

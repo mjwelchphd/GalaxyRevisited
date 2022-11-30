@@ -7,8 +7,10 @@
 import Vapor
 
 struct SignInContext: Content {
-    var userName: String = ""
-    var userPassword: String = ""
+    var name: String = ""
+    var email: String = ""
+    var password: String = ""
+    var confirmPassword: String = ""
 
     init() {}
 }
