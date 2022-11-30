@@ -10,8 +10,6 @@ import Foundation
 
 struct UserAddTemplate: TemplateRepresentable {
 
-    let distantFutureString = Date.distantFuture.toString(format: "MM/dd/yyyy")
-
     /// Template for the user add page.
     @TagBuilder
     func render(_ req: Request) -> Tag {
@@ -22,44 +20,32 @@ struct UserAddTemplate: TemplateRepresentable {
             Body {
                 H1("Add a New User")
                 Form {
-                    Input().type(.hidden).name("userId").value("")
-                    Input().type(.hidden).name("userPasswordExpires").value(distantFutureString)
-                    Input().type(.hidden).name("temporaryPasswordExpires").value(distantFutureString)
-                    Input().type(.hidden).name("userTokenExpires").value(distantFutureString)
+                    Input().type(.hidden).name("id").value("")
                     Table {
                         Tr {
                             Td {
-                                Label("User Name:").for("userName")
+                                Label("Name:").for("name")
                             }
                             Td {
-                                Input().type(.text).name("userName").value("")
-                            }
-                        }.style("background-color: #F0F0FF")
-
-                        Tr {
-                            Td {
-                                Label("User Password:").for("userPassword")
-                            }
-                            Td {
-                                Input().type(.text).name("userPassword").value("")
+                                Input().type(.text).name("name").value("")
                             }
                         }.style("background-color: #F0F0FF")
 
                         Tr {
                             Td {
-                                Label("Temporary Password:").for("temporaryPassword")
+                                Label("EMail:").for("email")
                             }
                             Td {
-                                Input().type(.text).name("temporaryPassword").value("")
+                                Input().type(.text).name("email").value("")
                             }
                         }.style("background-color: #F0F0FF")
 
                         Tr {
                             Td {
-                                Label("User Token:").for("userToken")
+                                Label("Password Hash").for("passwordHash")
                             }
                             Td {
-                                Input().type(.text).name("userToken").value("")
+                                Input().type(.text).name("passwordHash").value("")
                             }
                         }.style("background-color: #F0F0FF")
 

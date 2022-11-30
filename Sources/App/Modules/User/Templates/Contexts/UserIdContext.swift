@@ -5,15 +5,15 @@
 ///  Copyright © 2022 Michael J. Welch, Ph.D. All rights reserved.
 
 struct UserIdContext: PairableContent {
-    var userId: String = ""
+    var id: String = ""
 
     init() {}
 
-    init(userId: String) {
-        self.userId = userId
+    init(id: String) {
+        self.id = id
     }
 
     init(pairs: [String: String]) {
-        if let userId = pairs["userId"] { self.userId = userId }
+        if let id = pairs["id"] { self.id = id }
     }
 }

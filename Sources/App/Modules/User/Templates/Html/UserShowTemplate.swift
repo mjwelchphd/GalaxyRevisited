@@ -25,78 +25,30 @@ struct UserShowTemplate: TemplateRepresentable {
                 H1("Show a User")
 
                 Form {
-                    Input().type(.hidden).name("userId").value(userContext.userId)
-                    Input().type(.hidden).name("userToken").value(userContext.userToken)
+                    Input().type(.hidden).name("id").value(userContext.id)
                     Table {
                         Tr {
                             Td {
-                                Label("User ID:")
+                                Label("Name:").for("name")
                             }
                             Td {
-                                Input().type(.text).name("showUserId").value(userContext.userId).size(36).disabled()
-                            }
-                        }.style("background-color: #F0F0FF")
-
-                        Tr {
-                            Td {
-                                Label("User Name:").for("userName")
-                            }
-                            Td {
-                                Input().type(.text).name("userName").value(userContext.userName)
+                                Input().type(.text).name("name").value(userContext.name)
                             }
                         }.style("background-color: #F0F0FF")
-
                         Tr {
                             Td {
-                                Label("User Password:").for("userPassword")
+                                Label("email:").for("email")
                             }
                             Td {
-                                Input().type(.text).name("userPassword").value(userContext.userPassword)
+                                Input().type(.text).name("email").value(userContext.email)
                             }
                         }.style("background-color: #F0F0FF")
-
                         Tr {
                             Td {
-                                Label("User Password Expires:").for("userPasswordExpires")
+                                Label("Password Hash:").for("passwordHash")
                             }
                             Td {
-                                Input().type(.text).name("userPasswordExpires").value(userContext.userPasswordExpires.toString(format: "MM/dd/yyyy"))
-                            }
-                        }.style("background-color: #F0F0FF")
-
-                        Tr {
-                            Td {
-                                Label("Temporary Password:").for("temporaryPassword")
-                            }
-                            Td {
-                                Input().type(.text).name("temporaryPassword").value(userContext.temporaryPassword)
-                            }
-                        }.style("background-color: #F0F0FF")
-
-                        Tr {
-                            Td {
-                                Label("Temporary Password Expires:").for("temporaryPasswordExpires")
-                            }
-                            Td {
-                                Input().type(.text).name("temporaryPasswordExpires").value(userContext.temporaryPasswordExpires.toString(format: "MM/dd/yyyy"))
-                            }
-                        }.style("background-color: #F0F0FF")
-
-                        Tr {
-                            Td {
-                                Label("User Token:").for("userToken")
-                            }
-                            Td {
-                                Input().type(.text).name("userToken").value(userContext.userToken).size(34).disabled()
-                            }
-                        }.style("background-color: #F0F0FF")
-
-                        Tr {
-                            Td {
-                                Label("User Token Expires:").for("userTokenExpires")
-                            }
-                            Td {
-                                Input().type(.text).name("userTokenExpires").value(userContext.userTokenExpires.toString(format: "MM/dd/yyyy"))
+                                Input().type(.text).name("passwordHash").value(userContext.passwordHash)
                             }
                         }.style("background-color: #F0F0FF")
                         Tr {

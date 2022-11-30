@@ -43,7 +43,7 @@ struct UserController: RouteCollection {
         guard let userIdContext = try? req.query.decode(UserIdContext.self) else {
             throw UserControllerError.idParameterMissing
         }
-        guard let userId = UUID(uuidString: userIdContext.userId) else {
+        guard let userId = UUID(uuidString: userIdContext.id) else {
             throw UserControllerError.idParameterInvalid
         }
         guard let user = try await UserModel.find(userId, on: req.db) else {
@@ -65,8 +65,7 @@ struct UserController: RouteCollection {
     func save(req: Request) async throws -> Response {
         var userContext = UserContext()
         do {
-            let userDecodeContext1 = try req.content.decode(UserContextUsingStringsForDates.self)
-            userContext = UserContext(decoded: userDecodeContext1)
+            userContext = try req.content.decode(UserContext.self)
         } catch { throw UserControllerError.invalidForm }
         do {
             let userModel = UserModel(new: userContext)
@@ -83,9 +82,8 @@ struct UserController: RouteCollection {
     /// then copies the fields from the decoded record into the model. The "userId" is already populated, so
     /// Fluent will update the existing record as opposed to creating a new one.
     func update(req: Request) async throws -> Response {
-        let userDecodeContext = try req.content.decode(UserContextUsingStringsForDates.self)
-        let userContext = UserContext(decoded: userDecodeContext)
-        guard let userModel = try await UserModel.find(UUID(uuidString: userContext.userId), on: req.db) else {
+        let userContext = try req.content.decode(UserContext.self)
+        guard let userModel = try await UserModel.find(UUID(uuidString: userContext.id), on: req.db) else {
             throw UserControllerError.missingUser
         }
         userModel.update(update: userContext)
@@ -101,7 +99,7 @@ struct UserController: RouteCollection {
 
         // Get the user for which the stars will be looked up and eager load the stars
         if let wrappedUser = try await UserModel.query(on: req.db)
-            .filter(\.$id == UUID(uuidString: userIdContext.userId)!).first() {
+            .filter(\.$id == UUID(uuidString: userIdContext.id)!).first() {
             try await wrappedUser.delete(on: req.db)
             return req.redirect(to: "/user/index")
         } else {

@@ -36,26 +36,18 @@ struct UserIndexTemplate: TemplateRepresentable {
                         Tr { Td() }
                         Tr {
                             Th("Name").style("text-align:left")
-                            Th("Password").style("text-align:left")
-                            Th("Expires").style("text-align:left")
-                            Th("Temporary").style("text-align:left")
-                            Th("Expires").style("text-align:left")
-                            Th("Token").style("text-align:left")
-                            Th("Expires").style("text-align:left")
+                            Th("EMail").style("text-align:left")
+                            Th("Password Hash").style("text-align:left")
                         }
                         for userContext in usersContext.users {
                             Tr {
-                                Td(userContext.userName)
-                                Td(userContext.userPassword)
-                                Td(userContext.userPasswordExpires.toString(format: "MM/dd/yyyy"))
-                                Td(userContext.temporaryPassword)
-                                Td(userContext.temporaryPasswordExpires.toString(format: "MM/dd/yyyy"))
-                                Td(userContext.userToken)
-                                Td(userContext.userTokenExpires.toString(format: "MM/dd/yyyy"))
+                                Td(userContext.name)
+                                Td(userContext.email)
+                                Td(userContext.passwordHash)
                                 // GET by Form Button
                                 Td {
                                     Form {
-                                        Input().type(.hidden).name("userId").value(userContext.userId)
+                                        Input().type(.hidden).name("id").value(userContext.id)
                                         Button("Show")
                                             .type(.submit)
                                             .name("show-submit")

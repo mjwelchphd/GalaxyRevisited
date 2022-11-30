@@ -31,6 +31,7 @@ public func configure(_ app: Application) throws {
 
     app.migrations.add(CreateGalaxy())
     app.migrations.add(CreateStar())
+    app.migrations.add(CreateUser())
     try app.autoMigrate().wait()
 
     // register routes
