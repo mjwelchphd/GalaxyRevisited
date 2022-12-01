@@ -21,6 +21,7 @@ struct UserAddTemplate: TemplateRepresentable {
                 H1("Add a New User")
                 Form {
                     Input().type(.hidden).name("id").value("")
+                    Input().type(.hidden).name("passwordHash").value("")
                     Table {
                         Tr {
                             Td {
@@ -42,10 +43,19 @@ struct UserAddTemplate: TemplateRepresentable {
 
                         Tr {
                             Td {
-                                Label("Password Hash").for("passwordHash")
+                                Label("Password:").for("password")
                             }
                             Td {
-                                Input().type(.text).name("passwordHash").value("")
+                                Input().type(.password).name("password").value("")
+                            }
+                        }.style("background-color: #F0F0FF")
+
+                        Tr {
+                            Td {
+                                Label("Confirm Password:").for("confirmPassword")
+                            }
+                            Td {
+                                Input().type(.password).name("confirmPassword").value("")
                             }
                         }.style("background-color: #F0F0FF")
 

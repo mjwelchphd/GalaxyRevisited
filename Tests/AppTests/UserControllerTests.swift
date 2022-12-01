@@ -41,21 +41,45 @@ extension ControllerTests {
             validationString: "<title>Home</title>"
         )
 
-        //=== data item for testing=======================================================
+        //=== data items for testing======================================================
         var noNameUuid: String = ""
         var userContext = UserContext(
             id: "",
             name: "NoName",
             email: "noname@example.com",
-            passwordHash: ""
+            passwordHash: "$2b$12$XLs7ads0oQCrs.HbT3S9gOwSrsABXRqbdGCWju9z52qF85G47fS3S" // "trash"
         )
+
+//        var userIdContextWithPassword =  UserIdContextWithPassword(
+//            id: "",
+//            password: "trash",
+//            confirmPassword: "trash"
+//        )
+
+        struct UserSendContext: Content {
+            var id: String
+            var name: String
+            var email: String
+            var passwordHash: String
+            var password: String
+            var confirmPassword: String
+
+            init() {
+                id = ""
+                name = "NoName"
+                email = "noname@example.com"
+                passwordHash = "$2b$12$XLs7ads0oQCrs.HbT3S9gOwSrsABXRqbdGCWju9z52qF85G47fS3S"
+                password = "trash"
+                confirmPassword = "trash"
+            }
+        }
+        var userSendContext = UserSendContext()
         //================================================================================
 
         try app.test(.POST, "/user/save",
             beforeRequest: { req in
-            userContext.userId = ""
-                userContext.userId = ""
-                try req.content.encode(userDecodeContext, as: .urlEncodedForm)
+                userSendContext.id = "" // save
+                try req.content.encode(userSendContext, as: .urlEncodedForm)
             },
             afterResponse: { res in
                 XCTAssertEqual(res.status, .seeOther)
@@ -65,9 +89,8 @@ extension ControllerTests {
 
         try app.test(.POST, "/user/update",
             beforeRequest: { req in
-                userContext.userId = noNameUuid
-                let userDecodeContext = UserContextUsingStringsForDates(encoded: userContext)
-                try req.content.encode(userDecodeContext, as: .urlEncodedForm)
+                userSendContext.id = noNameUuid // update
+                try req.content.encode(userContext, as: .urlEncodedForm)
             },
             afterResponse: { res in
                 XCTAssertEqual(res.status, .seeOther)
@@ -77,7 +100,7 @@ extension ControllerTests {
         try app.test(.POST, "/user/delete",
             beforeRequest: { req in
                 var userIdContext = UserIdContext()
-                userIdContext.userId = noNameUuid
+                userIdContext.id = noNameUuid
                 try req.content.encode(userIdContext, as: .urlEncodedForm)
             },
             afterResponse: { res in

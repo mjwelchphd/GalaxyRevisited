@@ -17,13 +17,11 @@ struct CreateUser: AsyncMigration {
             .field("email", .string)
             .field("password_hash", .string)
             .create()
-        try await UserModel(name: "root", email: "root@example.com", passwordHash: "<no hash>").save(on: database)
+        // The password for root is "secret", and it's hash is below
+        try await UserModel(name: "root", email: "root@example.com", passwordHash: "$2b$12$Ykbze5p7W5zaWVizlv8cWetX365OLqt39o7RhBYsxUwOmHlCmC/Mm").save(on: database)
     }
 
-    /// Moves the "users" table back to a previous migration; if fields are removed from
-    /// the database in the process, that data will be lost from the database when the Vapor migrate command
-    /// is run. Backing up the database beforehand would be a great idea. In Galaxy Revisited, revert is not
-    /// used. One supposes it would only be used manually.
+    /// Moves the "users" table back to a previous migration.
     func revert(on database: Database) async throws {
         try await database.schema("users").delete()
     }

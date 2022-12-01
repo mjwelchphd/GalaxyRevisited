@@ -37,13 +37,11 @@ struct UserIndexTemplate: TemplateRepresentable {
                         Tr {
                             Th("Name").style("text-align:left")
                             Th("EMail").style("text-align:left")
-                            Th("Password Hash").style("text-align:left")
                         }
                         for userContext in usersContext.users {
                             Tr {
                                 Td(userContext.name)
                                 Td(userContext.email)
-                                Td(userContext.passwordHash)
                                 // GET by Form Button
                                 Td {
                                     Form {
