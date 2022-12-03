@@ -18,7 +18,7 @@ struct CreateUser: AsyncMigration {
             .field("password_hash", .string)
             .create()
         // The password for root is "secret", and it's hash is below
-        try await UserModel(name: "root", email: "root@example.com", passwordHash: "$2b$12$Ykbze5p7W5zaWVizlv8cWetX365OLqt39o7RhBYsxUwOmHlCmC/Mm").save(on: database)
+        try await UserModel(name: "root", email: "root@example.com", passwordHash: "$2b$12$wnimPv.tsfdsSxL8LjjkPOWdMrobu7SaOc.s64OIRxDMgEKP5h87.").save(on: database)
     }
 
     /// Moves the "users" table back to a previous migration.

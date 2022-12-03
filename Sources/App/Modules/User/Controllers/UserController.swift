@@ -130,7 +130,7 @@ struct UserController: RouteCollection {
 
         // If the password was entered, create a new hash
         if password != nil {
-            userModel.passwordHash = try Bcrypt.hash(userContext.email)
+            userModel.passwordHash = try Bcrypt.hash(userIdContextWithPassword.password)
         }
 
         // save the updated user record and return to the 'show' page

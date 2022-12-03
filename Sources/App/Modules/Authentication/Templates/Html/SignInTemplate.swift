@@ -19,6 +19,7 @@ struct SignInTemplate: TemplateRepresentable {
             Body {
                 H1("Please sign in")
                 Form {
+                    Input().type(.hidden).name("email").value("")
                     Table {
                         Tr {
                             Td {
@@ -26,15 +27,6 @@ struct SignInTemplate: TemplateRepresentable {
                             }
                             Td {
                                 Input().type(.text).name("name").value("")
-                            }
-                        }.style("background-color: #F0F0FF")
-
-                        Tr {
-                            Td {
-                                Label("EMail:").for("email")
-                            }
-                            Td {
-                                Input().type(.text).name("email").value("")
                             }
                         }.style("background-color: #F0F0FF")
 
@@ -49,19 +41,10 @@ struct SignInTemplate: TemplateRepresentable {
 
                         Tr {
                             Td {
-                                Label("Confirm Password:").for("confirmPassword")
-                            }
-                            Td {
-                                Input().type(.password).name("confirmPassword").value("")
-                            }
-                        }.style("background-color: #F0F0FF")
-
-                        Tr {
-                            Td {
-                                Button("Sign In")
+                                Button("Log In")
                                     .type(.submit)
-                                    .name("sign-in")
-                                    .formaction("/authenticate")
+                                    .name("log-in")
+                                    .formaction("/log-in")
                                     .formmethod(.post)
                                     .formenctype(.urlencoded)
                             }
