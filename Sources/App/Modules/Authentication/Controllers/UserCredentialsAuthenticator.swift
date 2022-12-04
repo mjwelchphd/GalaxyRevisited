@@ -30,8 +30,7 @@ struct UserCredentialsAuthenticator: AsyncCredentialsAuthenticator {
             guard try Bcrypt.verify(credentials.password, created: userModel.passwordHash) else {
                 return
             }
-            let authenticatedUser = AuthenticatedUser(model: userModel)
-            req.auth.login(authenticatedUser)
+            req.auth.login(AuthenticatedUser(model: userModel))
         }
         catch {
             // do nothing...

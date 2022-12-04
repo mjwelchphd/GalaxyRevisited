@@ -5,6 +5,7 @@
 ///  Copyright © 2022 Michael J. Welch, Ph.D. All rights reserved.
 
 import Vapor
+import Fluent
 import SwiftHtml
 
 struct WelcomeTemplate: TemplateRepresentable {
@@ -20,7 +21,7 @@ struct WelcomeTemplate: TemplateRepresentable {
                 H1("Revisiting Galaxy")
                 H3("Vapor's Fluent Demonstration Project")
 
-                P("Logged In: \(req.auth.get(AuthenticatedUser.self))")
+                P("Logged In: \(req.session.data["user-id"])")
 
                 P("Your choices are:")
                 Ul {
