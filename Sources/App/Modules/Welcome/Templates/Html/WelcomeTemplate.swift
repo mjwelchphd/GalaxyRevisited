@@ -21,7 +21,9 @@ struct WelcomeTemplate: TemplateRepresentable {
                 H1("Revisiting Galaxy")
                 H3("Vapor's Fluent Demonstration Project")
 
-                P("Logged In: \(req.session.data["user-id"])")
+                if let authenticatedUser = req.auth.get(AuthenticatedUser.self) {
+                    P("Welcome \(authenticatedUser.name)")
+                }
 
                 P("Your choices are:")
                 Ul {

@@ -30,22 +30,19 @@ public func configure(_ app: Application) throws {
         as: .mysql
     )
 
-    // Set up session
-    app.sessions.use(.fluent)
-    app.sessions.configuration.cookieName = "galaxy"
-    app.sessions.configuration.cookieFactory = { sessionID in
-            .init(string: sessionID.string, isSecure: true)
-    }
-    app.middleware.use(app.sessions.middleware)
-
     // Register migrations
-    app.migrations.add(SessionRecord.migration)
     app.migrations.add(CreateGalaxy())
     app.migrations.add(CreateStar())
     app.migrations.add(CreateUser())
-    try app.autoMigrate().wait()
 
+    // Set up session
+    app.sessions.use(.fluent)
+    app.sessions.configuration.cookieName = "galaxy"
+    app.migrations.add(SessionRecord.migration)
+    app.middleware.use(app.sessions.middleware)
     app.middleware.use(UserSessionAuthenticator())
+
+    try app.autoMigrate().wait()
     
     // register routes
     try routes(app)

@@ -26,8 +26,11 @@ struct UserAuthenticationController: RouteCollection {
 
     /// Process the results of the sign-in page (i.e., authenticate)
     func signInAction(req: Request) async throws -> Response {
+        // Make sure the previous user is logged out
+        req.auth.logout(AuthenticatedUser.self)
+        req.session.unauthenticate(AuthenticatedUser.self)
 
-        // if the user is authenticated, we can store the user data inside the session too
+        // If the user is authenticated, we can store the user data inside the session too
         if let user = req.auth.get(AuthenticatedUser.self) {
             req.session.authenticate(user)
             return req.redirect(to: "/")
@@ -35,21 +38,17 @@ struct UserAuthenticationController: RouteCollection {
 
         let credentials = try req.content.decode(Credentials.self)
         try await UserCredentialsAuthenticator().authenticate(credentials: credentials, for: req)
-
-        guard let signedInUser = req.auth.get(AuthenticatedUser.self) else {
+        guard let _ = req.auth.get(AuthenticatedUser.self) else {
             throw AuthenticationControllerErrors.unableToValidateSignIn
         }
-
-        req.session.data["user-id"] = signedInUser.id.uuidString
-
-        print(signedInUser)
 
         return req.redirect(to: "/")
     }
 
-    /// Display the sign in page
+    /// Close out the current user and session, but don't throuw away the session data.
     func signOut(req: Request) async throws -> Response {
         req.auth.logout(AuthenticatedUser.self)
+        req.session.unauthenticate(AuthenticatedUser.self)
         return req.redirect(to: "/")
     }
 }

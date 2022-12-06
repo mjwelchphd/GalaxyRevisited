@@ -12,7 +12,7 @@ struct AuthenticatedUser: Authenticatable {
     let name: String
     let email: String
 
-    public init(id: UUID, name: String, email: String) {
+    init(id: UUID, name: String, email: String) {
         self.id = id
         self.name = name
         self.email = email
