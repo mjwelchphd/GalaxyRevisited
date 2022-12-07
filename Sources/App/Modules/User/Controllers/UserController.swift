@@ -24,7 +24,7 @@ struct UserController: RouteCollection {
 
     /// Endpoints map for the UserController.
     func boot(routes: RoutesBuilder) throws {
-        let userRoutes = routes.grouped("user")
+        let userRoutes = routes.grouped("user").grouped(EnsureAdminUserMiddleware())
         userRoutes.get("index", use: index)
         userRoutes.get("add", use: add)
         userRoutes.post("save", use: save)

@@ -38,8 +38,14 @@ struct WelcomeTemplate: TemplateRepresentable {
 
                 P("Your admin testing choices are:")
                 Ul {
-                    Li { A("List All Users").name("list-all-users").href("/user/index") }
-                    Li { A("Sign In for Admin Functions").name("sign-in").href("/sign-in") }
+
+                    if let authenticatedUser = req.auth.get(AuthenticatedUser.self) {
+                        if authenticatedUser.name == "root" || authenticatedUser.name == "admin" {
+                            Li { A("List All Users").name("list-all-users").href("/user/index") }
+                        }
+                    }
+
+                    Li { A("Sign In").name("sign-in").href("/sign-in") }
                     Li { A("Sign Out").name("sign-out").href("/sign-out") }
                 }
             }
