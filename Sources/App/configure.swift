@@ -30,18 +30,20 @@ public func configure(_ app: Application) throws {
         as: .mysql
     )
 
-    // Register migrations
+    // Register migrations, except for sessions
     app.migrations.add(CreateGalaxy())
     app.migrations.add(CreateStar())
     app.migrations.add(CreateUser())
 
-    // Set up session
+    // Set up session, including session migration -- these calls must
+    // be made in this order or the app will produce strange results
     app.sessions.use(.fluent)
     app.sessions.configuration.cookieName = "galaxy"
     app.migrations.add(SessionRecord.migration)
     app.middleware.use(app.sessions.middleware)
     app.middleware.use(UserSessionAuthenticator())
 
+    // Continue with the migration (if any)
     try app.autoMigrate().wait()
     
     // register routes

@@ -16,7 +16,7 @@ func routes(_ app: Application) throws {
     try app.register(collection: UserAuthenticationController())
 
     // Display the routes for debugging the routes list
-/*    print("--- routes ---")
+    /* print("--- routes ---")
     for route in app.routes.all {
         print(route)
     }

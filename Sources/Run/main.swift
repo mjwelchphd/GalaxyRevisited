@@ -15,5 +15,5 @@ try configure(app)
 do {
     try app.run()
 } catch {
-    print("*000* error floated all the way to the top: \(error)")
+    print("*000* An error floated all the way to the top: \(error)")
 }

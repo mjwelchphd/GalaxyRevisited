@@ -2082,4 +2082,21 @@ systemctl -l status galaxy
 
 > Remember then Nginx is controlled separately, and both must be running to test. Normally, Nginx is always running, and if you don't do anything to it, it will just run. But you can either run Galaxy Revisited using the _swift run_ command when you're working on it, or as a daemon when you just want to leave it running.
 
+
+## Authentication
+
+### Notes
+
+- when you log off one user and log on another on the same browser, the data gets wiped from the first and replaced by the second. "Sessions" aren't the same as sessions in Ruby.
+
+- diff unauthenticate and destroy session
+
+- don't save anything in req.sessions.data because if the user doesn't get logged out, the next user inherits the previous user's cookie.
+
+- multiple windows in any one browser accessing the same website share the same cookie; i.e., only one cookie is assigned to a website URL. Caveat Emptor.
+
+- when logging in a new user when there are multiple windows open in a browser, that user then becomes the user of all the other windows in the browser for this server (it's a browser thing, not a server thing)
+
+
+
 <center>--- Fin ---</center>

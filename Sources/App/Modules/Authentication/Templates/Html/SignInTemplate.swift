@@ -8,6 +8,11 @@ import Vapor
 import SwiftHtml
 
 struct SignInTemplate: TemplateRepresentable {
+    let context: SignInContext
+
+    init(_ context: SignInContext) {
+        self.context = context
+    }
 
     /// Template for the sign in page.
     @TagBuilder
@@ -20,13 +25,21 @@ struct SignInTemplate: TemplateRepresentable {
                 H1("Please sign in")
                 Form {
                     Input().type(.hidden).name("email").value("")
+                    if let error = context.error {
+                        Tr {
+                            Td {
+                                Tag(error)
+                            }.attribute("color","red")
+                        }.style("background-color: #F0F0FF")
+                    }
+
                     Table {
                         Tr {
                             Td {
                                 Label("User Name:").for("name")
                             }
                             Td {
-                                Input().type(.text).name("name").value("")
+                                Input().type(.text).name("name").value(context.name)
                             }
                         }.style("background-color: #F0F0FF")
 
