@@ -24,6 +24,7 @@ struct UserSessionAuthenticator: AsyncSessionAuthenticator {
     // If no user is logged in, the "sessionID" will be nil, the find will fail, and the guard will return
     // without generating an error; otherwise, the usermodel will be copied into an AuthenticatedUser DTO
     // and registered as the logged-in user
+    /// If the user session is valid, log in the user (called from middleware).
     func authenticate(sessionID: User.SessionID, for req: Request) async throws {
         guard let userModel = try await UserModel.find(sessionID, on: req.db) else {
             return

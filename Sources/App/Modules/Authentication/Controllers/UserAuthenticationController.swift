@@ -19,13 +19,13 @@ struct UserAuthenticationController: RouteCollection {
         routes.get("sign-out", use: signOut)
         routes.post("log-in", use: signInAction)    }
 
-    /// Display the sign in page
+    /// Display the sign in page.
     func signIn(req: Request) async throws -> Response {
         return req.templates.renderHtml(SignInTemplate(SignInContext(name: "")))
     }
 
     // Note that there are two "authenticate" methods, one in UserCredentialsAuthenticator.swift,
-    // and another in UserSessionAuthenticator.swift -- only thge former is called here;
+    // and another in UserSessionAuthenticator.swift -- only the former is called here;
     // the latter is called by middleware to restore the logged on user from the
     // session record (_fluent_sessions.data)
     /// Process the results of the sign-in page (i.e., authenticate the user, if possible).

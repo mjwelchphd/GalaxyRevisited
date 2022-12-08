@@ -19,11 +19,12 @@ struct Credentials: Content {
 
 struct UserCredentialsAuthenticator: AsyncCredentialsAuthenticator {
 
-    // The "credentials" arrive here from Vapor -- An attempt is made to find
+    // The "credentials" arrive here from middleware -- An attempt is made to find
     // the user, and if successful, validate the given password against the
     // passwordHash in the user record -- if unsuccessful, nothing is changed;
     // otherwise, the usermodel will be copied into an AuthenticatedUser DTO
     // and registered as the logged-in user
+    /// Check user credentials and, if valid, log in the user.
     func authenticate(credentials: Credentials, for req: Request) async throws {
         guard
             let userModel = try await UserModel
