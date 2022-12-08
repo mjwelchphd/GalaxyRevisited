@@ -1,7 +1,7 @@
-///  File: Sources/App/Modules/Welcome/Templates/Html/SignInTemplate.swift
+///  File: Sources/App/Modules/Authentication/Templates/Html/SignInTemplate.swift
 ///
 ///  Author: Michael J. Welch, Ph.D.
-///  Created: 11/29/22.
+///  Created: 12/7/22.
 ///  Copyright © 2022 Michael J. Welch, Ph.D. All rights reserved.
 
 import Vapor

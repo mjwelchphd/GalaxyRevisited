@@ -1,3 +1,9 @@
+///  File: Sources/App/Modules/Authentication/Controllers/UserSessionAuthenticator.swift
+///
+///  Author: Michael J. Welch, Ph.D.
+///  Created: 12/7/22.
+///  Copyright © 2022 Michael J. Welch, Ph.D. All rights reserved.
+
 import Vapor
 import Fluent
 import Foundation

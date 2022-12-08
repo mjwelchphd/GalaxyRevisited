@@ -1,7 +1,7 @@
-///  File: Sources/App/Modules/Authentication/Controllers/AuthenticationController.swift
+///  File: Sources/App/Modules/Authentication/Controllers/UserCredentialsAuthenticator.swift
 ///
 ///  Author: Michael J. Welch, Ph.D.
-///  Created: 8/27/22.
+///  Created: 12/7/22.
 ///  Copyright © 2022 Michael J. Welch, Ph.D. All rights reserved.
 ///
 /// FILE: Sources/App/Modules/User/Authenticators/UserCredentialsAuthenticator.swift

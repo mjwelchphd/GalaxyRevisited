@@ -1,7 +1,7 @@
-///  File: Sources/App/Modules/User/Templates/Contexts/UserContext.swift
+///  File: Sources/App/Modules/Authentication/Templates/Contexts/SignInContext.swift
 ///
 ///  Author: Michael J. Welch, Ph.D.
-///  Created: 8/27/22.
+///  Created: 12/7/22.
 ///  Copyright © 2022 Michael J. Welch, Ph.D. All rights reserved.
 
 import Vapor
