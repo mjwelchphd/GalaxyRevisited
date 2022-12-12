@@ -2085,17 +2085,35 @@ systemctl -l status galaxy
 
 ## Authentication
 
+### First, Some Notes Regarding Authentication and Sessions
+
+- To do authentication, you need a model (database table) with at least a username and hashed password, but here we added an email. For GalaxyRevisited the model is UserModel, and UserModel follows the same general pattern that the GalaxyModel and StarModel follow, with minor variations. In fact, UserModel is simpler because it has no relationships. There is one little thing, though. Since the user routes will be protected, i.e., require a logged in user, the code for that is included in the User module.
+
+- User authentication for a website requires a way to remember that the user is logged on, and for that, Vapor provides _sessions_. A session in Vapor is created when a user logs on. It can remember string pairs (key, value) for the duration of the session, but once the user logs off, the session is destroyed, and hence, the string pairs are lost. In other words, the session can remember the pairs _only for the duration_ of the session. (The Vapor code for this is _req.sessions.data_.)
+
+- There can only be one session with one user at a time from a given browser. So, for example, if you open the browser and log into a website, a session is created. If you then open another window or tab in the browser, it'll already be logged in because it shares the same session. This, in part, is because the browser has only one cookie per URL, so there's no facility for it to support multiple logins in multiple windows or tabs. When one window or tab logs out, all windows and tabs are logged out, but the other windows and tabs don't automatically refresh, so an action in another window or tab can result in an authorization failure. Note that this isn't true using two browsers on different machines because they have independent cookie stores.
+
+> _**Beware**_
+If you simply log in a different user when you have multiple windows or tabs open, the new user will own all the windows and tabs. If you log into one tab, open a database record ready for update, then go to another window, and log in with another user that is not authorized for the record in the first tab, when you return to the first and click _update_ you'll get an authorization error because the tab now belongs to a user with no authorization.
+
+- If you would like multiple sessions to be stored, one per user, too bad. It doesn't work that way. There can be only one user logged in at a time. In order to log in a different user, the current user must be logged off. In GalaxyRevisited, the sign-on function logs out any previously logged in user so that it's not necessary to log out of the current user first. Remember, though, the previously logged-in users session (and any data save in that session) will be lost. If you want to have stuff that survives the log-out process, create a separate _preferences_ capability.
+
+- [JWTs aren't the panacea they might seem to be.](https://redis.com/blog/json-web-tokens-jwt-are-dangerous-for-user-sessions/)
+
+- Here's a comparison of [Cookies vs JWTs](https://developer.okta.com/blog/2022/02/08/cookies-vs-tokens).
+
+- Part of the argument for JWTs is that a backend lookup of the user demographics isn't necessary, but that claim must be weighed against the cost of the lookup. A fast, memory-based look up of user credentials may not be any more costly than the crypographic operations on JWTs. JWTs do have applications that cookies aren't suitable for, however (such as being valid on multiple servers).
+
+- An advantage of a cookie is that it can be revoked on the server side. A JWT, once issued, can't be revoked. It'll be valid until it expires, so it's often given a short (5 minute to 20 minute) lifetime for security reasons, but that means it may have to be renewed frequently.
+
+- The session values HttpOnly, Secure, and SameSite can be set in the HTTP header to increase security of the cookie. In Vapor, however, they default to their most permissive values. Although this is configurable in Vapor, it's difficult; however, since we'll be using a proxy server, it's probably true that the Vapor application is only accessible on the local machine, and that the HTTP headers don't need to specify HttpOnly, Secure, and SameSite for that reason.
+
+- Sadly, neither cookies nor tokens (including JWT) can verify that you're talking to the user you think you're talking to. For single site access, cookies are as good as tokens if you use HttpOnly, Secure, and SameSite headers in the proxy server. [HTTP State Tokens](https://mikewest.github.io/http-state-tokens/draft-west-http-state-tokens.html) have been proposed to solve this problem, but it's still not clear to me how these new tokens would securely identify the user such that a stolen token would instantly be recognized as coming from an unauthorized sender.
+
+
+
+
 ### Notes
-
-- when you log off one user and log on another on the same browser, the data gets wiped from the first and replaced by the second. "Sessions" aren't the same as sessions in Ruby.
-
-- diff unauthenticate and destroy session
-
-- don't save anything in req.sessions.data because if the user doesn't get logged out, the next user inherits the previous user's cookie.
-
-- multiple windows in any one browser accessing the same website share the same cookie; i.e., only one cookie is assigned to a website URL. Caveat Emptor.
-
-- when logging in a new user when there are multiple windows open in a browser, that user then becomes the user of all the other windows in the browser for this server (it's a browser thing, not a server thing)
 
 
 
