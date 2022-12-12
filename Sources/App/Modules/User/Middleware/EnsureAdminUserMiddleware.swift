@@ -9,7 +9,10 @@ import Vapor
 // Middleware to protect the UserController routes, but it can be applied to any routes
 struct EnsureAdminUserMiddleware: AsyncMiddleware {
     func respond(to request: Request, chainingTo next: AsyncResponder) async throws -> Response {
-        guard let user = request.auth.get(AuthenticatedUser.self), user.name == "root" || user.name == "admin" else {
+        guard let user = request.auth.get(AuthenticatedUser.self) else {
+            throw Abort(.unauthorized)
+        }
+        guard user.administrator == "Y" else {
             throw Abort(.unauthorized)
         }
         return try await next.respond(to: request)

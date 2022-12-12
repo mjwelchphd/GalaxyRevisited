@@ -33,7 +33,11 @@ struct UserShowTemplate: TemplateRepresentable {
                                 Label("Name:").for("name")
                             }
                             Td {
-                                Input().type(.text).name("name").value(userContext.name)
+                                if userContext.name != "root" {
+                                    Input().type(.text).name("name").value(userContext.name)
+                                } else {
+                                    Tag(userContext.name)
+                                }
                             }
                         }.style("background-color: #F0F0FF")
 
@@ -46,45 +50,57 @@ struct UserShowTemplate: TemplateRepresentable {
                             }
                         }.style("background-color: #F0F0FF")
 
-                        Tr {
-                            Td {
-                                Label("Password Hash:").for("passwordHash")
-                            }
-                            Td {
-                                Tag(userContext.passwordHash)
-                            }
-                        }.style("background-color: #F0F0FF")
+                        // If this is root, don't show critical field or the buttons
+                        if userContext.name != "root" {
+                            Tr {
+                                Td {
+                                    Label("Password Hash:").for("passwordHash")
+                                }
+                                Td {
+                                    Tag(userContext.passwordHash)
+                                }
+                            }.style("background-color: #F0F0FF")
 
-                        Tr {
-                            Td {
-                                Label("Password:").for("password")
-                            }
-                            Td {
-                                Input().type(.password).name("password").value("")
-                            }
-                        }.style("background-color: #F0F0FF")
+                            Tr {
+                                Td {
+                                    Label("Password:").for("password")
+                                }
+                                Td {
+                                    Input().type(.password).name("password").value("")
+                                }
+                            }.style("background-color: #F0F0FF")
 
-                        Tr {
-                            Td {
-                                Label("Confirm Password:").for("confirmPassword")
-                            }
-                            Td {
-                                Input().type(.password).name("confirmPassword").value("")
-                            }
-                        }.style("background-color: #F0F0FF")
+                            Tr {
+                                Td {
+                                    Label("Confirm Password:").for("confirmPassword")
+                                }
+                                Td {
+                                    Input().type(.password).name("confirmPassword").value("")
+                                }
+                            }.style("background-color: #F0F0FF")
 
-                        Tr {
-                            Td {
-                                Button("Update")
-                                    .type(.submit)
-                                    .name("update")
-                                    .formaction("/user/update")
-                                    .formmethod(.post)
-                                Button("Delete")
-                                    .type(.submit)
-                                    .name("delete")
-                                    .formaction("/user/delete")
-                                    .formmethod(.post)
+                            Tr {
+                                Td {
+                                    Label("administrator:").for("administrator")
+                                }
+                                Td {
+                                    Input().type(.text).name("administrator").value(userContext.administrator)
+                                }
+                            }.style("background-color: #F0F0FF")
+
+                            Tr {
+                                Td {
+                                    Button("Update")
+                                        .type(.submit)
+                                        .name("update")
+                                        .formaction("/user/update")
+                                        .formmethod(.post)
+                                    Button("Delete")
+                                        .type(.submit)
+                                        .name("delete")
+                                        .formaction("/user/delete")
+                                        .formmethod(.post)
+                                }
                             }
                         }
                     }

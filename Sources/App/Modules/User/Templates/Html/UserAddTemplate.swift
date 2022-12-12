@@ -22,6 +22,7 @@ struct UserAddTemplate: TemplateRepresentable {
                 Form {
                     Input().type(.hidden).name("id").value("")
                     Input().type(.hidden).name("passwordHash").value("")
+                    Input().type(.hidden).name("administrator").value("N")
                     Table {
                         Tr {
                             Td {

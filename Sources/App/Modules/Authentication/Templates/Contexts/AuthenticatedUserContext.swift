@@ -11,12 +11,14 @@ struct AuthenticatedUser: Authenticatable {
     let id: UUID
     let name: String
     let email: String
+    let administrator: String
 
     // Fills in the AuthenticatedUser from parameters
-    init(id: UUID, name: String, email: String) {
+    init(id: UUID, name: String, email: String, administrator: String) {
         self.id = id
         self.name = name
         self.email = email
+        self.administrator = administrator
     }
 
     // Fills in the AuthenticatedUser from a UserModel
@@ -25,6 +27,7 @@ struct AuthenticatedUser: Authenticatable {
         self.id = user.id!
         self.name = user.name
         self.email = user.email
+        self.administrator = user.administrator
     }
 }
 

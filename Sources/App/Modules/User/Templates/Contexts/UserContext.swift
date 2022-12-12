@@ -11,6 +11,7 @@ struct UserContext: Content {
     var name: String = ""
     var email: String = ""
     var passwordHash: String = ""
+    var administrator: String = ""
 
     init() {}
 
@@ -21,13 +22,15 @@ struct UserContext: Content {
         self.name = user.name
         self.email = user.email
         self.passwordHash = user.passwordHash
+        self.administrator = user.administrator
     }
 
     // Creates a new UserContext given parameters
-    init(id: String, name: String, email: String, passwordHash: String) {
+    init(id: String, name: String, email: String, passwordHash: String, administrator: String) {
         self.id = id
         self.name = name
         self.email = email
         self.passwordHash = passwordHash
+        self.administrator = administrator
     }
 }

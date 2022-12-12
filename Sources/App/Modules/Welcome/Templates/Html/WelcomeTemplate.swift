@@ -40,7 +40,7 @@ struct WelcomeTemplate: TemplateRepresentable {
                 Ul {
 
                     if let authenticatedUser = req.auth.get(AuthenticatedUser.self) {
-                        if authenticatedUser.name == "root" || authenticatedUser.name == "admin" {
+                        if authenticatedUser.administrator == "Y" {
                             Li { A("List All Users").name("list-all-users").href("/user/index") }
                         }
                     }

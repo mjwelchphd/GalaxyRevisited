@@ -4,6 +4,8 @@
 ///  Created: 12/7/22.
 ///  Copyright © 2022 Michael J. Welch, Ph.D. All rights reserved.
 
+// alter table users change administrator administrator char(1) not null default "N";
+
 import Vapor
 import Fluent
 
@@ -17,15 +19,17 @@ final class UserModel: Model, Content {
     @Field(key: "name") var name: String
     @Field(key: "email") var email: String
     @Field(key: "password_hash") var passwordHash: String
+    @Field(key: "administrator") var administrator: String
 
     // Creates a new, empty User
     init() { }
 
-    init(id: UUID? = nil, name: String, email: String, passwordHash: String) {
+    init(id: UUID? = nil, name: String, email: String, passwordHash: String, administrator: String) {
         self.id = id
         self.name = name
         self.email = email
         self.passwordHash = passwordHash
+        self.administrator = administrator
     }
 
     // Call here to create a new record
@@ -39,5 +43,6 @@ final class UserModel: Model, Content {
         self.name = user.name
         self.email = user.email
         self.passwordHash = user.passwordHash
+        self.administrator = user.administrator
     }
 }

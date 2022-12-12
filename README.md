@@ -79,6 +79,9 @@
         * [Updating Galaxy Revisited on AWS After Initial Installation](#a3e7dac7-6273-4c78-948a-320a95f48a66)
     * [Installing Nginx](#084799b1-400d-4b79-bf89-a2d5ced10c3f)
     * [Running Galaxy Revisited As A Daemon](#150500ab-3243-4a27-9526-61b157769741)
+- [Authentication](#0ae85d5c-30aa-43a5-9dbf-c831af08de64)
+    * [First, Some Notes Regarding Authentication and Sessions](#50cf0b2c-4ab5-496b-a8f2-c7d25db1a4b0)
+    * [Authentication](#488720ed-d910-44c3-8eeb-4e9f0fcbc325)
 <!-- end contents -->
 
 
@@ -105,7 +108,7 @@ As you experiment with this app, you can save your place using Git (Xcode Menu -
 
 Run it and examine the data flow. You can make changes to see what'll happen, and at any time, revert it and start again. Experimentation of this sort is where you learn the most, especially when there's nothing at risk. Note that the chart above doesn't show the _home_ links which you find on every page.
 
-As is common in Vapor-Fluent databases, the tables use a UUID for the primary key. _Galaxy Revisited_ is designed such that the user (nominally) never sees a UUID, but _show_ pages show them just for instructional purposes. In a real application, the UUIDs in the database table are generally used by other tables to reference a record in this one. Normally, _**they would never change**_ because that would break the link between tables.
+As is common in Vapor-Fluent databases, the tables use a UUID for the primary key. _Galaxy Revisited_ is designed such that the user (nominally) never sees a UUID, but _show_ pages show them just for instructional purposes. In a real application, the UUIDs in the database table are generally used by other tables to reference a record in this one. Normally, __they would never change__ because that would break the link between tables.
 
 In _Galaxy Revisited_, however, whenever the database is restored to its nominal content, or a test is run, the database data is erased and replaced with fresh, new data in which all the UUIDs are also new. This ability is useful for testing, where you want to be able to have non-repeatable data to discover errors caused by stale data. In a real app, the test database and the production database would be separate, but in _Galaxy Revisited_ no effort has been made to make them so. Here's an area you could experiment with.
 
@@ -203,7 +206,7 @@ To stop the execution, click the _stop_ button ![Home Page](Resources/Images/sto
 
 ### <a id="9b4e0c23-28cf-4c84-a4d1-5b2519a534f7">Is Galaxy Revisited a perfect example of how to write a Swift application?</a>
 
-_**No, sorry**_. There must be plenty of places where improvements can be made, and if you find one, give it a try! I haven't been entirely consistent in my naming conventions, either. As we programmers like to say, "I'll do it better next time!" (Shame on me for that one.) That's what this app is for. Learning and experimenting without risk.
+__No, sorry__. There must be plenty of places where improvements can be made, and if you find one, give it a try! I haven't been entirely consistent in my naming conventions, either. As we programmers like to say, "I'll do it better next time!" (Shame on me for that one.) That's what this app is for. Learning and experimenting without risk.
 
 As I was programming the tests (and that turned out to be more code than I anticipated), I found that I was starting to cut corners to save work, and the quality of what I was doing was dropping dramatically. There are some sayings among writers:
 
@@ -709,7 +712,7 @@ and generates this HTML:
 
 where the UUID 1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10 was read from the database in _/galaxy/index/_. 
 
-> _**Important Tip:** SwiftHtml "A" Tag Needs To Be Extended_
+> __Important Tip:** SwiftHtml "A" Tag Needs To Be Extended__
 
 > As mentioned before, the \<a> tag doesn't have a _name_ attribute, but we'll need one for testing. Since it's not part of the W^3^C specification, SwiftHtml doesn't accept it. To get around this, we _extend_ SwiftHtml in _SwiftHtmlTags.swift_. Some Ruby programmers call this _monkey patching_, but it's a feature of Ruby, not a bug. In Swift, it's an _important_ feature that you'll find useful in many situations, and it's used extensively by Swift programmers.
 
@@ -1296,7 +1299,7 @@ try testButton(
 
 ## <a id="3706d5ae-5b59-4465-b9c0-ab729a518055">Universally Unique Identifiers (UUIDs)</a>
 
-UUIDs in Fluent are used by a record in one table to link to a record in another table. Depending on how these links are used, different relationships can be created. In a database, these UUIDs _**must never**_ be changed or relationships will be broken. In _Galaxy Revisited_, when the database is re-created, either manually or during a test, all the tables are discarded, re-created, and re-loaded. All the relationships are re-created correctly, but with new UUIDs, meaning that you can't depend on them to be the same as they were previously. You would never re-create UUIDs in a real application.
+UUIDs in Fluent are used by a record in one table to link to a record in another table. Depending on how these links are used, different relationships can be created. In a database, these UUIDs __must never__ be changed or relationships will be broken. In _Galaxy Revisited_, when the database is re-created, either manually or during a test, all the tables are discarded, re-created, and re-loaded. All the relationships are re-created correctly, but with new UUIDs, meaning that you can't depend on them to be the same as they were previously. You would never re-create UUIDs in a real application.
 
 Also, UUIDs are never displayed to users, except maybe for diagnostic purposes. Instead, you display the name of the data the UUID represents, i.e., you wouldn't display the UUID (like 4ac343ac-7226-491e-a998-6fe3f11b7b3d) of a galaxy record, but the name of the galaxy (Milky Way).
 
@@ -1309,7 +1312,7 @@ In _Galaxy Revisited_, the _show_ pages display the UUID for diagnostic purposes
 
 
 ## <a id="0537ec6b-30bf-4d3d-a84b-6492e321461b">Data Transfer Objects (DTOs)</a>
-A Closer Look At _**Data Transfer Objects**_
+A Closer Look At __Data Transfer Objects__
 
 A _Data Transfer Object_ is, in its simplest form, just a struct with little if any functionality of its own. Say, for example, that you have a model, **GalaxyModel**, and you use it to read a **Galaxy** record from the database, and now you want to call another function with that **Galaxy** record. The **Galaxy** can be copied to another struct, say **GalaxyContext**, which can then be used to call the next function. We use the terminology Data Transfer Object to refer to that simple struct.
 
@@ -2083,20 +2086,30 @@ systemctl -l status galaxy
 > Remember then Nginx is controlled separately, and both must be running to test. Normally, Nginx is always running, and if you don't do anything to it, it will just run. But you can either run Galaxy Revisited using the _swift run_ command when you're working on it, or as a daemon when you just want to leave it running.
 
 
-## Authentication
+## <a id="0ae85d5c-30aa-43a5-9dbf-c831af08de64">Authentication</a>
 
-### First, Some Notes Regarding Authentication and Sessions
+### <a id="50cf0b2c-4ab5-496b-a8f2-c7d25db1a4b0">First, Some Notes Regarding Authentication and Sessions</a>
 
-- To do authentication, you need a model (database table) with at least a username and hashed password, but here we added an email. For GalaxyRevisited the model is UserModel, and UserModel follows the same general pattern that the GalaxyModel and StarModel follow, with minor variations. In fact, UserModel is simpler because it has no relationships. There is one little thing, though. Since the user routes will be protected, i.e., require a logged in user, the code for that is included in the User module.
+- To do authentication, you need a model (database table) with at least a username and hashed password, but in GalaxyRevisited, we added an email and an administrator field also (the administrator field is Y/N to indicate a privileged user or not). For GalaxyRevisited, the model is _UserModel_, and UserModel follows the same general pattern that the GalaxyModel and StarModel follow, with minor variations. The authorization code is also included in the User, and special rules for "root" are hard coded.
 
-- User authentication for a website requires a way to remember that the user is logged on, and for that, Vapor provides _sessions_. A session in Vapor is created when a user logs on. It can remember string pairs (key, value) for the duration of the session, but once the user logs off, the session is destroyed, and hence, the string pairs are lost. In other words, the session can remember the pairs _only for the duration_ of the session. (The Vapor code for this is _req.sessions.data_.)
+> __Remember...__
+The authentication code here is _bare bones_. It demonstrates how to make authentication work, but lacks the sophistication of a production application.
+
+- User authentication for a website requires a way to remember that the user is logged on, and for that, Vapor provides _sessions_. _Sessions_ are used to provide continuity from one page to another. A session contains:
+    - a _sessionID_, a UUID used to identify the individual session record;
+    - a _key_, a random string that the browser saves in its cookie, and that Vapor uses to look up the session belonging to the browser; and,
+    - _data_, a JSON encoded string to hold key/value pairs. When a user is logged in, one of the key/value pairs is _AuthenticatedUserSession: String_ that has the user's _UUID_; when a request is received, the browser cookie is used to look up the session using the _key_ field from the table __\_fluent_sessions__, then the user is looked up using the _AuthenticatedUserSession_, and the authenticatedUser context is placed into _req.auth_.
+    
+    ![Fluent Sessions Table](Resources/images/fluent-sessions-table.png)
+
+- A session in Vapor is created when a user logs on. It can remember string pairs (key, value) in _req.session.data_ for the duration of the session, but once the user logs off, the session is destroyed, and hence, the string pairs are lost. In other words, the session can remember the pairs _only for the duration_ of the session. (The Vapor code for this is _req.session.data_.)
 
 - There can only be one session with one user at a time from a given browser. So, for example, if you open the browser and log into a website, a session is created. If you then open another window or tab in the browser, it'll already be logged in because it shares the same session. This, in part, is because the browser has only one cookie per URL, so there's no facility for it to support multiple logins in multiple windows or tabs. When one window or tab logs out, all windows and tabs are logged out, but the other windows and tabs don't automatically refresh, so an action in another window or tab can result in an authorization failure. Note that this isn't true using two browsers on different machines because they have independent cookie stores.
 
-> _**Beware**_
-If you simply log in a different user when you have multiple windows or tabs open, the new user will own all the windows and tabs. If you log into one tab, open a database record ready for update, then go to another window, and log in with another user that is not authorized for the record in the first tab, when you return to the first and click _update_ you'll get an authorization error because the tab now belongs to a user with no authorization.
+    > __Beware__
+    If you log in as different user when you have multiple windows or tabs already open, the new user will aquire ownership of _all_ the windows and tabs. That means that the authorizations of the other windows and tabs also changes accordingly and can lead to unexpected authorization failures.
 
-- If you would like multiple sessions to be stored, one per user, too bad. It doesn't work that way. There can be only one user logged in at a time. In order to log in a different user, the current user must be logged off. In GalaxyRevisited, the sign-on function logs out any previously logged in user so that it's not necessary to log out of the current user first. Remember, though, the previously logged-in users session (and any data save in that session) will be lost. If you want to have stuff that survives the log-out process, create a separate _preferences_ capability.
+- In order to log in a different user, the current user must be logged off. In GalaxyRevisited, the sign-on function logs out any previously logged in user so that it's not necessary to log out of the current user first. Remember, though, the previously logged-in users session (and any data save in that session) will be lost. If you want to have stuff that survives the log-out process, create a separate _preferences_ capability.
 
 - [JWTs aren't the panacea they might seem to be.](https://redis.com/blog/json-web-tokens-jwt-are-dangerous-for-user-sessions/)
 
@@ -2110,11 +2123,23 @@ If you simply log in a different user when you have multiple windows or tabs ope
 
 - Sadly, neither cookies nor tokens (including JWT) can verify that you're talking to the user you think you're talking to. For single site access, cookies are as good as tokens if you use HttpOnly, Secure, and SameSite headers in the proxy server. [HTTP State Tokens](https://mikewest.github.io/http-state-tokens/draft-west-http-state-tokens.html) have been proposed to solve this problem, but it's still not clear to me how these new tokens would securely identify the user such that a stolen token would instantly be recognized as coming from an unauthorized sender.
 
+    > Well, that's the real trick, isn't it? --- Hans Solo
 
+### <a id="488720ed-d910-44c3-8eeb-4e9f0fcbc325">Authentication</a>
 
+Apart from the UserModel and it's templates, authentication requires:
+- 1 controller,
+- 2 authenticators,
+- 2 contexts,
+- 1 sign-in template.
 
-### Notes
+> __Note__
+there are no fancy error handling routines here. If an error occurs, you'll get an error like {"error":true,"reason":"Unauthorized"}. Just click the _back_ button at the top of the browser page, or start back at the home page.
 
+Basically, the process works as follows (in GalaxyRevisited)):
+- A use selects _Sign In_ on the Home (Welcome) page.That brings up the sign-in template.
+- The user enters his username and password, and clicks _Log In_.
+- The welcome page is re-displayed, with the "Welcome <username>" at the top. That's how you verify that the log in worked.
 
 
 <center>--- Fin ---</center>

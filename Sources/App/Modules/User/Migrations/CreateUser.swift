@@ -16,11 +16,13 @@ struct CreateUser: AsyncMigration {
             .field("name", .string)
             .field("email", .string)
             .field("password_hash", .string)
+            .field("administrator", .string)
             .unique(on: "email")
             .create()
         // The password for root and admin is "secret", and it's hash is below
-        try await UserModel(name: "root", email: "root@example.com", passwordHash: "$2b$12$wnimPv.tsfdsSxL8LjjkPOWdMrobu7SaOc.s64OIRxDMgEKP5h87.").save(on: database)
-        try await UserModel(name: "admin", email: "admin@example.com", passwordHash: "$2b$12$wnimPv.tsfdsSxL8LjjkPOWdMrobu7SaOc.s64OIRxDMgEKP5h87.").save(on: database)
+        // Notice that the "salt" in bcrypt makes the hashes different
+        try await UserModel(name: "root", email: "root@example.com", passwordHash: "$2b$12$wnimPv.tsfdsSxL8LjjkPOWdMrobu7SaOc.s64OIRxDMgEKP5h87.", administrator: "Y").save(on: database)
+        try await UserModel(name: "admin", email: "admin@example.com", passwordHash: "$2b$12$pSxGeR3H8TdJzjW1lafThenCizH9a/nfIf9UR7q9nTXnixOGlwW2G", administrator: "Y").save(on: database)
     }
 
     /// Moves the "users" table back to a previous migration.
