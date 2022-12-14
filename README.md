@@ -80,8 +80,12 @@
     * [Installing Nginx](#084799b1-400d-4b79-bf89-a2d5ced10c3f)
     * [Running Galaxy Revisited As A Daemon](#150500ab-3243-4a27-9526-61b157769741)
 - [Authentication](#0ae85d5c-30aa-43a5-9dbf-c831af08de64)
-    * [First, Some Notes Regarding Authentication and Sessions](#50cf0b2c-4ab5-496b-a8f2-c7d25db1a4b0)
-    * [Authentication](#488720ed-d910-44c3-8eeb-4e9f0fcbc325)
+    * [Some Notes Regarding Authentication and Sessions](#50cf0b2c-4ab5-496b-a8f2-c7d25db1a4b0)
+        * [The _Sign In_ flow goes like this:](#64fadbde-1e14-4034-a7dd-7049c0b14a15)
+        * [When you are logged-in and return to another endpoint:](#02a29c9a-ad7a-4569-9ff3-b703781332bf)
+        * [When the endpoint you want to access has authorization middleware:](#de81c311-b390-4a5c-a5de-c366798c023a)
+        * [Miscellaneous Notes](#7fade7c6-8903-4221-925e-9d8c091b75d2)
+    * [Using JWTs for Authentication](#c8bdd09e-b06c-40cc-992e-4681437eee4c)
 <!-- end contents -->
 
 
@@ -712,7 +716,7 @@ and generates this HTML:
 
 where the UUID 1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10 was read from the database in _/galaxy/index/_. 
 
-> __Important Tip:** SwiftHtml "A" Tag Needs To Be Extended__
+> __Important Tip: SwiftHtml "A" Tag Needs To Be Extended__
 
 > As mentioned before, the \<a> tag doesn't have a _name_ attribute, but we'll need one for testing. Since it's not part of the W^3^C specification, SwiftHtml doesn't accept it. To get around this, we _extend_ SwiftHtml in _SwiftHtmlTags.swift_. Some Ruby programmers call this _monkey patching_, but it's a feature of Ruby, not a bug. In Swift, it's an _important_ feature that you'll find useful in many situations, and it's used extensively by Swift programmers.
 
@@ -2085,61 +2089,140 @@ systemctl -l status galaxy
 
 > Remember then Nginx is controlled separately, and both must be running to test. Normally, Nginx is always running, and if you don't do anything to it, it will just run. But you can either run Galaxy Revisited using the _swift run_ command when you're working on it, or as a daemon when you just want to leave it running.
 
+[back to contents](#contents)<hr/>
+
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+
 
 ## <a id="0ae85d5c-30aa-43a5-9dbf-c831af08de64">Authentication</a>
 
-### <a id="50cf0b2c-4ab5-496b-a8f2-c7d25db1a4b0">First, Some Notes Regarding Authentication and Sessions</a>
+### <a id="50cf0b2c-4ab5-496b-a8f2-c7d25db1a4b0">Some Notes Regarding Authentication and Sessions</a>
 
-- To do authentication, you need a model (database table) with at least a username and hashed password, but in GalaxyRevisited, we added an email and an administrator field also (the administrator field is Y/N to indicate a privileged user or not). For GalaxyRevisited, the model is _UserModel_, and UserModel follows the same general pattern that the GalaxyModel and StarModel follow, with minor variations. The authorization code is also included in the User, and special rules for "root" are hard coded.
+- To do authentication, Galaxy Revisited has the following components:
+    - a user controller that follows the pattern established in the Galaxy and Star modules, but with a few hard coded rules for _root_ (User module);
+    - a sign-in template for entering the user name and pasword (SignInTemplate), and sign-in context (SignInContext);
+    - an authentication controller with sign-in and sign-out endpoints (UserAuthenticationController);
+    - a user credentials authenticator (UserCredentialsAuthenticator);
+    - a user session authenticator (UserSessionAuthenticator);
+    - an authenticated user context that represents the user login in _req.auth_ (AuthenticatedUser); and
+    - a middleware that's used in the User module's routes to require a user with _administrator_ privileges (EnsureAdminUserMiddleware).
 
 > __Remember...__
 The authentication code here is _bare bones_. It demonstrates how to make authentication work, but lacks the sophistication of a production application.
 
-- User authentication for a website requires a way to remember that the user is logged on, and for that, Vapor provides _sessions_. _Sessions_ are used to provide continuity from one page to another. A session contains:
-    - a _sessionID_, a UUID used to identify the individual session record;
-    - a _key_, a random string that the browser saves in its cookie, and that Vapor uses to look up the session belonging to the browser; and,
-    - _data_, a JSON encoded string to hold key/value pairs. When a user is logged in, one of the key/value pairs is _AuthenticatedUserSession: String_ that has the user's _UUID_; when a request is received, the browser cookie is used to look up the session using the _key_ field from the table __\_fluent_sessions__, then the user is looked up using the _AuthenticatedUserSession_, and the authenticatedUser context is placed into _req.auth_.
-    
+First, a few things about Vapor:
+
+- the place where the user log-in is stored is _req.auth_;
+    - _req.auth_ is nil when no user is logged in;
+    - _req.auth_ has an Optional(AuthenticatedUser) when a user is logged in;
+
+- the place where session data is stored (if any) is _req.session.data_;
+    - req.session has the session record; and
+    - req.session.data has any data put there since the start of the user session (i.e., last log-in);
+
+- the name of the database table that holds the sessions is _\_fluent_sessions_;
+    - the table in MySQL:
     ![Fluent Sessions Table](Resources/images/fluent-sessions-table.png)
+    - an _id_, a UUID used by Vapor to identify the individual session record;
+    - a _key_, a random token that the browser saves in its cookie, and that Vapor uses to look up the session belonging to the browser; and,
+    - _data_, a JSON encoded string to hold key/value pairs. When a user is logged in, one of the key/value pairs in the _data_ field is _AuthenticatedUserSession_ and that has the user's _UUID_ as its value (in Vapor code, it's called sessionID).
 
-- A session in Vapor is created when a user logs on. It can remember string pairs (key, value) in _req.session.data_ for the duration of the session, but once the user logs off, the session is destroyed, and hence, the string pairs are lost. In other words, the session can remember the pairs _only for the duration_ of the session. (The Vapor code for this is _req.session.data_.)
+The User module works like the Galaxy or Star controllers, so there's no need to go over the programming. GalaxyRevisited enters two users for testing, _root_ and _admin_. They're both set as administrators.
 
-- There can only be one session with one user at a time from a given browser. So, for example, if you open the browser and log into a website, a session is created. If you then open another window or tab in the browser, it'll already be logged in because it shares the same session. This, in part, is because the browser has only one cookie per URL, so there's no facility for it to support multiple logins in multiple windows or tabs. When one window or tab logs out, all windows and tabs are logged out, but the other windows and tabs don't automatically refresh, so an action in another window or tab can result in an authorization failure. Note that this isn't true using two browsers on different machines because they have independent cookie stores.
+The Home (Welcome) page has the _Sign In_ and _Sign Out_ links on it. In addition, when an authorized user is logged in, the _List All Users_ link will be displayed.
+<table><tr>
+<td><b>No One Logged In</b></td>
+<td><b>Logging In</b></td>
+<td><b>Admin Logged In</b></td>
+</tr><tr>
+<td><authentication><img src="Resources/Images/noone-logged-in.png"/></authentication></td>
+<td><authentication><img src="Resources/Images/logging-in.png"/></authentication></td>
+<td><authentication><img src="Resources/Images/logged-in-with-admin.png"/></authentication></td>
+</tr></table>
+
+
+#### <a id="64fadbde-1e14-4034-a7dd-7049c0b14a15">The _Sign In_ flow goes like this:</a>
+
+- You click the _Sign In_ link and the log-in page opens.
+- You enter your username and password and click the _Log In_ button.
+- That takes you to the _UserAuthenticationController.signInAction_ endpoint.
+- That endpoint performs a _logout_ to be sure no other user is logged in.
+- Next, the UserCredentialsAuthenticator().authenticate is called to validate the credentials.
+    - The authenticator looks up the user and validates the password against the passwordHash.
+    - If it fails, the (now empty) _req.auth_ is left empty, and the authenticator returns
+    - if it passes, an AuthenticatedUser is created, you're logged in (and the AuthenticatedUser is put into req.auth).
+- The endpoint tests _req.auth_ to see if you were authenticated.
+- if you were authenticated, you are returned to the Home  (Welcome) page.
+- If you were _not_ authenticated, an error is returned and you're redirected back to the log-in page.
+
+#### <a id="02a29c9a-ad7a-4569-9ff3-b703781332bf">When you are logged-in and return to another endpoint:</a>
+
+- When Vapor receives a request, _middleware_ (UserSessionAuthenticator) looks at the _req.auth_ to see if a user is logged in.
+- If you're logged in, the middleware looks your name up to validates that you're still authorized.
+- If you're still in the database, you're logged in (and the AuthenticatedUser is put into req.auth).
+- This step only validates the session and your logged-in status.
+
+#### <a id="de81c311-b390-4a5c-a5de-c366798c023a">When the endpoint you want to access has authorization middleware:</a>
+
+- When Vapor calls the endpoint router.
+- The router calls its middleware (which is _EnsureAdminUserMiddleware_ for _User_).
+- The middleware (in this example) looks up the user to obtain the _administrator_ flag.
+- If the flag is "Y", the router activates the endpoint.
+- If the flag is _not_ "Y", the request is denied access to the endpoint.
+    > __Note__
+    You can put any authorization rules you want for the endpoint group in the middleware. The _administrator_ flag is in Galaxy Revisited only to demonstrate the methodology. The most common method for authorization is to create a _roles_ table which specifies what level of access each role has, and each user would, in turn, be assigned to a specific role. Implementing such a scheme is trivial and beyond the scope of this document.
+
+#### <a id="7fade7c6-8903-4221-925e-9d8c091b75d2">Miscellaneous Notes</a>
+
+- User authentication for a website requires a way to remember that you're logged on, and for that, Vapor provides _sessions_. _Sessions_ are used to provide continuity from one page to another. [(The session file is described above)](#50cf0b2c-4ab5-496b-a8f2-c7d25db1a4b0).
+
+- When a request is received, Vapor:
+    - gets the cookie token from the browser (if any) and uses it to find the associated session record using the _key_ field from the table __\_fluent_sessions__; if no session record matches, a new session record is created;
+    - the data field in the session record contains a JSON string. Initially, the JSON string is empty (_{}_);
+    - When a user is logged into the session, an _\_AuthenticatedUserSession_ key is added to the _data_ field with a value User.id of the user associated with that session;
+    - a _middleware_ (UserSessionAuthenticator) is called and it looks up the user in the UserModel using the _sessionID_ (the user.id)
+        - if the user is found, a _AuthenticatedUser_ is created and logged-in (the AuthenticatedUser object is put into the req.auth).
+        - if the user isn't found, no action is taken (leaving _no_ user logged in).
+
+- A session in Vapor can remember string pairs (key, value) in _req.session.data_ for the duration of the session, but once the user logs off, the session is destroyed, and hence, the string pairs are lost. In other words, the session can remember the pairs _only for the duration_ of the session. (The Vapor code for this is _req.session.data_.)
+
+- There can only be one session with one user at a time from a given browser. So, for example, if you open the browser and log in, a session is created. If you then open another window or tab in the browser, it'll already be logged in because it shares the same session. This, in part, is because the browser has only one cookie per URL, so there's no facility for it to support multiple simultaneous logins from the same browser, but with different users. When one window or tab logs out, all windows and tabs are logged out, but the other windows and tabs don't automatically refresh, so an action in another window or tab can result in an authorization failure. Note that this isn't true using two browsers on different machines because they have independent cookie stores.
 
     > __Beware__
     If you log in as different user when you have multiple windows or tabs already open, the new user will aquire ownership of _all_ the windows and tabs. That means that the authorizations of the other windows and tabs also changes accordingly and can lead to unexpected authorization failures.
 
-- In order to log in a different user, the current user must be logged off. In GalaxyRevisited, the sign-on function logs out any previously logged in user so that it's not necessary to log out of the current user first. Remember, though, the previously logged-in users session (and any data save in that session) will be lost. If you want to have stuff that survives the log-out process, create a separate _preferences_ capability.
+- In order to log in a different user, the current user must be logged off. In GalaxyRevisited, the sign-on function logs out any previously logged in user so that it's not necessary to log out of the current user first. Remember, though, the previously logged-in users session (and any data saved in that session) will be lost. If you want to have stuff that survives the log-out process, create a separate _preferences_ capability.
 
-- [JWTs aren't the panacea they might seem to be.](https://redis.com/blog/json-web-tokens-jwt-are-dangerous-for-user-sessions/)
+[back to contents](#contents)<hr/>
 
-- Here's a comparison of [Cookies vs JWTs](https://developer.okta.com/blog/2022/02/08/cookies-vs-tokens).
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
 
-- Part of the argument for JWTs is that a backend lookup of the user demographics isn't necessary, but that claim must be weighed against the cost of the lookup. A fast, memory-based look up of user credentials may not be any more costly than the crypographic operations on JWTs. JWTs do have applications that cookies aren't suitable for, however (such as being valid on multiple servers).
 
-- An advantage of a cookie is that it can be revoked on the server side. A JWT, once issued, can't be revoked. It'll be valid until it expires, so it's often given a short (5 minute to 20 minute) lifetime for security reasons, but that means it may have to be renewed frequently.
+### <a id="c8bdd09e-b06c-40cc-992e-4681437eee4c">Using JWTs for Authentication</a>
 
-- The session values HttpOnly, Secure, and SameSite can be set in the HTTP header to increase security of the cookie. In Vapor, however, they default to their most permissive values. Although this is configurable in Vapor, it's difficult; however, since we'll be using a proxy server, it's probably true that the Vapor application is only accessible on the local machine, and that the HTTP headers don't need to specify HttpOnly, Secure, and SameSite for that reason.
+- The process would work like this from a browser:
 
-- Sadly, neither cookies nor tokens (including JWT) can verify that you're talking to the user you think you're talking to. For single site access, cookies are as good as tokens if you use HttpOnly, Secure, and SameSite headers in the proxy server. [HTTP State Tokens](https://mikewest.github.io/http-state-tokens/draft-west-http-state-tokens.html) have been proposed to solve this problem, but it's still not clear to me how these new tokens would securely identify the user such that a stolen token would instantly be recognized as coming from an unauthorized sender.
+    - The user logs on by sending his username and password.
+    - We look it up, and if it verifies, we generate _and sign_ a JWT. We use our private key to sign the JWT, so the receiver _could_ validate it against our published public key (but browsers don't do that, at least not yet).
+    - The browser stores the JWT as a cookie and sends it with every request going forward.
+    - We receive a request from the user, including the JWT, and we verify the JWT. If we stored the user's ID in the JWT as encrypted data, we can decrypt it and recover the user's name, so we don't have to look it up.
+    - What we don't have is the session, so we're forced to use the JWT just like an ordinary cookie to look up the session. If we previously stored the user information in the session, we didn't need it in the JWT.
+    
+    - Bottom line: we saved _nothing_. In this use case, there's no advantage in using a JWT as essentially a random session token.
+
+- On the other hand, an advantage of a cookie is that it can be revoked on the server side. A JWT, once issued, can't be revoked. It'll be valid until it expires, so it's often given a short (5 minute to 20 minute) lifetime for security reasons, but that means it may have to be renewed frequently.
+
+- The session values HttpOnly, Secure, and SameSite can be set in the HTTP header to increase security of the cookie. (In Vapor they default to their most permissive values. Although it's configurable in Vapor, it's difficult; however, since we'll be using a proxy server, it's probably true that the Vapor application is only accessible on the local machine, and doesn't need to use those settings.)
+
+- Sadly, neither cookies nor tokens (including JWT) can verify that you're talking to the user you think you're talking to. If a thief has access to the cookie, Bearer Token, or JWT, it's game over. If the thief can steal the user's private key, it's game over! Happily, such scenarios are very unlikely, so for most applications, the usual cookie will work fine with  the standard protections, and we can even add some of our own, if we want (but that's beyond the scope of what we're doing here).
+
+- Bottom line: for single site access, cookies are as good as tokens, even if the token is a JWT; if you use HttpOnly, Secure, and SameSite headers in the proxy server, you can minimize to risk of theft of the cookie.
 
     > Well, that's the real trick, isn't it? --- Hans Solo
 
-### <a id="488720ed-d910-44c3-8eeb-4e9f0fcbc325">Authentication</a>
+[back to contents](#contents)<hr/>
 
-Apart from the UserModel and it's templates, authentication requires:
-- 1 controller,
-- 2 authenticators,
-- 2 contexts,
-- 1 sign-in template.
-
-> __Note__
-there are no fancy error handling routines here. If an error occurs, you'll get an error like {"error":true,"reason":"Unauthorized"}. Just click the _back_ button at the top of the browser page, or start back at the home page.
-
-Basically, the process works as follows (in GalaxyRevisited)):
-- A use selects _Sign In_ on the Home (Welcome) page.That brings up the sign-in template.
-- The user enters his username and password, and clicks _Log In_.
-- The welcome page is re-displayed, with the "Welcome <username>" at the top. That's how you verify that the log in worked.
-
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
 
 <center>--- Fin ---</center>

@@ -2,6 +2,14 @@ figure {
 	margin-left: 0px;
 }
 
+authentication img{
+	width: 328px;
+	height: 358px;
+	border: solid 1px black;
+	background-color: #f8f8f8;
+	border-radius: 10px
+}
+
 figure img{
 	width: 625px;
 	border: solid 1px black;

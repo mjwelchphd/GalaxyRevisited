@@ -129,7 +129,20 @@
 <li><a href="#a3e7dac7-6273-4c78-948a-320a95f48a66">Updating Galaxy Revisited on AWS After Initial Installation</a></li>
 </ul></li>
 <li><a href="#084799b1-400d-4b79-bf89-a2d5ced10c3f">Installing Nginx</a></li>
-<li><a href="#150500ab-3243-4a27-9526-61b157769741">Running Galaxy Revisited As A Daemon</a><br/>
+<li><a href="#150500ab-3243-4a27-9526-61b157769741">Running Galaxy Revisited As A Daemon</a></li>
+</ul></li>
+<li><a href="#0ae85d5c-30aa-43a5-9dbf-c831af08de64">Authentication</a>
+
+<ul>
+<li><a href="#50cf0b2c-4ab5-496b-a8f2-c7d25db1a4b0">Some Notes Regarding Authentication and Sessions</a>
+
+<ul>
+<li><a href="#64fadbde-1e14-4034-a7dd-7049c0b14a15">The <em>Sign In</em> flow goes like this:</a></li>
+<li><a href="#02a29c9a-ad7a-4569-9ff3-b703781332bf">When you are logged-in and return to another endpoint:</a></li>
+<li><a href="#de81c311-b390-4a5c-a5de-c366798c023a">When the endpoint you want to access has authorization middleware:</a></li>
+<li><a href="#7fade7c6-8903-4221-925e-9d8c091b75d2">Miscellaneous Notes</a></li>
+</ul></li>
+<li><a href="#c8bdd09e-b06c-40cc-992e-4681437eee4c">Using JWTs for Authentication</a><br/>
 <!-- end contents --></li>
 </ul></li>
 </ul>
@@ -160,7 +173,7 @@
 
 <p>Run it and examine the data flow. You can make changes to see what&#8217;ll happen, and at any time, revert it and start again. Experimentation of this sort is where you learn the most, especially when there&#8217;s nothing at risk. Note that the chart above doesn&#8217;t show the <em>home</em> links which you find on every page.</p>
 
-<p>As is common in Vapor-Fluent databases, the tables use a UUID for the primary key. <em>Galaxy Revisited</em> is designed such that the user (nominally) never sees a UUID, but <em>show</em> pages show them just for instructional purposes. In a real application, the UUIDs in the database table are generally used by other tables to reference a record in this one. Normally, <em><strong>they would never change</strong></em> because that would break the link between tables.</p>
+<p>As is common in Vapor-Fluent databases, the tables use a UUID for the primary key. <em>Galaxy Revisited</em> is designed such that the user (nominally) never sees a UUID, but <em>show</em> pages show them just for instructional purposes. In a real application, the UUIDs in the database table are generally used by other tables to reference a record in this one. Normally, <strong>they would never change</strong> because that would break the link between tables.</p>
 
 <p>In <em>Galaxy Revisited</em>, however, whenever the database is restored to its nominal content, or a test is run, the database data is erased and replaced with fresh, new data in which all the UUIDs are also new. This ability is useful for testing, where you want to be able to have non-repeatable data to discover errors caused by stale data. In a real app, the test database and the production database would be separate, but in <em>Galaxy Revisited</em> no effort has been made to make them so. Here&#8217;s an area you could experiment with.</p>
 
@@ -247,7 +260,7 @@ drwxr-xr-x   5 mike  staff   160B Nov  9 19:19 Public
 
 <h3 id="aid9b4e0c23-28cf-4c84-a4d1-5b2519a534f7isgalaxyrevisitedaperfectexampleofhowtowriteaswiftapplicationa"><a id="9b4e0c23-28cf-4c84-a4d1-5b2519a534f7">Is Galaxy Revisited a perfect example of how to write a Swift application?</a></h3>
 
-<p><em><strong>No, sorry</strong></em>. There must be plenty of places where improvements can be made, and if you find one, give it a try! I haven&#8217;t been entirely consistent in my naming conventions, either. As we programmers like to say, &#8220;I&#8217;ll do it better next time!&#8221; (Shame on me for that one.) That&#8217;s what this app is for. Learning and experimenting without risk.</p>
+<p><strong>No, sorry</strong>. There must be plenty of places where improvements can be made, and if you find one, give it a try! I haven&#8217;t been entirely consistent in my naming conventions, either. As we programmers like to say, &#8220;I&#8217;ll do it better next time!&#8221; (Shame on me for that one.) That&#8217;s what this app is for. Learning and experimenting without risk.</p>
 
 <p>As I was programming the tests (and that turned out to be more code than I anticipated), I found that I was starting to cut corners to save work, and the quality of what I was doing was dropping dramatically. There are some sayings among writers:</p>
 
@@ -725,7 +738,7 @@ http://localhost:8080/galaxy/show1<yellow-highlight>/1E3E85B9&#8211;7C17&#8211;4
 <p>where the UUID 1E3E85B9&#8211;7C17&#8211;4BAA-A2F8&#8211;2C67B73CDC10 was read from the database in <em>/galaxy/index/</em>. </p>
 
 <blockquote>
-<p><em><strong>Important Tip:</strong> SwiftHtml &#8220;A&#8221; Tag Needs To Be Extended</em></p>
+<p><strong>Important Tip: SwiftHtml &#8220;A&#8221; Tag Needs To Be Extended</strong></p>
 
 <p>As mentioned before, the &lt;a&gt; tag doesn&#8217;t have a <em>name</em> attribute, but we&#8217;ll need one for testing. Since it&#8217;s not part of the W<sup>3</sup>C specification, SwiftHtml doesn&#8217;t accept it. To get around this, we <em>extend</em> SwiftHtml in <em>SwiftHtmlTags.swift</em>. Some Ruby programmers call this <em>monkey patching</em>, but it&#8217;s a feature of Ruby, not a bug. In Swift, it&#8217;s an <em>important</em> feature that you&#8217;ll find useful in many situations, and it&#8217;s used extensively by Swift programmers.</p>
 </blockquote>
@@ -1223,7 +1236,7 @@ try retrievePageHtml(
 
 <h2 id="aid3706d5ae-5b59-4465-b9c0-ab729a518055universallyuniqueidentifiersuuidsa"><a id="3706d5ae-5b59-4465-b9c0-ab729a518055">Universally Unique Identifiers (UUIDs)</a></h2>
 
-<p>UUIDs in Fluent are used by a record in one table to link to a record in another table. Depending on how these links are used, different relationships can be created. In a database, these UUIDs <em><strong>must never</strong></em> be changed or relationships will be broken. In <em>Galaxy Revisited</em>, when the database is re-created, either manually or during a test, all the tables are discarded, re-created, and re-loaded. All the relationships are re-created correctly, but with new UUIDs, meaning that you can&#8217;t depend on them to be the same as they were previously. You would never re-create UUIDs in a real application.</p>
+<p>UUIDs in Fluent are used by a record in one table to link to a record in another table. Depending on how these links are used, different relationships can be created. In a database, these UUIDs <strong>must never</strong> be changed or relationships will be broken. In <em>Galaxy Revisited</em>, when the database is re-created, either manually or during a test, all the tables are discarded, re-created, and re-loaded. All the relationships are re-created correctly, but with new UUIDs, meaning that you can&#8217;t depend on them to be the same as they were previously. You would never re-create UUIDs in a real application.</p>
 
 <p>Also, UUIDs are never displayed to users, except maybe for diagnostic purposes. Instead, you display the name of the data the UUID represents, i.e., you wouldn&#8217;t display the UUID (like 4ac343ac&#8211;7226&#8211;491e-a998&#8211;6fe3f11b7b3d) of a galaxy record, but the name of the galaxy (Milky Way).</p>
 
@@ -1234,7 +1247,7 @@ try retrievePageHtml(
 
 <h2 id="aid0537ec6b-30bf-4d3d-a84b-6492e321461bdatatransferobjectsdtosa"><a id="0537ec6b-30bf-4d3d-a84b-6492e321461b">Data Transfer Objects (DTOs)</a></h2>
 
-<p>A Closer Look At <em><strong>Data Transfer Objects</strong></em></p>
+<p>A Closer Look At <strong>Data Transfer Objects</strong></p>
 
 <p>A <em>Data Transfer Object</em> is, in its simplest form, just a struct with little if any functionality of its own. Say, for example, that you have a model, <strong>GalaxyModel</strong>, and you use it to read a <strong>Galaxy</strong> record from the database, and now you want to call another function with that <strong>Galaxy</strong> record. The <strong>Galaxy</strong> can be copied to another struct, say <strong>GalaxyContext</strong>, which can then be used to call the next function. We use the terminology Data Transfer Object to refer to that simple struct.</p>
 
@@ -1932,6 +1945,170 @@ systemctl -l status galaxy</code></pre>
 <blockquote>
 <p>Remember then Nginx is controlled separately, and both must be running to test. Normally, Nginx is always running, and if you don&#8217;t do anything to it, it will just run. But you can either run Galaxy Revisited using the <em>swift run</em> command when you&#8217;re working on it, or as a daemon when you just want to leave it running.</p>
 </blockquote>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h2 id="aid0ae85d5c-30aa-43a5-9dbf-c831af08de64authenticationa"><a id="0ae85d5c-30aa-43a5-9dbf-c831af08de64">Authentication</a></h2>
+
+<h3 id="aid50cf0b2c-4ab5-496b-a8f2-c7d25db1a4b0somenotesregardingauthenticationandsessionsa"><a id="50cf0b2c-4ab5-496b-a8f2-c7d25db1a4b0">Some Notes Regarding Authentication and Sessions</a></h3>
+
+<ul>
+<li>To do authentication, Galaxy Revisited has the following components:
+
+<ul>
+<li>a user controller that follows the pattern established in the Galaxy and Star modules, but with a few hard coded rules for <em>root</em> (User module);</li>
+<li>a sign-in template for entering the user name and pasword (SignInTemplate), and sign-in context (SignInContext);</li>
+<li>an authentication controller with sign-in and sign-out endpoints (UserAuthenticationController);</li>
+<li>a user credentials authenticator (UserCredentialsAuthenticator);</li>
+<li>a user session authenticator (UserSessionAuthenticator);</li>
+<li>an authenticated user context that represents the user login in <em>req.auth</em> (AuthenticatedUser); and</li>
+<li>a middleware that&#8217;s used in the User module&#8217;s routes to require a user with <em>administrator</em> privileges (EnsureAdminUserMiddleware).</li>
+</ul></li>
+</ul>
+
+<blockquote>
+<p><strong>Remember&#8230;</strong><br/>
+The authentication code here is <em>bare bones</em>. It demonstrates how to make authentication work, but lacks the sophistication of a production application.</p>
+</blockquote>
+
+<p>First, a few things about Vapor:</p>
+
+<ul>
+<li>the place where the user log-in is stored is <em>req.auth</em>;
+
+<ul>
+<li><em>req.auth</em> is nil when no user is logged in;</li>
+<li><em>req.auth</em> has an Optional(AuthenticatedUser) when a user is logged in;</li>
+</ul></li>
+<li>the place where session data is stored (if any) is <em>req.session.data</em>;
+
+<ul>
+<li>req.session has the session record; and</li>
+<li>req.session.data has any data put there since the start of the user session (i.e., last log-in);</li>
+</ul></li>
+<li>the name of the database table that holds the sessions is <em>_fluent_sessions</em>;
+
+<ul>
+<li>the table in MySQL:<br/>
+<img src="Resources/images/fluent-sessions-table.png" alt="Fluent Sessions Table" /></li>
+<li>an <em>id</em>, a UUID used by Vapor to identify the individual session record;</li>
+<li>a <em>key</em>, a random token that the browser saves in its cookie, and that Vapor uses to look up the session belonging to the browser; and,</li>
+<li><em>data</em>, a JSON encoded string to hold key/value pairs. When a user is logged in, one of the key/value pairs in the <em>data</em> field is <em>AuthenticatedUserSession</em> and that has the user&#8217;s <em>UUID</em> as its value (in Vapor code, it&#8217;s called sessionID).</li>
+</ul></li>
+</ul>
+
+<p>The User module works like the Galaxy or Star controllers, so there&#8217;s no need to go over the programming. GalaxyRevisited enters two users for testing, <em>root</em> and <em>admin</em>. They&#8217;re both set as administrators.</p>
+
+<p>The Home (Welcome) page has the <em>Sign In</em> and <em>Sign Out</em> links on it. In addition, when an authorized user is logged in, the <em>List All Users</em> link will be displayed.<br/>
+<table><tr>
+<td><b>No One Logged In</b></td>
+<td><b>Logging In</b></td>
+<td><b>Admin Logged In</b></td>
+</tr><tr>
+<td><authentication><img src="Resources/Images/noone-logged-in.png"/></authentication></td>
+<td><authentication><img src="Resources/Images/logging-in.png"/></authentication></td>
+<td><authentication><img src="Resources/Images/logged-in-with-admin.png"/></authentication></td>
+</tr></table></p>
+
+<h4 id="aid64fadbde-1e14-4034-a7dd-7049c0b14a15thesigninflowgoeslikethis:a"><a id="64fadbde-1e14-4034-a7dd-7049c0b14a15">The <em>Sign In</em> flow goes like this:</a></h4>
+
+<ul>
+<li>You click the <em>Sign In</em> link and the log-in page opens.</li>
+<li>You enter your username and password and click the <em>Log In</em> button.</li>
+<li>That takes you to the <em>UserAuthenticationController.signInAction</em> endpoint.</li>
+<li>That endpoint performs a <em>logout</em> to be sure no other user is logged in.</li>
+<li>Next, the UserCredentialsAuthenticator().authenticate is called to validate the credentials.
+
+<ul>
+<li>The authenticator looks up the user and validates the password against the passwordHash.</li>
+<li>If it fails, the (now empty) <em>req.auth</em> is left empty, and the authenticator returns</li>
+<li>if it passes, an AuthenticatedUser is created, you&#8217;re logged in (and the AuthenticatedUser is put into req.auth).</li>
+</ul></li>
+<li>The endpoint tests <em>req.auth</em> to see if you were authenticated.</li>
+<li>if you were authenticated, you are returned to the Home (Welcome) page.</li>
+<li>If you were <em>not</em> authenticated, an error is returned and you&#8217;re redirected back to the log-in page.</li>
+</ul>
+
+<h4 id="aid02a29c9a-ad7a-4569-9ff3-b703781332bfwhenyouarelogged-inandreturntoanotherendpoint:a"><a id="02a29c9a-ad7a-4569-9ff3-b703781332bf">When you are logged-in and return to another endpoint:</a></h4>
+
+<ul>
+<li>When Vapor receives a request, <em>middleware</em> (UserSessionAuthenticator) looks at the <em>req.auth</em> to see if a user is logged in.</li>
+<li>If you&#8217;re logged in, the middleware looks your name up to validates that you&#8217;re still authorized.</li>
+<li>If you&#8217;re still in the database, you&#8217;re logged in (and the AuthenticatedUser is put into req.auth).</li>
+<li>This step only validates the session and your logged-in status.</li>
+</ul>
+
+<h4 id="aidde81c311-b390-4a5c-a5de-c366798c023awhentheendpointyouwanttoaccesshasauthorizationmiddleware:a"><a id="de81c311-b390-4a5c-a5de-c366798c023a">When the endpoint you want to access has authorization middleware:</a></h4>
+
+<ul>
+<li>When Vapor calls the endpoint router.</li>
+<li>The router calls its middleware (which is <em>EnsureAdminUserMiddleware</em> for <em>User</em>).</li>
+<li>The middleware (in this example) looks up the user to obtain the <em>administrator</em> flag.</li>
+<li>If the flag is &#8220;Y&#8221;, the router activates the endpoint.</li>
+<li><p>If the flag is <em>not</em> &#8220;Y&#8221;, the request is denied access to the endpoint. </p>
+
+<blockquote>
+<p><strong>Note</strong><br/>
+You can put any authorization rules you want for the endpoint group in the middleware. The <em>administrator</em> flag is in Galaxy Revisited only to demonstrate the methodology. The most common method for authorization is to create a <em>roles</em> table which specifies what level of access each role has, and each user would, in turn, be assigned to a specific role. Implementing such a scheme is trivial and beyond the scope of this document.</p>
+</blockquote></li>
+</ul>
+
+<h4 id="aid7fade7c6-8903-4221-925e-9d8c091b75d2miscellaneousnotesa"><a id="7fade7c6-8903-4221-925e-9d8c091b75d2">Miscellaneous Notes</a></h4>
+
+<ul>
+<li><p>User authentication for a website requires a way to remember that you&#8217;re logged on, and for that, Vapor provides <em>sessions</em>. <em>Sessions</em> are used to provide continuity from one page to another. <a href="#50cf0b2c-4ab5-496b-a8f2-c7d25db1a4b0">(The session file is described above)</a>.</p></li>
+<li>When a request is received, Vapor:
+
+<ul>
+<li>gets the cookie token from the browser (if any) and uses it to find the associated session record using the <em>key</em> field from the table <strong>_fluent_sessions</strong>; if no session record matches, a new session record is created;</li>
+<li>the data field in the session record contains a JSON string. Initially, the JSON string is empty (<em>{}</em>);</li>
+<li>When a user is logged into the session, an <em>_AuthenticatedUserSession</em> key is added to the <em>data</em> field with a value User.id of the user associated with that session;</li>
+<li>a <em>middleware</em> (UserSessionAuthenticator) is called and it looks up the user in the UserModel using the <em>sessionID</em> (the user.id)
+
+<ul>
+<li>if the user is found, a <em>AuthenticatedUser</em> is created and logged-in (the AuthenticatedUser object is put into the req.auth).</li>
+<li>if the user isn&#8217;t found, no action is taken (leaving <em>no</em> user logged in).</li>
+</ul></li>
+</ul></li>
+<li><p>A session in Vapor can remember string pairs (key, value) in <em>req.session.data</em> for the duration of the session, but once the user logs off, the session is destroyed, and hence, the string pairs are lost. In other words, the session can remember the pairs <em>only for the duration</em> of the session. (The Vapor code for this is <em>req.session.data</em>.)</p></li>
+<li><p>There can only be one session with one user at a time from a given browser. So, for example, if you open the browser and log in, a session is created. If you then open another window or tab in the browser, it&#8217;ll already be logged in because it shares the same session. This, in part, is because the browser has only one cookie per URL, so there&#8217;s no facility for it to support multiple simultaneous logins from the same browser, but with different users. When one window or tab logs out, all windows and tabs are logged out, but the other windows and tabs don&#8217;t automatically refresh, so an action in another window or tab can result in an authorization failure. Note that this isn&#8217;t true using two browsers on different machines because they have independent cookie stores.</p>
+
+<blockquote>
+<p><strong>Beware</strong><br/>
+If you log in as different user when you have multiple windows or tabs already open, the new user will aquire ownership of <em>all</em> the windows and tabs. That means that the authorizations of the other windows and tabs also changes accordingly and can lead to unexpected authorization failures.</p>
+</blockquote></li>
+<li><p>In order to log in a different user, the current user must be logged off. In GalaxyRevisited, the sign-on function logs out any previously logged in user so that it&#8217;s not necessary to log out of the current user first. Remember, though, the previously logged-in users session (and any data saved in that session) will be lost. If you want to have stuff that survives the log-out process, create a separate <em>preferences</em> capability.</p></li>
+</ul>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h3 id="aidc8bdd09e-b06c-40cc-992e-4681437eee4cusingjwtsforauthenticationa"><a id="c8bdd09e-b06c-40cc-992e-4681437eee4c">Using JWTs for Authentication</a></h3>
+
+<ul>
+<li><p>The process would work like this from a browser:</p>
+
+<ul>
+<li><p>The user logs on by sending his username and password. </p></li>
+<li><p>We look it up, and if it verifies, we generate <em>and sign</em> a JWT. We use our private key to sign the JWT, so the receiver <em>could</em> validate it against our published public key (but browsers don&#8217;t do that, at least not yet). </p></li>
+<li><p>The browser stores the JWT as a cookie and sends it with every request going forward. </p></li>
+<li><p>We receive a request from the user, including the JWT, and we verify the JWT. If we stored the user&#8217;s ID in the JWT as encrypted data, we can decrypt it and recover the user&#8217;s name, so we don&#8217;t have to look it up. </p></li>
+<li><p>What we don&#8217;t have is the session, so we&#8217;re forced to use the JWT just like an ordinary cookie to look up the session. If we previously stored the user information in the session, we didn&#8217;t need it in the JWT.</p></li>
+<li><p>Bottom line: we saved <em>nothing</em>. In this use case, there&#8217;s no advantage in using a JWT as essentially a random session token.</p></li>
+</ul></li>
+<li><p>On the other hand, an advantage of a cookie is that it can be revoked on the server side. A JWT, once issued, can&#8217;t be revoked. It&#8217;ll be valid until it expires, so it&#8217;s often given a short (5 minute to 20 minute) lifetime for security reasons, but that means it may have to be renewed frequently.</p></li>
+<li><p>The session values HttpOnly, Secure, and SameSite can be set in the HTTP header to increase security of the cookie. (In Vapor they default to their most permissive values. Although it&#8217;s configurable in Vapor, it&#8217;s difficult; however, since we&#8217;ll be using a proxy server, it&#8217;s probably true that the Vapor application is only accessible on the local machine, and doesn&#8217;t need to use those settings.)</p></li>
+<li><p>Sadly, neither cookies nor tokens (including JWT) can verify that you&#8217;re talking to the user you think you&#8217;re talking to. If a thief has access to the cookie, Bearer Token, or JWT, it&#8217;s game over. If the thief can steal the user&#8217;s private key, it&#8217;s game over! Happily, such scenarios are very unlikely, so for most applications, the usual cookie will work fine with the standard protections, and we can even add some of our own, if we want (but that&#8217;s beyond the scope of what we&#8217;re doing here).</p></li>
+<li><p>Bottom line: for single site access, cookies are as good as tokens, even if the token is a JWT; if you use HttpOnly, Secure, and SameSite headers in the proxy server, you can minimize to risk of theft of the cookie.</p>
+
+<blockquote>
+<p>Well, that&#8217;s the real trick, isn&#8217;t it? &#8212; Hans Solo</p>
+</blockquote></li>
+</ul>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
 <center>&#8212; Fin &#8212;</center>
 
 </body>
