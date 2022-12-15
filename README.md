@@ -2123,7 +2123,7 @@ First, a few things about Vapor:
 
 - the name of the database table that holds the sessions is _\_fluent_sessions_;
     - the table in MySQL:
-    ![Fluent Sessions Table](Resources/images/fluent-sessions-table.png)
+    ![Fluent Sessions Table](Resources/Images/fluent-sessions-table.png)
     - an _id_, a UUID used by Vapor to identify the individual session record;
     - a _key_, a random token that the browser saves in its cookie, and that Vapor uses to look up the session belonging to the browser; and,
     - _data_, a JSON encoded string to hold key/value pairs. When a user is logged in, one of the key/value pairs in the _data_ field is _AuthenticatedUserSession_ and that has the user's _UUID_ as its value (in Vapor code, it's called sessionID).
