@@ -1991,7 +1991,7 @@ The authentication code here is <em>bare bones</em>. It demonstrates how to make
 
 <ul>
 <li>the table in MySQL:<br/>
-<img src="Resources/images/fluent-sessions-table.png" alt="Fluent Sessions Table" /></li>
+<img src="Resources/Images/fluent-sessions-table.png" alt="Fluent Sessions Table" /></li>
 <li>an <em>id</em>, a UUID used by Vapor to identify the individual session record;</li>
 <li>a <em>key</em>, a random token that the browser saves in its cookie, and that Vapor uses to look up the session belonging to the browser; and,</li>
 <li><em>data</em>, a JSON encoded string to hold key/value pairs. When a user is logged in, one of the key/value pairs in the <em>data</em> field is <em>AuthenticatedUserSession</em> and that has the user&#8217;s <em>UUID</em> as its value (in Vapor code, it&#8217;s called sessionID).</li>
