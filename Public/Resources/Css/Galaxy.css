@@ -1,16 +1,24 @@
 figure {
-	margin-left: 0px;
+    margin-left: 0px;
+}
+
+authentication img{
+    width: 328px;
+    height: 358px;
+    border: solid 1px black;
+    background-color: #f8f8f8;
+    border-radius: 10px
 }
 
 figure img{
-	width: 625px;
-	border: solid 1px black;
-	background-color: #f8f8f8;
-	border-radius: 10px
+    width: 625px;
+    border: solid 1px black;
+    background-color: #f8f8f8;
+    border-radius: 10px
 }
 
 figcaption {
-    font-weight: bold;  
+    font-weight: bold;
     font-style: italic;
 }
 
@@ -39,18 +47,18 @@ pink-highlight {
 }
 
 pre {
-	padding: 2px;
-	border: 1px dotted black;
-	border-radius: 7px;
-	background-color: #f8f8f8;
+    padding: 2px;
+    border: 1px dotted black;
+    border-radius: 7px;
+    background-color: #f8f8f8;
     overflow: auto;
-	white-space: pre-wrap;
+    white-space: pre-wrap;
 }
 
 pre code {
-  display: block;
-  padding: 0.625rem 1rem;
-  overflow-wrap: break-word;
+    display: block;
+    padding: 0.625rem 1rem;
+    overflow-wrap: break-word;
 }
 
 .swift {
@@ -59,13 +67,13 @@ pre code {
 }
 
 .script {
-	color: green;
+    color: green;
     font-family: monospace, monospace;
     font-size: 0.7em;
 }
 
 .html {
-	color: blue;
+    color: blue;
     font-family: monospace, monospace;
     font-size: 0.7em;
 }
