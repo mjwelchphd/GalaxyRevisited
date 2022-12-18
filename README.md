@@ -2236,7 +2236,7 @@ Inside a designated init, the instance (self) has already been created and you c
 
 Inside a convenience init, the instance hasn't yet been created: you must call a designated init before you can initialize the instance's (self's) variables. Before you call the designated init, the instance doesn't yet exist, so you can't reference it's variables, but otherwise, you can do whatever computing you want. After you call the designated init, you can do whatever computing you want including modifing any of the instance's variables (via self) (those of type _var_, of course because those of type _let_ will be frozen).
 
-Many people ask, "then why do I need the keyword _convenience_?" The answer is that unless you use the keyword _convenience_, the init will default to a designated init. And the next question is: "can't I just us a regular init?", and the answer is: yes, probably, but using convenience inits is DRYer and more easily understood.
+Many people ask, "then why do I need the keyword _convenience_? Can't Swift figure it out?" The answer is that unless you use the keyword _convenience_, the init will default to a designated init, and Swift could probably figure out which kind of init it's looking at, but the use of the keyword convenience makes your intent very clear. And the next question is: "can't I just use a regular init?", and the answer is: yes, probably, but convenience inits are DRYer and more easily understood because they are making a variation of a previously defined designated init.
 
 
 
