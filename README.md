@@ -2225,4 +2225,19 @@ The Home (Welcome) page has the _Sign In_ and _Sign Out_ links on it. In additio
 
 <!--section-break-section-break-section-break-section-break-section-break-section-break-->
 
+### A Note About Convenience Inits
+
+There are two kinds of inits: a _designated_ init and a _convenience_ init. The difference between the two is:
+
+- a designated init _instantiates a new object_, whereas
+- a convenience init _calls a designated init to instantiate a new object_.
+
+Inside a designated init, the instance (self) has already been created and you can do whatever computing you want, but you must initialize all the instance's variables.
+
+Inside a convenience init, the instance hasn't yet been created: you must call a designated init before you can initialize the instance's (self's) variables. Before you call the designated init, the instance doesn't yet exist, so you can't reference it's variables, but otherwise, you can do whatever computing you want. After you call the designated init, you can do whatever computing you want including modifing any of the instance's variables (via self) (those of type _var_, of course because those of type _let_ will be frozen).
+
+Many people ask, "then why do I need the keyword _convenience_?" The answer is that unless you use the keyword _convenience_, the init will default to a designated init. And the next question is: "can't I just us a regular init?", and the answer is: yes, probably, but using convenience inits is DRYer and more easily understood.
+
+
+
 <center>--- Fin ---</center>
