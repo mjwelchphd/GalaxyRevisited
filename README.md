@@ -86,6 +86,9 @@
         * [When the endpoint you want to access has authorization middleware:](#de81c311-b390-4a5c-a5de-c366798c023a)
         * [Miscellaneous Notes](#7fade7c6-8903-4221-925e-9d8c091b75d2)
     * [Using JWTs for Authentication](#c8bdd09e-b06c-40cc-992e-4681437eee4c)
+    * [A Note About Convenience Inits](#1f7cee76-b24b-474b-b2b5-8d080f7b7f3b)
+- [Adding a Menu](#334d5d93-c2c8-49ed-b09e-665580866f4d)
+
 <!-- end contents -->
 
 
@@ -2194,6 +2197,20 @@ The Home (Welcome) page has the _Sign In_ and _Sign Out_ links on it. In additio
 
 - In order to log in a different user, the current user must be logged off. In GalaxyRevisited, the sign-on function logs out any previously logged in user so that it's not necessary to log out of the current user first. Remember, though, the previously logged-in users session (and any data saved in that session) will be lost. If you want to have stuff that survives the log-out process, create a separate _preferences_ capability.
 
+- Something that needs to be addressed is user _authorization_ which differs from _authentication_. Authentication is the process of identifying the user as one of ours; authorization is the process of identifying the resources for which this _authenticated_ user is authorized. In Galaxy Revisited I only created a very simple _administrator_ vs. _user_ system to demonstrate the methology of blocking links for which a given user has _no_ access.
+
+The Vapor location _req.auth_ holds a list of authentications. Galaxy Revisited has only one, _AuthenticatedUser_, but it's possible to define different kinds such as _AuthenticatedUser_, _AuthenticatedAdministrator_, _AuthenticatedManager_ and so forth. An alternate method is to create a _RolesModel_ where a user can be assigned a role, and a role, in turn, lists the authorizations for that role. Since the decision as to which to use, eithier of these or some other is beyond the scope of this document, Galaxy Revisited only implements administrators and users.
+
+Notice that to get an _AuthenticatedUser_ from _req.auth_, the call
+
+```swift
+let authenticatedUser = req.auth.get(AuthenticatedUser.self)
+```
+
+is used, but if we had more authorization contexts as suggested above, we could have had others also, and we'd make the selection in the same way.'
+
+.get_ function can get an _AuthenticatedUser_, but we could also have created an _AuthenticatedAdministrator_ ir order to differentiate between user and administrators, but more importantly, the ability to deliver more information through _reg.auth.get(AuthenticatedAdministrator)_ than _reg.auth.get(AuthenticatedUser)_.
+
 [back to contents](#contents)<hr/>
 
 <!--section-break-section-break-section-break-section-break-section-break-section-break-->
@@ -2225,7 +2242,7 @@ The Home (Welcome) page has the _Sign In_ and _Sign Out_ links on it. In additio
 
 <!--section-break-section-break-section-break-section-break-section-break-section-break-->
 
-### A Note About Convenience Inits
+### <a id="1f7cee76-b24b-474b-b2b5-8d080f7b7f3b">A Note About Convenience Inits</a>
 
 There are two kinds of inits: a _designated_ init and a _convenience_ init. The difference between the two is:
 
@@ -2237,6 +2254,49 @@ Inside a designated init, the instance (self) has already been created and you c
 Inside a convenience init, the instance hasn't yet been created: you must call a designated init before you can initialize the instance's (self's) variables. Before you call the designated init, the instance doesn't yet exist, so you can't reference it's variables, but otherwise, you can do whatever computing you want. After you call the designated init, you can do whatever computing you want including modifing any of the instance's variables (via self) (those of type _var_, of course because those of type _let_ will be frozen).
 
 Many people ask, "then why do I need the keyword _convenience_? Can't Swift figure it out?" The answer is that unless you use the keyword _convenience_, the init will default to a designated init, and Swift could probably figure out which kind of init it's looking at, but the use of the keyword convenience makes your intent very clear. And the next question is: "can't I just use a regular init?", and the answer is: yes, probably, but convenience inits are DRYer and more easily understood because they are making a variation of a previously defined designated init.
+
+## <a id="334d5d93-c2c8-49ed-b09e-665580866f4d">Adding a Menu</a>
+
+To add a menu, you only need a small amount of HTML and a bunch of CSS. The menu in Galaxy Revisited is documented in [W3Schools's How TO - Dropdown Navbar](https://www.w3schools.com/howto/howto_css_dropdown_navbar.asp) and consists of two parts: the HTML and the CSS.
+
+The HTML for Galaxy Revisited is in _Sources/App/Templates/MenuTemplate.swift_, and the CSS is in _Public/Resources/Css/Menu.css_. Note that the CSS for the menu is kept in a different file from the CSS for the README in order to avoid clashes between the two, and it just makes maintenance simpler.
+
+The first line of _MenuTemplate_ is the link that brings in the CSS when the browser loads the page. The rest of the HTML is a variation of the W3Schools example.
+
+MenuTemplate conforms to _TemplateRepresentable_ and can be added to any other page that is _TemplateRepresentable_. For example, in _UserAddTemplate_, it's added directly below the \<body> tag.
+
+```swift
+/// Template for the user add page.
+@TagBuilder
+func render(_ req: Request) -> Tag {
+    Html {
+        Head { Title("Add A User") }
+        Body {
+            MenuTemplate().render(req)
+            H1("Add a New User")
+            ...
+        }
+    }
+}
+```
+
+Normally, the \<link ...> tag would be in the \<head>...\</head> section at the top of the page, but it works fine in the body, too. Since the menu generates an @TagBuilder Tag, it just gets added to the host page's Tags. The ability to do this makes it easy to break up HTML into reusable sections. We can simply add this menu to the top of every page.
+
+You could probably put the menu code inline so adding it to each page would not be necessary, but I've found in my experience that to do so is not always helpful. For example, you may want to create a report that can be printed, and you don't want the menu on that page.
+
+The menu will display on the page wherever it appears in the HTML, so you can put a menu anywhere you want on a page. There's a large selection of menu forms, so be sure to look through the W3Schools documentation.
+
+    /// Template for the user index page.
+    @TagBuilder
+    func render(_ req: Request) -> Tag {
+
+SwiftHtml is a dynamic HTML builder: the menu is created at runtime, so menu items can be determined at runtime. For example, some items may be available to everyone, others only to users who are logged in, and yet others only for administrators.
+
+> __Note__ An endpoint that's only available to administrators must be protected as <a id="de81c311-b390-4a5c-a5de-c366798c023a">demonstrated earlier using middleware</a>. Simply excluding the endpoint from a menu won't stop a hacker from typing in the endpoint manually.
+
+The Galaxy Revisited menu demonstrates two simple forms, a menubar item with no dropdown, a some with dropdowns.
+
+[back to contents](#contents)<hr/>
 
 
 

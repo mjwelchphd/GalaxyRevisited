@@ -22,6 +22,7 @@ struct UserIndexTemplate: TemplateRepresentable {
                 Title("List All Users")
             }
             Body {
+                MenuTemplate().render(req)
                 H1("List All Users")
                 Table {
                     if usersContext.users.isEmpty {

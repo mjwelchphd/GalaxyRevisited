@@ -18,6 +18,7 @@ struct UserAddTemplate: TemplateRepresentable {
                 Title("Add A User")
             }
             Body {
+                MenuTemplate().render(req)
                 H1("Add a New User")
                 Form {
                     Input().type(.hidden).name("id").value("")

@@ -35,3 +35,14 @@ struct AuthenticatedUser: Authenticatable {
 extension AuthenticatedUser: SessionAuthenticatable {
     public var sessionID: UUID { id }
 }
+
+// This is added to Request to make it easier to check for an administrator
+extension Request {
+    // Gets the AuthenticatedUser if any, and returns a Bool
+    func isAdministrator() -> Bool {
+        guard let authenticatedUser = self.auth.get(AuthenticatedUser.self) else {
+            return false
+        }
+        return authenticatedUser.administrator == "Y"
+    }
+}

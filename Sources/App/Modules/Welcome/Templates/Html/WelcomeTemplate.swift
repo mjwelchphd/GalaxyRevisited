@@ -18,6 +18,7 @@ struct WelcomeTemplate: TemplateRepresentable {
                 Title("Home")
             }
             Body {
+                MenuTemplate().render(req)
                 H1("Revisiting Galaxy")
                 H3("Vapor's Fluent Demonstration Project")
 
@@ -29,7 +30,7 @@ struct WelcomeTemplate: TemplateRepresentable {
                 Ul {
                     Li { A("Show the README").name("readme").href("README.html") }
                     Li { A("List - list all galaxies").name("show").href("/galaxy/index") }
-                    Li { A("Add - add a new galaxy").name("add").href("/galaxy/add") }
+                     Li { A("Add - add a new galaxy").name("add").href("/galaxy/add") }
                     Li { A("Create - restore the test galaxies and stars").name("create").href("/create-universes") }
                 }
 
@@ -38,13 +39,9 @@ struct WelcomeTemplate: TemplateRepresentable {
 
                 P("Your admin testing choices are:")
                 Ul {
-
-                    if let authenticatedUser = req.auth.get(AuthenticatedUser.self) {
-                        if authenticatedUser.administrator == "Y" {
-                            Li { A("List All Users").name("list-all-users").href("/user/index") }
-                        }
+                    if req.isAdministrator() {
+                        Li { A("List All Users").name("list-all-users").href("/user/index") }
                     }
-
                     Li { A("Sign In").name("sign-in").href("/sign-in") }
                     Li { A("Sign Out").name("sign-out").href("/sign-out") }
                 }

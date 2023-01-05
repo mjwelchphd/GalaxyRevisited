@@ -22,6 +22,7 @@ struct UserShowTemplate: TemplateRepresentable {
                 Title("Show A User")
             }
             Body {
+                MenuTemplate().render(req)
                 H1("Show a User")
 
                 Form {
