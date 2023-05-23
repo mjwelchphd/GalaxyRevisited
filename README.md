@@ -9,7 +9,11 @@
 
 > **FIRST DRAFT**
 
-> This is a first draft. The README lacks CSS in the GitHub viewer because GitHub doesn't allow it, but the README will render correctly when viewed locally with a markdown viewer (like Marked2) after cloning the project. In the future, I'll be adding some more stuff (like authentication) to the project, but I wanted to get this up on GitHub so that people could learn from it.
+> This is a first draft. The README lacks CSS in the GitHub viewer because GitHub doesn't allow it, but the README will render correctly when viewed locally with a markdown viewer (like Marked2) after cloning the project. Be sure to choose the CSS file __"Galaxy"__ at the bottom of the Marked2 page.
+
+> In the future, I'll be adding some more stuff (like maybe replacing Fluent with Hummingbird) to the project. At the time of this writing, the project is running on AWS at __michaeljwelch.org__.
+
+>The login in the authentication section is __"admin"__ or __"root"__ and the password is __"secret"__. This is software for testing: don't ever use a simple password like __"secret"__ in production software. Your macOS will offer to generate a strong password like _syKxuw-muchis-higco1_.
 
 ## Contents
 
@@ -586,7 +590,7 @@ Data is transferred into GalaxyModel from GalaxyContext for one of two reasons:
 galaxyModel = GalaxyModel(new: galaxyContext)
 ```
  or
- 
+
 - to initialize the model before updating an existing record:
 
 ```swift
@@ -597,31 +601,31 @@ You may be wondering why there is an _init(new:...)_, but a _func update(update:
 
 The difference is that _GalaxyModel(new:)_ sets the _id_ to _nil_ to signal to Fluent that this
  is a new record to be added to the database.
- 
+
  The GalaxyModel can be initialized by reading from the database, also. In this case, the data is moved to the GalaxyContext for one of two reasons:
- 
+
  - to pass a list of galaxies:
- 
+
  ```swift
  GalaxiesContext(many: GalaxyModel.query(on: req.db).all())
  ```
- 
+
  or
- 
+
  - to pass a single galaxy:
- 
+
  ```swift
  GalaxyContext(model: GalaxyModel.find(galaxyId, on: req.db))
  ```
- 
+
 **One More Thing...**
 
 GalaxiesContext is just an array of GalaxyContexts. Notice that there is another _init_ for GalaxiesContext_ that allows for a single galaxy:
- 
+
  ```swift
  GalaxiesContext(one: GalaxyModel.query(on: req.db).first())
  ```
- 
+
  This particular function didn't get used, but I left it in anyways.
 
 [back to contents](#contents)<hr/>
@@ -717,7 +721,7 @@ and generates this HTML:
 <a name="show-1-link" href="/galaxy/show1/1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10">Show-1</a>
 ```
 
-where the UUID 1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10 was read from the database in _/galaxy/index/_. 
+where the UUID 1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10 was read from the database in _/galaxy/index/_.
 
 > __Important Tip: SwiftHtml "A" Tag Needs To Be Extended__
 
@@ -741,7 +745,7 @@ RoutingKit.Parameters(
   catchall: RoutingKit.Parameters.(unknown context at $100ff480c)
   .Catchall(values: [], isPercentEncoded: true), logger: Logging.Logger(
   handler: ConsoleKit.ConsoleLogger(
-  label: "routing-kit-parameters-logger", metadata: [:], logLevel: info, 
+  label: "routing-kit-parameters-logger", metadata: [:], logLevel: info,
   console: ConsoleKit.Terminal), label: "routing-kit-parameters-logger"))
 ```
 
@@ -781,7 +785,7 @@ guard ...
 The _Show-3_ button transfers to the _Show a Galaxy Page_. It demonstrates another way to pass a parameter through a URL _query_ and is the third of three different ways to pass one or more parameters in a GET request by including them in the URL query. An example of a UUID passed through a URL query (where the parameter is highlighted) is the same as the Show-2 link, but using a button:
 
 <monospace>http://localhost:8080/galaxy/show2<yellow-highlight>?galaxyId=1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10</yellow-highlight>/</monospace>
-    
+
 The SwiftHtml coding is:
 
 ```swift
@@ -818,7 +822,7 @@ When Vapor gets this, it decodes the request into _req.query_ just as was done f
 ### <a id="49699549-3b9f-4ec8-b85e-e944ad53dd00">List Stars</a>
 
 The _List Stars_ button transfers to the _List All Stars Page_. It demonstrates the way to pass multiple parameters through a URL _query_ and works in a way similar to the way the _Show-3_ button works, but has more parameters and transfers to _show/index_.
-    
+
 The SwiftHtml coding is:
 
 ```swift
@@ -1302,7 +1306,7 @@ try testButton(
 
 
 <!--section-break-section-break-section-break-section-break-section-break-section-break-->
- 
+
 
 ## <a id="3706d5ae-5b59-4465-b9c0-ab729a518055">Universally Unique Identifiers (UUIDs)</a>
 
@@ -1381,11 +1385,11 @@ Once you have an AWS account:
 
 ![](Resources/Images/aws/create-optional.png)
 
-> A little note here:  
+> A little note here:
   The "Default key" will only work for the Amazon browser-based console. This console is the one you'll use for emergencies if any. For logging in from a Linux or macOS "terminal" window, and for setting up an "sshfs" folder later, you'll need to create another key pair for remote access. Also, create only one (1) key here.
-    
+
 Note also that the client (you) retains the `private` key, and the server (AWS) retains only the `public` key. That's why, after generation, the private key can only be downloaded once, and why AWS doesn't remember it. It's a security precaution that guarantees only you have the private key.
-    
+
 - Click the `Create new +` link.
 
 ![](Resources/Images/aws/select-a-region.png)
@@ -1397,7 +1401,7 @@ Note also that the client (you) retains the `private` key, and the server (AWS) 
 Choose a unique name for the new key: I recommend using one that relates to the name you'll choose for the AWS instance: for example, "chicago-office-west" for "ChicagoOfficeWest" we'll use below. You'll be prompted to download the secret part of the key, and you only get ONE (1) chance. It'll go to your Downloads folder, and we'll move it later. It'll be named \<your-key-pair-name\>.pem (~/Downloads/chicago-office-west.pem in this example).
 
 > Be careful not to lose this key! You can only create one (1) root login for an instance. To create user logins later, refer to the [IAM User's Guide](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html).
-    
+
 ![](Resources/Images/aws/key-pair-created.png)
 
 After your key is downloaded (to your Downloads folder), you'll go back to the "SSH key pair manager" page.
@@ -1723,7 +1727,7 @@ That was pretty easy, and now I'd like to show you one more tool since it's a cr
 
 #### <a id="ef70d3d4-3e4a-4297-8e6e-fe6c883ef85b">Installing Dependancies</a>
 
-Before installing Swift Package Manager (SPM), we must install the required dependencies. 
+Before installing Swift Package Manager (SPM), we must install the required dependencies.
 
 ```shell
 # e.g. Swift dependencies on Amazon Linux 2 (install as root using sudo).
@@ -1756,12 +1760,12 @@ git clone https://github.com/kylef/swiftenv.git ~/.swiftenv
 
 The next step is to configure the environment.
 
-If you're using Linux, the default shell is probably Bash, as it is with Amazon Linux 2. You can enter the following commands to set up the environment for swiftenv: 
+If you're using Linux, the default shell is probably Bash, as it is with Amazon Linux 2. You can enter the following commands to set up the environment for swiftenv:
 
 ```shell
 echo 'export SWIFTENV_ROOT="$HOME/.swiftenv"' >> ~/.bash_profile
 echo 'export PATH="$SWIFTENV_ROOT/bin:$PATH"' >> ~/.bash_profile
-echo 'eval "$(swiftenv init -)"' >> ~/.bash_profile	
+echo 'eval "$(swiftenv init -)"' >> ~/.bash_profile
 source .bash_profile
 ```
 
@@ -1869,12 +1873,12 @@ $ fg %1
 swift run GalaxyRevisited <-- Server response
 ^C
 $ jobs
-$ 
+$
 ```
 
 Notice that the `jobs` command produces no response because we stopped the server (which validates that we _did_ stop the server).
 
-> Note  
+> Note
 > If you try to repeat the build first without stopping an app that's running on port 8080, you'll get a lengthy error with <span style="color: red;">... Address already in use (errno: 98) ...</span> in it.
 
 #### <a id="040b70f9-1910-43ec-b622-5cf79890c84f">Accessing From A Browser</a>
@@ -1912,14 +1916,14 @@ Fast-forward
  README.md                                                 | 97 +++...---
  Sources/App/Modules/Star/Controllers/StarController.swift |  1 +
  3 files changed, 154 insertions(+), 34 deletions(-)
-$ 
+$
 ```
 
 If there are no updates, you just get a message:
 
 ```script
 Already up to date.
-$ 
+$
 ```
 
 You can check updates you've made with this:
@@ -1950,7 +1954,7 @@ Changes not staged for commit:
       modified:   Sources/App/Modules/Star/Controllers/StarController.swift
 
 no changes added to commit (use "git add" and/or "git commit -a")
-$ 
+$
 ```
 
 If you modify something which has a modification at the origin, you'll be asked to merge the updates together when you execute a _git pull_. It's beyond the scope of this document to explain how that is done.
@@ -2225,7 +2229,7 @@ is used, but if we had more authorization contexts as suggested above, we could 
     - The browser stores the JWT as a cookie and sends it with every request going forward.
     - We receive a request from the user, including the JWT, and we verify the JWT. If we stored the user's ID in the JWT as encrypted data, we can decrypt it and recover the user's name, so we don't have to look it up.
     - What we don't have is the session, so we're forced to use the JWT just like an ordinary cookie to look up the session. If we previously stored the user information in the session, we didn't need it in the JWT.
-    
+
     - Bottom line: we saved _nothing_. In this use case, there's no advantage in using a JWT as essentially a random session token.
 
 - On the other hand, an advantage of a cookie is that it can be revoked on the server side. A JWT, once issued, can't be revoked. It'll be valid until it expires, so it's often given a short (5 minute to 20 minute) lifetime for security reasons, but that means it may have to be renewed frequently.

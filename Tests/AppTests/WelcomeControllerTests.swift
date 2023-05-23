@@ -16,6 +16,7 @@ extension ControllerTests {
         defer { app.shutdown() }
         try configure(app)
         try await createUniverses(db: app.db)
+        try await createUsers(db: app.db)
 
         let welcomePageHtml =
         try retrievePageHtml(

@@ -31,7 +31,7 @@ struct WelcomeTemplate: TemplateRepresentable {
                     Li { A("Show the README").name("readme").href("README.html") }
                     Li { A("List - list all galaxies").name("show").href("/galaxy/index") }
                      Li { A("Add - add a new galaxy").name("add").href("/galaxy/add") }
-                    Li { A("Create - restore the test galaxies and stars").name("create").href("/create-universes") }
+                    Li { A("Create - restore the test galaxies, stars, and users").name("create").href("/create-universes") }
                 }
 
                 // Tag("Other text not encapsuled in HTML tag.")

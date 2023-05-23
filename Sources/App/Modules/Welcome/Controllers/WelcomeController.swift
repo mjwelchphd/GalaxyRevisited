@@ -23,6 +23,7 @@ struct WelcomeController: RouteCollection {
     /// (Re)create the test data in the database.
     func create(req: Request) async throws -> Response {
         try await createUniverses(db: req.db)
+        try await createUsers(db: req.db)
         return req.redirect(to: "/galaxy/index")
     }
 }
