@@ -1,0 +1,2189 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<meta name="creator" content="Marked.app"/>
+</head>
+<body>
+
+<p><link rel="stylesheet" href="Resources/Css/Galaxy.css"></p>
+
+<h1 id="centergalaxyrevisitedcenter"><center>Galaxy Revisited</center></h1>
+<center><img src="Resources/Images/swift-logo.png" width="15%"/></center>
+
+<h5 id="centermichaelj.welchphdauthorandbrtiborbödecstechnicalcontributorcenter"><center>Michael J. Welch, PhD, author and<br/>Tibor Bödecs, technical contributor</center></h5>
+<hr/>
+
+<blockquote>
+<p><strong>FIRST DRAFT</strong></p>
+
+<p>This is a first draft. The README lacks CSS in the GitHub viewer because GitHub doesn&#8217;t allow it, but the README will render correctly when viewed locally with a markdown viewer (like Marked2) after cloning the project. Be sure to choose the CSS file <strong>&#8220;Galaxy&#8221;</strong> at the bottom of the Marked2 page.</p>
+
+<p>In the future, I&#8217;ll be adding some more stuff (like maybe replacing Fluent with Hummingbird) to the project. At the time of this writing, the project is running on AWS at <strong>michaeljwelch.org</strong>.</p>
+
+<p>The login in the authentication section is <strong>&#8220;admin&#8221;</strong> or <strong>&#8220;root&#8221;</strong> and the password is <strong>&#8220;secret&#8221;</strong>. This is software for testing: don&#8217;t ever use a simple password like <strong>&#8220;secret&#8221;</strong> in production software. Your macOS will offer to generate a strong password like <em>syKxuw-muchis-higco1</em>.</p>
+</blockquote>
+
+<h2 id="contents">Contents</h2>
+<!-- begin contents -->
+
+<ul>
+<li><a href="#aeababf9-e04d-47e8-9716-0e62caf19260">Introduction</a></li>
+<li><a href="#f6cb17c7-cf24-453c-846a-46991d815634">Developing Galaxy Revisited on a Mac Using Xcode</a>
+
+<ul>
+<li><a href="#f160e10e-3418-492f-8f01-839ef9af2f81">Setting up your Mac</a></li>
+<li><a href="#d3d0186b-ced6-4856-8b86-a3afac8d8de9">Cloning Galaxy Revisited from GitHub</a></li>
+<li><a href="#b8756003-fa48-4203-8abf-b048349670d0">Building on Xcode</a></li>
+<li><a href="#9b4e0c23-28cf-4c84-a4d1-5b2519a534f7">Is Galaxy Revisited a perfect example of how to write a Swift application?</a></li>
+</ul></li>
+<li><a href="#4ac343ac-7226-491e-a998-6fe3f11b7b3d">The Structure of a Swift-Vapor Web Server</a></li>
+<li><a href="#b697e262-34d1-49ad-b3bf-47397f099256">Taking a Top-Down Approach</a>
+
+<ul>
+<li><a href="#acd964bf-49f2-4978-bc0e-1dfadd69e5b3">All requests are handled in the same way</a></li>
+</ul></li>
+<li><a href="#169212cd-5a8c-4188-a99d-a0fd34529d04">Writing HTML Using SwiftHtml</a>
+
+<ul>
+<li><a href="#5d5d3686-d439-4d3b-84c3-e1ee441be6bf">Templates and Contexts</a></li>
+</ul></li>
+<li><a href="#444859ab-bbb2-4004-a9c4-1002f11b3be5">The Fluent Model&#8212;GalaxyModel.swift</a>
+
+<ul>
+<li><a href="#f31412bb-ddac-4e79-93d2-5da330fd3ed2">Model Definition</a></li>
+<li><a href="#edab8c0b-40ea-4084-86cc-943338b22822">How data is passed between Models and Contexts</a></li>
+</ul></li>
+<li><a href="#c8c787eb-a4e6-4c9a-a0b4-978fe378b598">Vapor starts at <em>main.swift</em></a></li>
+<li><a href="#5c12f813-336a-4977-8a14-727949b4ae0b">The Home page</a></li>
+<li><a href="#91c02c29-ef1a-4ffa-bad4-bf55e98b6227">The List All Galaxies Page</a>
+
+<ul>
+<li><a href="#050b0c8e-e579-4d21-b023-815c84d59c1a">Show&#8211;1 Show a Galaxy</a></li>
+<li><a href="#a698c5c7-d668-4918-8673-53e9801a0765">Show&#8211;2 Show a Galaxy</a></li>
+<li><a href="#8632ce4f-59fc-4af5-8408-dc37e97f0ab0">Show&#8211;3 Show a Galaxy</a></li>
+<li><a href="#49699549-3b9f-4ec8-b85e-e944ad53dd00">List Stars</a></li>
+<li><a href="#31517612-5650-4040-8068-a12ef7e27fe5">Show a galaxy given the UUID</a></li>
+<li><a href="#c4ca2448-cc48-43a9-bd56-38a1ddfcde18">Summary of the Show Links and Button</a></li>
+</ul></li>
+<li><a href="#c1b25a9b-e2b7-4357-8192-fcea2cf58b6f">Show a Galaxy Page</a>
+
+<ul>
+<li><a href="#75279c44-4cc0-4dc9-85bf-d27b12a568bd">Update</a></li>
+<li><a href="#3028b51f-45b7-4abb-b357-474c6ffecd75">Delete</a></li>
+<li><a href="#f0b229b1-e89b-4297-9db8-4a4aa776f9aa">List Stars</a></li>
+<li><a href="#ef8712c5-fcf4-4590-86ff-39e3a482bde8"><em>POST Update</em> request using a <em>form</em></a></a></li>
+<li><a href="#ee8f64fa-2b8d-4624-b1a7-7e3e833dfee1"><em>POST Delete</em> request using a <em>form</em></a></li>
+<li><a href="#470fd552-7859-4aec-ae5c-89d4573a2d92"><em>POST Add</em> request using a <em>form</em></a></li>
+</ul></li>
+<li><a href="#582e1de9-bd73-446d-93a3-61a231b0f180">Add a Star Page</a></li>
+<li><a href="#c507e1d9-7ddf-41ab-bb64-fc22f3ee11a6">List All Stars Page</a>
+
+<ul>
+<li><a href="#1c107f53-534b-4836-b1e4-129c1f0c9c36">How to Query a Galaxy and it&#8217;s Stars</a></li>
+</ul></li>
+<li><a href="#1adfc405-a0e6-4d37-a7fd-62e24e9dd641">Show One Star</a></li>
+<li><a href="#32db6b7a-ffd0-4de7-95f3-a824a739aef2">Testing</a>
+
+<ul>
+<li><a href="#36973807-3365-43c1-8809-9eab1d4bbfdc">A Few Words About Testing</a></li>
+<li><a href="#f4935ac8-21a6-4d23-ada2-2cdf507b6986">Testing Links and Buttons on a Page</a></li>
+</ul></li>
+<li><a href="#3706d5ae-5b59-4465-b9c0-ab729a518055">Universally Unique Identifiers (UUIDs)</a></li>
+<li><a href="#0537ec6b-30bf-4d3d-a84b-6492e321461b">Data Transfer Objects (DTOs)</a></li>
+<li><a href="#45bf0627-8fc0-4291-8f78-0e8a6dc5b15e">Run Galaxy Revisited on an Amazon Linux 2 Server</a>
+
+<ul>
+<li><a href="#51fd8a5e-8260-4f98-8f16-ee5eae59b647">Start at the Lightsail page</a>
+
+<ul>
+<li><a href="#5f61da11-cc42-4918-b52d-a190506d6899">At the <code>Home</code> page, click the <code>Create Instance</code> button.</a></li>
+<li><a href="#25500332-0d24-406d-b566-e5c4bfe9bb21">Creating Keys</a></li>
+<li><a href="#b8668941-f36e-437f-ab18-e97b04dc2a5c">Choosing a Plan</a></li>
+<li><a href="#9b964e3b-8df9-494f-96ac-71ce90b249ed">Your Instance Is Up And Running</a></li>
+<li><a href="#b48ec3e7-fa28-4619-b771-1a63a4310afd">Creating a Static IP Address</a></li>
+<li><a href="#fa96c869-b543-4e18-8cc9-d647868b86f2">Examining The New Instance</a></li>
+<li><a href="#51728c3d-b4f8-4d6a-959d-ce7bacc582eb">Setting up the client (your computer&#8217;s terminal and sshfs)</a></li>
+</ul></li>
+<li><a href="#8bc06efc-2f30-425b-a65a-43ed44cb4add">MySQL 8 Database Server</a>
+
+<ul>
+<li><a href="#8d84d5a7-4f39-406d-a102-fe49d12a73bd">Start by checking the release of your EC&#8211;2 instance</a></li>
+<li><a href="#b7d5f596-df05-44d2-9e0a-65712e00c965">Install the repository</a></li>
+<li><a href="#ceaac5ea-c0a3-4e57-aaa8-3bd2bec6867f">Install the MySQL package and start the server</a></li>
+<li><a href="#02eab657-2444-42c5-9ff8-82e54f662a86">Change the new root password and add a user password for Galaxy Revisited</a></li>
+</ul></li>
+<li><a href="#15a71478-a6e2-404c-9f88-1796360f6785">Installing Swift</a>
+
+<ul>
+<li><a href="#a43c71aa-1b5c-44b9-bfe1-998260572227">Downloading Swift</a></li>
+<li><a href="#56bf8150-65e2-4d41-832a-f015d735923e">Finishing the Install</a></li>
+<li><a href="#4e5e5b2a-bce6-46cd-96bc-dfae42761300">Verifying Swift version</a></li>
+</ul></li>
+<li><a href="#5c86b8d2-6bb8-4ca3-a126-28b7d017e411">Installing Swift Package Manager</a>
+
+<ul>
+<li><a href="#ef70d3d4-3e4a-4297-8e6e-fe6c883ef85b">Installing Dependancies</a></li>
+</ul></li>
+<li><a href="#5d492dd9-54b0-48ea-9005-6df5cbdda58b">Cloning Galaxy Revisited from GitHub</a>
+
+<ul>
+<li><a href="#7f8f8ca4-2ebd-4a11-ab18-6e8a89ccd0f0">Building and Running</a></li>
+<li><a href="#040b70f9-1910-43ec-b622-5cf79890c84f">Accessing From A Browser</a></li>
+<li><a href="#a3e7dac7-6273-4c78-948a-320a95f48a66">Updating Galaxy Revisited on AWS After Initial Installation</a></li>
+</ul></li>
+<li><a href="#084799b1-400d-4b79-bf89-a2d5ced10c3f">Installing Nginx</a></li>
+<li><a href="#150500ab-3243-4a27-9526-61b157769741">Running Galaxy Revisited As A Daemon</a></li>
+</ul></li>
+<li><a href="#0ae85d5c-30aa-43a5-9dbf-c831af08de64">Authentication</a>
+
+<ul>
+<li><a href="#50cf0b2c-4ab5-496b-a8f2-c7d25db1a4b0">Some Notes Regarding Authentication and Sessions</a>
+
+<ul>
+<li><a href="#64fadbde-1e14-4034-a7dd-7049c0b14a15">The <em>Sign In</em> flow goes like this:</a></li>
+<li><a href="#02a29c9a-ad7a-4569-9ff3-b703781332bf">When you are logged-in and return to another endpoint:</a></li>
+<li><a href="#de81c311-b390-4a5c-a5de-c366798c023a">When the endpoint you want to access has authorization middleware:</a></li>
+<li><a href="#7fade7c6-8903-4221-925e-9d8c091b75d2">Miscellaneous Notes</a></li>
+</ul></li>
+<li><a href="#c8bdd09e-b06c-40cc-992e-4681437eee4c">Using JWTs for Authentication</a></li>
+<li><a href="#1f7cee76-b24b-474b-b2b5-8d080f7b7f3b">A Note About Convenience Inits</a></li>
+</ul></li>
+<li><a href="#334d5d93-c2c8-49ed-b09e-665580866f4d">Adding a Menu</a></li>
+</ul>
+<!-- end contents -->
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h2 id="aidaeababf9-e04d-47e8-9716-0e62caf19260introductiona"><a id="aeababf9-e04d-47e8-9716-0e62caf19260">Introduction</a></h2>
+
+<p>The purpose of <em>Galaxy Revisited</em> is to introduce you to most of the basic concepts of Swift-Vapor-Fluent-SwiftHtml programming. Its basic purpose is to jump-start your learning experience with Server Side Swift. Galaxy Revisited was built and tested using macOS Ventura 13.0 and Xcode Version 14.0.</p>
+
+<p><em>Galaxy Revisited</em> is very basic. It&#8217;s intended to be used in conjunction with Tibor Bödecs&#8217;s book <a href="https://theswiftdev.com/practical-server-side-swift-using-vapor-4-book/"><em>Practical Server Side Swift</em></a> (hereafter PSSS), which goes into many more-advanced topics. You should consider this more like a self-paced tutorial on the <em>basics</em>, not an exhaustive treatise on the subject. Once you understand this app, everything else should make more sense.</p>
+
+<blockquote>
+<p><strong>Important</strong></p>
+
+<p>This documentation doesn&#8217;t show the actual source code for the project. You have to clone the project using <em>git</em> and build it using <em>Xcode</em> (see the section below labeled <strong>Cloning Galaxy Revisited from GitHub</strong>). As you read this document, you have to refer to the code in the app to get a full understanding. If you don&#8217;t clone and build the app, but just read this document, you may learn a few things, but you&#8217;ll miss so much.</p>
+</blockquote>
+
+<p>Before going any further, it&#8217;s important to say that this app (with its documentation) doesn&#8217;t replace the official <a href="https://docs.vapor.codes">Vapor-Fluent documentation</a>; it clarifies and demonstrates it. My recommendation is to read through the official documentation quickly to get a feel for what&#8217;s there, but don&#8217;t dwell on it. Then come here and work with the <em>Galaxy Revisited</em> app to get hands-on experience. After you get the gist of it all, you can use both as reference materials.</p>
+
+<p>Below you can see a diagram of the app&#8217;s page flow. You can see how simple it is, yet it demonstrates the foundation of every server-side Swift app. It starts with a welcome page; that takes you to the galaxy page which in turn allows you to create, read, update, and delete galaxies&#8230; CRUD, as it&#8217;s commonly referred to. There are two database tables, galaxies, and stars which are used to demonstrate links using UUIDs in a one-to-many relationship (see <a href="https://en.wikipedia.org/wiki/Universally_unique_identifier">the Wikipedia article on UUIDs</a> for more information).</p>
+
+<figure>
+<img src="Resources/Images/galaxy-map.png" alt="Galaxy Map" />
+<figcaption><em>Galaxy Map</em></figcaption>
+</figure>
+
+<p>As you experiment with this app, you can save your place using Git (Xcode Menu -&gt; Source Control -&gt; Commit), then if everything goes South, just restore the project and start over. This is a risk-free learning experiment.</p>
+
+<p>Run it and examine the data flow. You can make changes to see what&#8217;ll happen, and at any time, revert it and start again. Experimentation of this sort is where you learn the most, especially when there&#8217;s nothing at risk. Note that the chart above doesn&#8217;t show the <em>home</em> links which you find on every page.</p>
+
+<p>As is common in Vapor-Fluent databases, the tables use a UUID for the primary key. <em>Galaxy Revisited</em> is designed such that the user (nominally) never sees a UUID, but <em>show</em> pages show them just for instructional purposes. In a real application, the UUIDs in the database table are generally used by other tables to reference a record in this one. Normally, <strong>they would never change</strong> because that would break the link between tables.</p>
+
+<p>In <em>Galaxy Revisited</em>, however, whenever the database is restored to its nominal content, or a test is run, the database data is erased and replaced with fresh, new data in which all the UUIDs are also new. This ability is useful for testing, where you want to be able to have non-repeatable data to discover errors caused by stale data. In a real app, the test database and the production database would be separate, but in <em>Galaxy Revisited</em> no effort has been made to make them so. Here&#8217;s an area you could experiment with.</p>
+
+<blockquote>
+<p><strong>Warning</strong></p>
+
+<p>You can&#8217;t meaningfully sort on a UUID because they are (nominally) random. You may want to consider adding an integer key to the table which is automatically incremented which you can use for sorting by insertion order. Otherwise, there is no practical way to pick up the <em>first</em> or <em>last</em> record by order of insertion or return a series of records in insertion order.</p>
+
+<p>Also, remember that <em>first</em> in a Fluent query means <em>the first record found which meets the search criteria</em>, not the first record inserted into the table (although it may coincidentally be the same record). MySQL and some other databases <em>do not guarantee</em> that records will be returned in any particular order without an <em>ORDER</em> clause. Hic sunt dracones.</p>
+
+<p>In one post, the poster also pointed out that you need a sequential number in insertion order to be able to pick up the <em>prior</em> and the <em>following</em> records by subtracting 1 or adding 1 to the sequential key value. The flaw here is that if you have records A, B, C, D, and E, and you read record C, the technique will work to read records B and D, but if for some reason record B or D gets deleted, the method will fail with a <em>record not found</em>. Oops, back to the drawing board!</p>
+
+<p>The only reliable way of reading the table in reverse insertion order is to sort it by insertion order descending or keep two insertion keys, one ascending and one descending. For the example above, you&#8217;d need two queries to accomplish this. These and any other techniques for retrieving records in reverse order of insertion are the least-worst solutions (unfortunately). The best solution is to design software that doesn&#8217;t rely on reading tables in reverse order of insertion.</p>
+</blockquote>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h2 id="aidf6cb17c7-cf24-453c-846a-46991d815634developinggalaxyrevisitedonamacusingxcodea"><a id="f6cb17c7-cf24-453c-846a-46991d815634">Developing Galaxy Revisited on a Mac Using Xcode</a></h2>
+
+<h3 id="aidf160e10e-3418-492f-8f01-839ef9af2f81settingupyourmaca"><a id="f160e10e-3418-492f-8f01-839ef9af2f81">Setting up your Mac</a></h3>
+
+<p>This project was designed to be developed on a Mac computer and deployed on an Amazon AWS EC2 instance using an Amazon Linux2 Server. If you don&#8217;t have that setup, you can still use this document, but you&#8217;ll have to figure out the differences between what you have and our suggested setup.</p>
+
+<p>The project documentation is comprised largely of two sections, development on a Mac with Xcode, and production (deployment) on an Amazon AWS EC2 server. The good news is that almost any Linux will work fine, but keep in mind that there are two ancestors to most Linux systems, RedHat and Debian. There will be small differences between them; for example, RedHat uses <em>yum</em> and Debian uses <em>apt</em>. If you are experienced with Linux, you probably already know the differences and will have no trouble.</p>
+
+<p>Also, you can develop on the Linux system; it&#8217;s just far less convenient and will cost you much more time. If you have a significant project, you will be well served by buying a Mac for Xcode development. It&#8217;ll be much easier, save lots of time, and, most importantly, be more fun.</p>
+
+<h3 id="aidd3d0186b-ced6-4856-8b86-a3afac8d8de9cloninggalaxyrevisitedfromgithuba"><a id="d3d0186b-ced6-4856-8b86-a3afac8d8de9">Cloning Galaxy Revisited from GitHub</a></h3>
+
+<p>You can find <a href="https://github.com/mjwelchphd/GalaxyRevisited"><em>Galaxy Revisited</em> on GitHub</a>.</p>
+
+<p>Click the green <em>Code</em> button, and from the dropdown, click the copy icon <img src="Resources/Images/copy-icon.png" alt="" />.</p>
+
+<p>Open a terminal window on your Mac, and <em>cd</em> to the place where you want the project to go. Enter:</p>
+<pre><code class="script">git clone ⌘v
+cd GalaxyRevisited
+ls -hAlt</code></pre>
+
+<p>You should get:</p>
+<pre><code class="script">total 320
+drwxr-xr-x  12 mike  staff   384B Nov  9 19:19 .git
+-rw-r--r--   1 mike  staff   1.8K Nov  9 19:19 docker-compose.yml
+drwxr-xr-x   3 mike  staff    96B Nov  9 19:19 Tests
+drwxr-xr-x   4 mike  staff   128B Nov  9 19:19 Sources
+drwxr-xr-x   4 mike  staff   128B Nov  9 19:19 Resources
+-rw-r--r--   1 mike  staff    98K Nov  9 19:19 README.md
+drwxr-xr-x   5 mike  staff   160B Nov  9 19:19 Public
+-rw-r--r--   1 mike  staff   1.3K Nov  9 19:19 Package.swift
+-rw-r--r--   1 mike  staff   7.2K Nov  9 19:19 Package.resolved
+-rw-r--r--   1 mike  staff    34K Nov  9 19:19 LICENSE
+-rw-r--r--   1 mike  staff   2.6K Nov  9 19:19 Dockerfile
+-rw-r--r--   1 mike  staff    97B Nov  9 19:19 .gitignore</code></pre>
+
+<h3 id="aidb8756003-fa48-4203-8abf-b048349670d0buildingonxcodea"><a id="b8756003-fa48-4203-8abf-b048349670d0">Building on Xcode</a></h3>
+
+<p>Double-click the <em>Package.swift</em> icon. The project will open in Xcode. Click GalaxyRevisited in the navigator pane, and the Package.swift file should open.</p>
+
+<blockquote>
+<p><strong>Important</strong></p>
+
+<p>Click the schema editor dropdown menu <img src="Resources/Images/schema-dropdown.png" alt="" /> and select <em>Edit Scheme</em>. In the scheme edit window, select <em>Run</em> on the left-hand side, and <em>Options</em> at the top bar. Go down to <em>Working Directory</em> and check <em>Use custom working directory</em>, and select the <em>GalaxyRevisited</em> project folder. Repeat this for <em>Profile</em>. If you don&#8217;t do this, some resources won&#8217;t be found when you run the app.</p>
+</blockquote>
+
+<p>Click in the editor window, then type <code>⌘U</code> and the project will build and tests will run. This took less than 30 seconds the first time. After the first time, it takes only a few seconds.</p>
+
+<p>You should see the <em>Build Succeeded</em> and <em>Test Succeeded</em> windows pop up one at a time on the screen.</p>
+
+<p>Open the <em>output</em> window at the bottom right of the Xcode editor window <img src="Resources/Images/open-outputs.png" alt="" />, then type the Run command <code>⌘R</code> or click the run button <img src="Resources/Images/run-button.png" alt="" /> and if the <em>Developer Tools Access</em> dialog opens, enter your login password and click <em>continue</em>, then you should see:</p>
+<pre><code class="script">[ NOTICE ] Server starting on http://127.0.0.1:8080</code></pre>
+
+<p>in the <em>output</em> window. To test the app, run your browser and enter:</p>
+<pre><code class="script">http://localhost:8080/</code></pre>
+
+<p>and the welcome page should be displayed.</p>
+
+<figure>
+<img src="Resources/Images/home-page.png" alt="Home Page" />
+<figcaption>Home Page</figcaption>
+</figure>
+
+<p>To stop the execution, click the <em>stop</em> button <img src="Resources/Images/stop-button.png" alt="Home Page" />.</p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h3 id="aid9b4e0c23-28cf-4c84-a4d1-5b2519a534f7isgalaxyrevisitedaperfectexampleofhowtowriteaswiftapplicationa"><a id="9b4e0c23-28cf-4c84-a4d1-5b2519a534f7">Is Galaxy Revisited a perfect example of how to write a Swift application?</a></h3>
+
+<p><strong>No, sorry</strong>. There must be plenty of places where improvements can be made, and if you find one, give it a try! I haven&#8217;t been entirely consistent in my naming conventions, either. As we programmers like to say, &#8220;I&#8217;ll do it better next time!&#8221; (Shame on me for that one.) That&#8217;s what this app is for. Learning and experimenting without risk.</p>
+
+<p>As I was programming the tests (and that turned out to be more code than I anticipated), I found that I was starting to cut corners to save work, and the quality of what I was doing was dropping dramatically. There are some sayings among writers:</p>
+
+<ul>
+<li>If the stuff you&#8217;re writing isn&#8217;t for yourself, it won&#8217;t work. &#8212; Stephen King</li>
+<li>Only bad writers think that their work is really good. &#8212; Anne Enright</li>
+<li>Writing is thinking and thinking is hard work. &#8212; Lewis Black</li>
+<li>Writing isn&#8217;t glamorous &#8212; it&#8217;s hard work. If you want to be a glamorous writer, wear purple nail varnish when you type. &#8212; Sue Cross</li>
+</ul>
+
+<p>This applies to writing Swift also. Good code has several characteristics:</p>
+
+<ul>
+<li><p>The most important characteristic is <em>reliability</em>; it must always work as expected. This may seem obvious, but it&#8217;s easy to overlook places where unexpected errors can occur, and it often involves nil-optionals and throws. Careful design up-front can reduce this problem. Try making a small change to your code that you know will cause a failure, such as passing a UUID for which there is no database record, then see if the error gets caught. This can be put into a <em>test</em>, although there is none in Galaxy Revisited. Try Adding a test like that.</p></li>
+<li><p>Simplicity is the next important characteristic, and this usually brings to mind Occam&#8217;s Razor, which is simply: the simplest solution is usually the best. Crafting code that uses the full power of Swift can lead to simpler, more expressive, code.</p></li>
+<li><p>Maintainability is next. Code must be crafted to make it easy to follow, but good code alone isn&#8217;t good enough: you need good comments in the code also. For that, there are many style guides you can refer to listed below.</p></li>
+<li><p>Lastly, we used to think that <em>small, fast</em> code was the goal, but that was back in the day when a giant mainframe had only <em>one-megabyte</em> of core memory, instruction times were measured in <em>microseconds</em>, and the computer required a small building to house it, and an electrical power station nearby (I worked on one of these: I&#8217;m thinking of you, IBM/360). Today computers have thousands of times that much memory and instruction cycle times are measured in fractions of <em>nanoseconds</em>, and an Apple Macbook M1 uses only about 8&#8211;15 watts of power. Today, the goal is <em>reliable and maintainable</em> code. Small and fast are the jobs of the compiler (and Swift does it <em>so</em> well).</p></li>
+</ul>
+
+<p>Some of the many guidelines available can be found here:</p>
+
+<ul>
+<li><a href="https://theswiftdev.com/conventions-for-xcode/">Conventions for Xcode</a></li>
+<li><a href="https://swift.org/documentation/api-design-guidelines/">Swift API Design Guidelines</a></li>
+<li><a href="https://github.com/raywenderlich/swift-style-guide">Ray Wenderlich&#8217;s Swift Style Guide</a></li>
+<li><a href="https://github.com/linkedin/swift-style-guide">Linkedin&#8217;s Swift Style Guide</a></li>
+<li><a href="https://github.com/airbnb/swift">AirBNB&#8217;s Swift Style Guide</a></li>
+<li><a href="https://www.vadimbulavin.com/the-art-of-commenting-in-swift/">Vadim Bulavin&#8217;s The Art Commenting</a></li>
+<li><a href="https://www.vadimbulavin.com/swift-code-style/">Vadim Bulavin&#8217;s Style Guide</a></li>
+<li><a href="https://www.swift.org/documentation/api-design-guidelines/">Apple&#8217;s API Design Guidelines</a></li>
+<li><a href="https://google.github.io/swift/">Google&#8217;s Swift Style Guide</a></li>
+<li><a href="https://developer.apple.com/documentation/xcode/formatting-your-documentation-content">Apple&#8217;s Formatting Your Documentation Content</a></li>
+</ul>
+
+<p>Now, after this long exhortation, I have to admit that I deliberately violated the rules in one situation. This code:</p>
+<pre><code class="swift">try app.test(.POST, &quot;/galaxy/delete&quot;, beforeRequest: { req in
+    var galaxyIdContext = GalaxyIdContext()
+    galaxyIdContext.galaxyId = smallMagenicCloudUuid
+    try req.content.encode(galaxyIdContext, as: .urlEncodedForm)
+}, afterResponse: { res in
+    XCTAssertEqual(res.status, .seeOther)
+})</code></pre>
+
+<p>looks better this way:</p>
+<pre><code class="swift">try app.test(.POST, &quot;/galaxy/delete&quot;,
+    beforeRequest: { req in
+        var galaxyIdContext = GalaxyIdContext()
+        galaxyIdContext.galaxyId = smallMagenicCloudUuid
+        try req.content.encode(galaxyIdContext, as: .urlEncodedForm)
+    },
+    afterResponse: { res in
+        XCTAssertEqual(res.status, .seeOther)
+    }
+)</code></pre>
+
+<p>Notice that the closures, beforeRequest and afterResponse, can more easily be visualized as independent blocks of code.</p>
+
+<p>The bottom line is that a generic set of rules can&#8217;t cover every possible case, and you&#8217;ll just have to use your judgment in some situations, but remember, if you reformat this code using &lt;ctrl&gt;i, you&#8217;ll get this ugly and difficult to read code (which follows the rules):</p>
+<pre><code class="swift">try app.test(.POST, &quot;/galaxy/delete&quot;,
+             beforeRequest: { req in
+    var galaxyIdContext = GalaxyIdContext()
+    galaxyIdContext.galaxyId = smallMagenicCloudUuid
+    try req.content.encode(galaxyIdContext, as: .urlEncodedForm)
+},
+             afterResponse: { res in
+    XCTAssertEqual(res.status, .seeOther)
+}
+)</code></pre>
+
+<p>I realized that I had to go back and do better. It&#8217;s called crafting. Writers call it wordsmithing. The lesson here? Learn and follow the guidelines to make yourself a better Swift programmer, but keep it sane.</p>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h2 id="aid4ac343ac-7226-491e-a998-6fe3f11b7b3dthestructureofaswift-vaporwebservera"><a id="4ac343ac-7226-491e-a998-6fe3f11b7b3d">The Structure of a Swift-Vapor Web Server</a></h2>
+
+<p>Vapor uses a common structure for developing a server-side app that&#8217;s close to the default structure of a default (non-Vapor) Swift project that the <em>swift</em> tool creates. Also, if you create a project with the <em>vapor</em> tool, it follows this pattern, but with some minor differences. In addition, there are some minor differences to accommodate the programming style you find in <em>Galaxy Revisited</em> and PSSS.</p>
+
+<p>This structure divides the code and other files into separate <em>areas of concern</em>. These areas are similarly divided into other sub-areas, and all of this serves to bring a high level of organization to the project which makes the project easier to write and maintain. Notice that each controller is similar: it shows how a logical organization enables patterns to be used to organize the source.</p>
+
+<p>When you organize your code this way, you&#8217;ll find that you spend most of your time in just a few folders, maybe Controllers and Templates, for example. Everything else is mostly static, and since the other code is physically separated, the chance of accidentally modifying it is very low.</p>
+
+<p>This style would be considered a model-view-controller (MVC) style, but Galaxy Revisited isn&#8217;t tightly bound to that style and considers MVC to be more of a <em>suggested pattern</em> of design. Do what&#8217;s best for your project; don&#8217;t manipulate your code to comply with a style strictly for the sake of compliance. Think pragmatically.</p>
+
+<p>A big difference you&#8217;ll see in <em>Galaxy Revisited</em> is the use of DTOs or Data Transfer Objects (see the <a href="#0537ec6b-30bf-4d3d-a84b-6492e321461b">section on DTOs</a> for more information); here we refer to them as <em>contexts</em>.</p>
+
+<p>The project folder for <em>Galaxy Revisited</em> looks like this:</p>
+<pre><code class="diagram">Project Folder
+├── Public                          Runtime files
+├── Resources                       The database, CSS, and images
+├── Sources
+│   ├── App
+│   │   ├── Extensions              Application-wide extensions
+│   │   ├── Modules                 The all controller source code
+│   │   │   ├── Galaxy              The Galaxy controller source code
+│   │   │   │   ├── Controllers     The controller endpoints
+│   │   │   │   ├── Migrations      Fluent migration code here
+│   │   │   │   ├── Models          The Fluent model(s)
+│   │   │   │   └── Templates
+│   │   │   │       ├── Contexts    All DTOs (contexts)
+│   │   │   │       └── Html        All SwiftHtml modules go here
+│   │   │   ├── Star                The collection of Star source code
+│   │   │   │   ├── Controllers     Same breakdown as Galaxy
+│   │   │   │   ├── Migrations
+│   │   │   │   ├── Models
+│   │   │   │   └── Templates
+│   │   │   │       ├── Contexts
+│   │   │   │       └── Html
+│   │   │   └── Welcome
+│   │   │       ├── Controllers     Same breakdown as Galaxy
+│   │   │       └── Templates
+│   │   │           └── Html
+│   │   ├── Protocols               Application-wide protocols
+│   │   └── Template                Tibor Bödecs&apos;s handy template helpers
+│   └── Run                         Startup code
+└── Tests
+    └── AppTests                    All test-related materials are here</code></pre>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h2 id="aidb697e262-34d1-49ad-b3bf-47397f099256takingatop-downapproacha"><a id="b697e262-34d1-49ad-b3bf-47397f099256">Taking a Top-Down Approach</a></h2>
+
+<p><em>Galaxy Revisited</em> takes a top-down and visually oriented approach as much as possible. This approach is suitable for auditory-sequential learners, but it&#8217;s especially important for visual-spatial learners who need to see the big picture before the nitty-gritty details. So, we start at the top and work our way through somewhat like a user might try out the app. As we go through the pages, we&#8217;ll explore the coding techniques needed to implement Vapor-Fluent-SwiftHtml apps. This method is referred to as <a href="https://en.wikipedia.org/wiki/Ariadne%27s_thread_(logic)"><em>Ariadne&#8217;s thread</em></a> in logic and it&#8217;s thusly applied to programming.</p>
+
+<p>The project structure in the <em>Xcode navigator</em> is decidedly not top-down, but alphabetical because Xcode sorts all the folders and files in alphabetical order. The <em>Galaxy Map</em> is a much better way to visualize the top-down flow of the app. This flow will be followed to some degree here; we&#8217;ll take a look at different concepts in the order they come up, taking into account that many of the techniques appear repeatedly, so we only need to discuss them once.</p>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h3 id="aidacd964bf-49f2-4978-bc0e-1dfadd69e5b3allrequestsarehandledinthesamewaya"><a id="acd964bf-49f2-4978-bc0e-1dfadd69e5b3">All requests are handled in the same way</a></h3>
+
+<p>All requests in controllers begin with a <em>Request</em> object. They mostly follow the pattern</p>
+
+<ul>
+<li>decode inputs from the previous page (if any);</li>
+<li>lookup data in the database (if needed);</li>
+<li>other specific logic creating a <em>context</em> or <em>DTO</em>;</li>
+<li>prepare the return data:
+
+<ul>
+<li>fill out and render a template to return; or</li>
+<li>do another operation like <em>update</em>, then prepare a redirect; and</li>
+</ul></li>
+<li>return.</li>
+</ul>
+<pre><code class="swift">func endPoint(_ req: Request) async throws -&gt; Response {
+    &lt;handle the request, creating a response&gt;
+    return &lt;Response&gt;
+}</code></pre>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h2 id="aid169212cd-5a8c-4188-a99d-a0fd34529d04writinghtmlusingswifthtmla"><a id="169212cd-5a8c-4188-a99d-a0fd34529d04">Writing HTML Using SwiftHtml</a></h2>
+
+<p>GalaxyRevisited renders HTML docs using a brand new domain-specific library (DSL) called SwiftHtml and the Vapor web framework. The code is pretty straightforward, especially if you know a bit about HTML. The SwiftHtml library tries to follow the naming conventions as closely as possible, so if you&#8217;ve written HTML before this syntax should be very familiar, except that you don&#8217;t have to write opening and closing tags: instead, we utilize the Swift compiler to do the boring repetitive tasks for us.</p>
+
+<p>Since we&#8217;re using a DSL in Swift, the compiler can type-check everything at build-time: this way it&#8217;s 100% sure that our HTML code won&#8217;t have syntax issues. Of course, you can still make semantic mistakes, but that&#8217;s also possible if you&#8217;re not using a DSL.</p>
+
+<p>The main advantage here is that you won&#8217;t be able to mistype or misspell tags, and you don&#8217;t even have to think about closing tags, but you can use result builders to construct the HTML node tree. SwiftHtml uses <em>Tags</em> for nodes and it builds a tree from them; this makes it possible to efficiently render the entire structure with proper indentation, or minification if needed.</p>
+
+<p>For an in-depth tutorial, look at <a href="https://theswiftdev.com/how-to-write-html-in-swift/">How to write HTML in Swift?</a></p>
+
+<p>Here&#8217;s an example of SwiftHtml showing a form inside a table, and inside the form, a hidden input field and button. In the case of a button, the button takes the place of an input+submit, and thus allows for multiple buttons in the same form, each with a different destination URL.</p>
+
+<p>Note that:</p>
+
+<ul>
+<li>Tags begin with a capital letter, like <em>Form {&#8230;}</em>.</li>
+<li>Tags may be nested, like <em>Form { Tr {&#8230;} }</em>.</li>
+<li>Tags may have content, like <em>Button(&#8220;Show&#8211;3&#8221;)</em>.</li>
+<li>Attribute names are lowercase, like <em>.type(.text)</em>.</li>
+<li>Tags may have attributes, like <em>.name(&#8220;show&#8211;3-submit&#8221;)</em>.</li>
+<li>Attributes may have values, like <em>.formmethod(.get)</em>.<br/>
+<br/></li>
+</ul>
+<pre><code class="swift">Table {
+	Tr {
+		Td {
+			Form {
+				Input()
+					.type(.hidden)
+					.name(&quot;galaxyId&quot;)
+					.value(galaxyContext.galaxyId)
+				Button(&quot;Show-3&quot;)
+					.type(.submit)
+					.name(&quot;show-3-submit&quot;)
+					.formaction(&quot;/galaxy/show2&quot;)
+					.formmethod(.get)
+					.formenctype(.urlencoded)
+			}.name(&quot;show-3-form&quot;)
+		}
+	}.style(&quot;background-color: #F0F0FF&quot;)
+}</code></pre>
+
+<p>This will generate HTML that looks like this:</p>
+<pre><code class="html">&lt;table&gt;
+    &lt;tr style=&quot;background-color: #F0F0FF&quot;&gt;
+        &lt;td&gt;
+            &lt;form name=&quot;show-3-form&quot;&gt;
+                &lt;input type=&quot;hidden&quot; name=&quot;galaxyId&quot; value=&quot;35B56F32-D794-430F-B6AD-1FEF5535684E&quot;&gt;
+                &lt;button type=&quot;submit&quot; name=&quot;show-3-submit&quot; formaction=&quot;/galaxy/show2&quot; formmethod=&quot;get&quot; formenctype=&quot;application/x-www-form-urlencoded&quot;&gt;Show-3&lt;/button&gt;
+            &lt;/form&gt;
+        &lt;/td&gt;
+    &lt;/tr&gt;
+ &lt;/table&gt;</code></pre>
+
+<p>Notice that the input button properties match the listing in the <a href="https://www.w3schools.com/tags/tag_button.asp">W<sup>3</sup>C page</a>, with the exception that enums are preceded by a period as required by Swift syntax.</p>
+
+<figure>
+<img src="Resources/Images/input-button-object-properties.png" alt="W3C Button Properties" />
+<figcaption>W<sup>3</sup>C Button Properties</figcaption>
+</figure>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h3 id="aid5d5d3686-d439-4d3b-84c3-e1ee441be6bftemplatesandcontextsa"><a id="5d5d3686-d439-4d3b-84c3-e1ee441be6bf">Templates and Contexts</a></h3>
+
+<p>Vapor-SwiftHtml templates are very simple to build. Here&#8217;s an example of a template:</p>
+<pre><code class="swift">var galaxiesContext: GalaxiesContext
+
+init(_ galaxiesContext: GalaxiesContext) {
+    self.galaxiesContext = galaxiesContext
+}
+
+@TagBuilder
+func render(_ req: Request) -&gt; Tag {
+    Html {
+        Head {
+            ...
+        }
+        Body {
+            ...
+        }
+    }.lang(&quot;en-US&quot;)
+}</code></pre>
+
+<p>and its contexts.</p>
+<pre><code class="swift">struct GalaxiesContext {
+    var galaxies: [GalaxyContext]
+    ...
+}
+
+struct GalaxyContext: Content {
+    var galaxyId: String = &quot;&quot;
+    var name: String = &quot;&quot;
+    var magnitude: Float = 0.0
+    var distance: Int = 0
+    var constellation: String = &quot;&quot;
+    ...
+}</code></pre>
+
+<p>The <em>var galaxiesContext</em> will hold the context, i.e., the data to render in the template. That <em>var</em> gets filled in the <em>init</em> function.</p>
+
+<p>@TagBuilder identifies this as a SwiftHtml DSL builder that returns a <em>Tag</em>. The Html, Body, H1, Table, Tr, Th, Td, A, Form, Input, Button, and Br statements follow the same pattern: they are the capitalized name of the HTML tag, and they have the same attributes as the tag definitions in the W<sup>3</sup>C HTML specification.</p>
+
+<p>Here&#8217;s an <em>a</em> tag example.</p>
+<pre><code class="swift">A(&quot;Show&quot;).name(&quot;show-link&quot;).href(&quot;/galaxy/show?galaxyId=\(galaxyContext.galaxyId)&quot;)</code></pre>
+
+<p>generates:</p>
+<pre><code class="html">&lt;a name=&quot;show-link&quot; href=&quot;/galaxy/show?galaxyId=C666C717-319F-48A2-B80D-93CF2E055B4C&quot;&gt;Show&lt;/a&gt;</code></pre>
+
+<p>The sharp eye might have noticed that the <em>a</em> tag has a <em>name</em> attribute that&#8217;s not supported in the W<sup>3</sup>C specifications. Spoiler alert: it&#8217;s for testing. We&#8217;ll get to that in the chapter on testing.</p>
+
+<p>Here&#8217;s another example.</p>
+<pre><code class="swift">Form {
+    Input().type(.hidden).name(&quot;galaxyId&quot;).value(galaxyContext.galaxyId)
+    Button(&quot;Show&quot;).name(&quot;show-submit&quot;).type(.submit)
+        .formaction(&quot;/galaxy/show&quot;)
+        .formmethod(.get).formenctype(.urlencoded)
+}.name(&quot;show-form&quot;)</code></pre>
+
+<blockquote>
+<p><strong>Beware</strong></p>
+
+<p>If the tag has a body, the attributes must follow the body; for example, the <em>.name(&#8220;show-form&#8221;)</em> follows the closing bracket of the <em>Form</em> in the example.</p>
+</blockquote>
+
+<p>The HTML produced is:</p>
+<pre><code class="html">&lt;form name=&quot;show-form&quot;&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;galaxyId&quot; value=&quot;C666C717-319F-48A2-B80D-93CF2E055B4C&quot;&gt;
+    &lt;button name=&quot;show-submit&quot; type=&quot;submit&quot; formaction=&quot;/galaxy/show&quot; formmethod=&quot;get&quot;
+    	formenctype=&quot;application/x-www-form-urlencoded&quot;&gt;Show&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h2 id="aid444859ab-bbb2-4004-a9c4-1002f11b3be5thefluentmodel---galaxymodel.swifta"><a id="444859ab-bbb2-4004-a9c4-1002f11b3be5">The Fluent Model&#8212;GalaxyModel.swift</a></h2>
+
+<p>The Vapor-Fluent Model is just a definition of what the database object (or <em>table</em> in relational databases like Sqlite) looks like. Notice the use of <em>Swift properties</em> in the definitions. Don&#8217;t worry about how Swift properties work: just follow the pattern.</p>
+
+<h3 id="aidf31412bb-ddac-4e79-93d2-5da330fd3ed2modeldefinitiona"><a id="f31412bb-ddac-4e79-93d2-5da330fd3ed2">Model Definition</a></h3>
+
+<ul>
+<li>The <em>schema</em> value is the name of the database table in the database.</li>
+<li>@ID
+
+<ul>
+<li>defines the <em>primary</em> key in the table. The default creates a <em>UUID</em> key, but you can use another type if you need to.</li>
+</ul></li>
+<li>@Field
+
+<ul>
+<li>defines the name of the field in the database, and the name and type of the field in the application. This is important because a field named <em>firstName</em> in your app will have the name <em>first_name</em> in a PostgreSQL database.</li>
+</ul></li>
+<li>@Parent
+
+<ul>
+<li>defines a <em>foreign key</em> for a child table to hold the primary key of the parent table.</li>
+</ul></li>
+<li>@Children
+
+<ul>
+<li>defines one or more tables that reference this table as the parent. No actual field is created in the database table: this statement is used to create information for Fluent.</li>
+</ul></li>
+</ul>
+
+<p>In the @Field definition, it appears that field names are repeated, but there is a reason for the apparent duplicity. Take this field definition, for example.</p>
+<pre><code class="swift">@Field(key: &quot;constellation_name&quot;) var constellationName: String</code></pre>
+
+<p>This says that, in the database, the column name in the table is <em>constellation_name</em>, but in the Swift app, the name is <em>constellationName</em>. PostgreSQL, for example, uses <em>all lowercase letters in a field name</em> whereas your app must conform to Swift naming rules and styles. This is the way Vapor allows for compatibility between Swift and your database. This feature can also be used to gain compatibility with legacy databases.</p>
+
+<p>In migrations, it&#8217;s the first name, <em>constellation_name</em> which will be used in the database.</p>
+
+<p>Fluent requires an empty <em>init(&nbsp;) { }</em> function.</p>
+
+<h3 id="aidedab8c0b-40ea-4084-86cc-943338b22822howdataispassedbetweenmodelsandcontextsa"><a id="edab8c0b-40ea-4084-86cc-943338b22822">How data is passed between Models and Contexts</a></h3>
+
+<p>As I mentioned earlier, data is transferred in and out of models through DTOs. Let&#8217;s see how that works. (The <em>try awaits</em> and <em>guards</em> were removed for clarity.)</p>
+
+<p>Data is transferred into GalaxyModel from GalaxyContext for one of two reasons:</p>
+
+<ul>
+<li>to initialize the model before writing a new record:</li>
+</ul>
+<pre><code class="swift">galaxyModel = GalaxyModel(new: galaxyContext)</code></pre>
+
+<p>or</p>
+
+<ul>
+<li>to initialize the model before updating an existing record:</li>
+</ul>
+<pre><code class="swift">galaxyModel.update(update: galaxyContext)</code></pre>
+
+<p>You may be wondering why there is an <em>init(new:&#8230;)</em>, but a <em>func update(update:&#8230;)</em>; it&#8217;s because <em>init</em> creates a new instance whereas <em>update</em> acts on an existing instance.</p>
+
+<p>The difference is that <em>GalaxyModel(new:)</em> sets the <em>id</em> to <em>nil</em> to signal to Fluent that this<br/>
+ is a new record to be added to the database.</p>
+
+<p>The GalaxyModel can be initialized by reading from the database, also. In this case, the data is moved to the GalaxyContext for one of two reasons:</p>
+
+<ul>
+<li>to pass a list of galaxies:</li>
+</ul>
+
+<p><pre><code class="swift">GalaxiesContext(many: GalaxyModel.query(on: req.db).all())</code></pre></p>
+
+<p>or</p>
+
+<ul>
+<li>to pass a single galaxy:</li>
+</ul>
+
+<p><pre><code class="swift">GalaxyContext(model: GalaxyModel.find(galaxyId, on: req.db))</code></pre></p>
+
+<p><strong>One More Thing&#8230;</strong></p>
+
+<p>GalaxiesContext is just an array of GalaxyContexts. Notice that there is another <em>init</em> for GalaxiesContext_ that allows for a single galaxy:</p>
+
+<p><pre><code class="swift">GalaxiesContext(one: GalaxyModel.query(on: req.db).first())</code></pre></p>
+
+<p>This particular function didn&#8217;t get used, but I left it in anyways.</p>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h2 id="aidc8c787eb-a4e6-4c9a-a0b4-978fe378b598vaporstartsatmain.swifta"><a id="c8c787eb-a4e6-4c9a-a0b4-978fe378b598">Vapor starts at <em>main.swift</em></a></h2>
+
+<p>Although the app &#8220;starts&#8221; here, in reality, the Swift code just sets up the Vapor environment and starts Vapor. Once Vapor is running, it listens for connections and handles requests. As part of the configuration process, this code calls <em>configure.swift</em>, and that opens the database, runs the migration, and initializes the routes tables.</p>
+
+<p>Main starts by calling <em>configure.swift</em>, and that opens the database first. If there isn&#8217;t a database, and you&#8217;re using <em>sqlite</em>, it will create it. If you&#8217;re using MySQL, you have to do that yourself manually using MySQL utilities (see <a href="#8bc06efc-2f30-425b-a65a-43ed44cb4add">how it&#8217;s done on AWS</a>). If the database gets created during the initial startup of <em>Galaxy Revisited</em>, it won&#8217;t have any tables in it. Those will get created during the migration process, but they&#8217;ll be empty tables.</p>
+
+<p>There are two migrations, one for <em>galaxies</em> and the other for <em>stars</em>. Note that migrations are run in the order they are defined, <em>galaxies</em> first, then <em>stars</em> because when creating the stars, the galaxies (the parents) must already be present. That&#8217;s evident in <em>createUniverses.swift</em>. Having a set of starting data makes it easier to jump right in and start learning.</p>
+
+<p>That means that the very first time <em>Galaxy Revisited</em> is run (before the database exists), you have to select <em>Create - restore the test galaxies and stars</em> on the home page (unless, by chance you run the tests first, in which case the tests did the <em>Create</em> function). If you want to use another database such as PostgreSQL or MySql, you may have other things you&#8217;ll have to do to set up the database that is beyond the scope of this book.</p>
+
+<p>The last thing <em>configure</em> does is load the routes, and after that, Vapor waits for requests. To see the main (Welcome) page, you have to start the app running in Xcode and enter the URL <em>http://localhost:8080/</em> into your browser. From there, you can follow links all around the app.</p>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h2 id="aid5c12f813-336a-4977-8a14-727949b4ae0bthehomepagea"><a id="5c12f813-336a-4977-8a14-727949b4ae0b">The Home page</a></h2>
+
+<p>Once you have the app running, use your browser to go to http://localhost:8080/; the first page that comes up is the Home page from the WelcomeController which looks like this:</p>
+
+<figure>
+<img src="Resources/Images/home-page.png" alt="Home Page" />
+<figcaption>Home Page</figcaption>
+</figure>
+
+<p>!TODO update image to show the readme line</p>
+
+<p>The very first time you run the app, choose <em>Create - restore the test galaxies and stars</em> to initialize the database with test data. After the database is initialized (or re-initialized), you&#8217;ll be left at the <em>List - list all galaxies</em> page. Seven galaxies are created, each with some stars. Anytime you want to come back to this state, just click on the <em>Create</em> link on the Home page again.</p>
+
+<p>The <em>Home</em> page, a.k.a. the <em>Welcome</em> page, has three links:</p>
+
+<ul>
+<li>List - list all galaxies
+
+<ul>
+<li>This takes you to the list all galaxies page you arrived at after the <em>Create</em> link or the <em>List</em> link. The most important function of the <em>List - list all galaxies</em> page is that (internally) galaxy names are associated with each galaxy&#8217;s key (a UUID, Universal Unique Identifier). When you select a galaxy <em>Show</em> link or button, or the <em>Show Stars</em> button, the galaxy&#8217;s UUID is passed on to the next page.</li>
+</ul></li>
+</ul>
+
+<blockquote>
+<p><strong>Important Tip</strong></p>
+
+<p>UUIDs are used to identify one object from another <em>uniquely</em>. You can enter the same galaxy twice in the app, but behind the scenes, each will have a unique UUID. UUIDs are important for that very reason: each object must be uniquely identifiable. Be aware: each time you click the <em>Create - restore the test galaxies and stars</em> link you&#8217;ll get all new UUIDs because all the data is deleted first, then new galaxies and stars are added back in. <strong>In normal apps, you don&#8217;t recreate data like this</strong>: database records, once created, are permanent and their UUIDs are permanent (unless you deliberately delete them).</p>
+
+<p>One other thing: macOS UUIDs created by Swift, Vapor, and Fluent are all uppercase even though the UUID specifications call for lowercase. Just note that when the String form of an upper-case UUID it&#8217;s compared with its lower-case form, it should be obvious that an <em>exact</em> comparison will fail, but a case-insensitive comparison would pass. In some applications, the case may not matter (because they use case-insensitive comparisons), but the safest path to follow with macOS is to make <em>all</em> UUIDs uppercase, even if they weren&#8217;t created by Swift, Vapor, or Fluent. Consistency in the treatment of UUIDs will be rewarded.</p>
+</blockquote>
+
+<ul>
+<li><p>Add - add a new galaxy</p>
+
+<ul>
+<li>All the <em>Add</em> link does is bring up a page into which you can enter a new galaxy.</li>
+</ul></li>
+<li><p>Create - restore the test galaxies and stars</p>
+
+<ul>
+<li>(We saw this up above.)</li>
+</ul></li>
+</ul>
+
+<p>To continue, click the <em>List - list all galaxies</em> link to go to the next page.</p>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h2 id="aid91c02c29-ef1a-4ffa-bad4-bf55e98b6227thelistallgalaxiespagea"><a id="91c02c29-ef1a-4ffa-bad4-bf55e98b6227">The List All Galaxies Page</a></h2>
+
+<p>This page demonstrates how to pass parameters in a GET call. There are three ways to pass a parameter:</p>
+
+<ul>
+<li>by including it as part of the URL in a <em>link</em>;</li>
+<li>by adding it to the URL as a <em>query</em> in a <em>link</em>;</li>
+<li>by adding it to the URL as a <em>query</em> in a <em>button</em>.</li>
+</ul>
+
+<p>HTML4 only supported a single submit button for a form and a single <em>action</em>. HTML5 added a <em>button</em> (which acts like an <em>&lt;input type=submit&gt;</em>) to forms. The <em>formaction</em> attribute in a button can specify a different <em>action</em> for each button, thus allowing the same form to be sent to different endpoints. The <em>Show&#8211;3</em> and <em>List Stars</em> forms use buttons.</p>
+
+<figure>
+<img src="Resources/Images/list-all-galaxies-page.png" alt="ListAll Galaxies page" />
+<figcaption>ListAll Galaxies page</figcaption>
+</figure>
+
+<h3 id="aid050b0c8e-e579-4d21-b023-815c84d59c1ashow-1showagalaxya"><a id="050b0c8e-e579-4d21-b023-815c84d59c1a">Show&#8211;1 Show a Galaxy</a></h3>
+
+<p>The <em>Show&#8211;1</em> link transfers to the <em>Show a Galaxy Page</em>. It demonstrates how to pass a parameter through a URL and is the first of three different ways to pass one or more parameters in a GET request by including them in the URL. An example of a UUID passed through a URL (where the parameter is highlighted) is:</p>
+
+<p><monospace>
+http://localhost:8080/galaxy/show1<yellow-highlight>/1E3E85B9&#8211;7C17&#8211;4BAA-A2F8&#8211;2C67B73CDC10</yellow-highlight>/<br/>
+</monospace></p>
+
+<p>The SwiftHtml coding in <em>GalaxyIndexTemplate.swift</em> is:</p>
+<pre><code class="swift">A(&quot;Show-1&quot;).name(&quot;show-1-link&quot;).href(&quot;/galaxy/show1/\(galaxyContext.galaxyId)&quot;)</code></pre>
+
+<p>and generates this HTML:</p>
+<pre><code class="html">&lt;a name=&quot;show-1-link&quot; href=&quot;/galaxy/show1/1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10&quot;&gt;Show-1&lt;/a&gt;</code></pre>
+
+<p>where the UUID 1E3E85B9&#8211;7C17&#8211;4BAA-A2F8&#8211;2C67B73CDC10 was read from the database in <em>/galaxy/index/</em>.</p>
+
+<blockquote>
+<p><strong>Important Tip: SwiftHtml &#8220;A&#8221; Tag Needs To Be Extended</strong></p>
+
+<p>As mentioned before, the &lt;a&gt; tag doesn&#8217;t have a <em>name</em> attribute, but we&#8217;ll need one for testing. Since it&#8217;s not part of the W<sup>3</sup>C specification, SwiftHtml doesn&#8217;t accept it. To get around this, we <em>extend</em> SwiftHtml in <em>SwiftHtmlTags.swift</em>. Some Ruby programmers call this <em>monkey patching</em>, but it&#8217;s a feature of Ruby, not a bug. In Swift, it&#8217;s an <em>important</em> feature that you&#8217;ll find useful in many situations, and it&#8217;s used extensively by Swift programmers.</p>
+</blockquote>
+
+<p>When you click the Show&#8211;1 link in the browser, Vapor receives the request and looks for the URL <strong>/galaxy/show1/:galaxyId</strong> in the routing tables, then calls func show1(&nbsp;) in GalaxyController.</p>
+
+<p><em>Show&#8211;1</em> link gets defined in the <em>routes</em> table like this:</p>
+<pre><code class="swift">galaxyRoutes.get(&quot;show1&quot;, &quot;:galaxyId&quot;, use: show1)  // maps: &quot;/galaxy/show/&lt;galaxyId&gt;&quot;</code></pre>
+
+<p>You can see the value <em>1E3E85B9&#8211;7C17&#8211;4BAA-A2F8&#8211;2C67B73CDC10</em> in the GET request that will get decoded by Vapor into the <em>parameters</em>.</p>
+
+<p>At <em>func show1(&#8230;)</em> the incoming GET request gets processed and stored in the request like this:</p>
+<pre><code class="script">RoutingKit.Parameters(
+  values: [&quot;galaxyId&quot;: &quot;1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10&quot;],
+  catchall: RoutingKit.Parameters.(unknown context at $100ff480c)
+  .Catchall(values: [], isPercentEncoded: true), logger: Logging.Logger(
+  handler: ConsoleKit.ConsoleLogger(
+  label: &quot;routing-kit-parameters-logger&quot;, metadata: [:], logLevel: info,
+  console: ConsoleKit.Terminal), label: &quot;routing-kit-parameters-logger&quot;))</code></pre>
+
+<p>The <em>func showGalaxy</em> is common for the three <em>show</em> buttons. It completes the <em>show</em> operation given the <em>galaxyId</em>.</p>
+
+<h3 id="aida698c5c7-d668-4918-8673-53e9801a0765show-2showagalaxya"><a id="a698c5c7-d668-4918-8673-53e9801a0765">Show&#8211;2 Show a Galaxy</a></h3>
+
+<p>The <em>Show&#8211;2</em> link transfers to the <em>Show a Galaxy Page</em>. It demonstrates how to pass a parameter through a URL <em>query</em> and is the second of three different ways to pass one or more parameters in a GET request by including them in the URL query. An example of a UUID passed through a URL query (where the parameter is highlighted) is:</p>
+
+<p><monospace>http://localhost:8080/galaxy/show2<yellow-highlight>?galaxyId=1E3E85B9&#8211;7C17&#8211;4BAA-A2F8&#8211;2C67B73CDC10</yellow-highlight>/</monospace></p>
+
+<p>The SwiftHtml coding is:</p>
+<pre><code class="swift">A(&quot;Show-2&quot;).name(&quot;show-2-link&quot;).href(&quot;/galaxy/show2?galaxyId=\(galaxyContext.galaxyId)&quot;)</code></pre>
+
+<p>and generates:</p>
+<pre><code class="html">	&lt;a name=&quot;show-2-link&quot; href=&quot;/galaxy/show2?galaxyId=1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10&quot;&gt;Show-2&lt;/a&gt;</code></pre>
+
+<p>Again, the UUID is passed in the URL, but not as a part of the URL proper, but as a query string following the &#8220;?&#8221; and is decoded differently.</p>
+
+<p>When Vapor gets this, it decodes the request into <em>req.query</em> and we pick it up using <em>req.query.decode(GalaxyIdContext.self)</em>. Note that queries passed as part of the URL are decoded into <em>query</em> and must be decoded into a <em>context</em>, rather than directly into a <em>var</em>.</p>
+<pre><code class="swift">galaxyIdContext = try? req.query.decode(GalaxyIdContext.self)
+guard ...
+... galaxyIdContext.galaxyId</code></pre>
+
+<h3 id="aid8632ce4f-59fc-4af5-8408-dc37e97f0ab0show-3showagalaxya"><a id="8632ce4f-59fc-4af5-8408-dc37e97f0ab0">Show&#8211;3 Show a Galaxy</a></h3>
+
+<p>The <em>Show&#8211;3</em> button transfers to the <em>Show a Galaxy Page</em>. It demonstrates another way to pass a parameter through a URL <em>query</em> and is the third of three different ways to pass one or more parameters in a GET request by including them in the URL query. An example of a UUID passed through a URL query (where the parameter is highlighted) is the same as the Show&#8211;2 link, but using a button:</p>
+
+<p><monospace>http://localhost:8080/galaxy/show2<yellow-highlight>?galaxyId=1E3E85B9&#8211;7C17&#8211;4BAA-A2F8&#8211;2C67B73CDC10</yellow-highlight>/</monospace></p>
+
+<p>The SwiftHtml coding is:</p>
+<pre><code class="swift">Form {
+	Input().type(.hidden).name(&quot;galaxyId&quot;).value(galaxyContext.galaxyId)
+	Button(&quot;Show-3&quot;).name(&quot;show-3-submit&quot;).type(.submit)
+		.formaction(&quot;/galaxy/show2&quot;)
+        .formmethod(.get)
+        .formenctype(.urlencoded)
+}.name(&quot;show-3-form&quot;)</code></pre>
+
+<p>and generates:</p>
+<pre><code class="html">&lt;form name=&quot;show-3-form&quot;&gt;
+	&lt;input type=&quot;hidden&quot; name=&quot;galaxyId&quot; value=&quot;1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10&quot;&gt;
+	&lt;button name=&quot;show-3-submit&quot; type=&quot;submit&quot; formaction=&quot;/galaxy/show2&quot; formmethod=&quot;get&quot;
+		formenctype=&quot;application/x-www-form-urlencoded&quot;&gt;Show-3&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+
+<p>When Vapor gets this, it decodes the request into <em>req.query</em> and we pick it up using <em>req.query.decode(GalaxyIdContext.self)</em>. Note that queries passed as part of the URL are decoded into <em>query</em> and must be decoded into a <em>context</em>, rather than directly into a <em>var</em>.</p>
+<pre><code class="swift">let galaxyIdContext = try req.query.decode(GalaxyIdContext.self)
+let galaxyId = UUID(galaxyIdContext.galaxyId)!</code></pre>
+
+<p>The astute reader will have noticed that the URL links to <em>/galaxy/show2</em> which is the same as the <em>show&#8211;2</em> link. The reason is that the <em>show&#8211;3</em> form/button produces a query identical to the <em>show&#8211;2</em> query, which means that it can be decoded by the same (Show&#8211;2) code.</p>
+
+<p>When Vapor gets this, it decodes the request into <em>req.query</em> just as was done for the <em>show&#8211;2</em> link. We use it accordingly.</p>
+
+<h3 id="aid49699549-3b9f-4ec8-b85e-e944ad53dd00liststarsa"><a id="49699549-3b9f-4ec8-b85e-e944ad53dd00">List Stars</a></h3>
+
+<p>The <em>List Stars</em> button transfers to the <em>List All Stars Page</em>. It demonstrates the way to pass multiple parameters through a URL <em>query</em> and works in a way similar to the way the <em>Show&#8211;3</em> button works, but has more parameters and transfers to <em>show/index</em>.</p>
+
+<p>The SwiftHtml coding is:</p>
+<pre><code class="swift">Form {
+    // send a StarIdContext.swift
+    Input().type(.hidden).name(&quot;galaxyId&quot;).value(galaxyContext.galaxyId)
+    Input().type(.hidden).name(&quot;galaxyName&quot;).value(galaxyContext.name)
+    Input().type(.hidden).name(&quot;starId&quot;).value(&quot;&quot;)
+    Button(&quot;List Stars&quot;)
+        .type(.submit)
+        .name(&quot;show-stars-submit&quot;)
+        .formaction(&quot;/star/index&quot;)
+        .formmethod(.get)
+        .formenctype(.urlencoded)
+}.name(&quot;show-stars-form&quot;)</code></pre>
+
+<p>and generates:</p>
+<pre><code class="html">&lt;form name=\&quot;show-stars-form\&quot;&gt;
+    &lt;input type=\&quot;hidden\&quot; name=\&quot;galaxyId\&quot; value=\&quot;1E3E85B9-7C17-4BAA-A2F8-2C67B73CDC10\&quot;&gt;
+    &lt;input type=\&quot;hidden\&quot; name=\&quot;galaxyName\&quot; value=\&quot;Large Magellanic Cloud\&quot;&gt;
+    &lt;input type=\&quot;hidden\&quot; name=\&quot;starId\&quot; value=\&quot;\&quot;&gt;
+    &lt;button type=\&quot;submit\&quot; name=\&quot;show-stars-submit\&quot; formaction=\&quot;/star/index\&quot; formmethod=\&quot;get\&quot; formenctype=\&quot;application/x-www-form-urlencoded\&quot;&gt;List Stars&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+
+<p>When Vapor gets this, it decodes the request into <em>req.query</em> and <em>List All Stars</em> picks it up in <em>StarController.index</em> using <em>req.query.decode(StarIdContext.self)</em>. It&#8217;s the same technique that was used in <em>Show&#8211;2</em>, except that more parameters are used in the <em>StarController</em>.</p>
+<pre><code class="swift">let starIdContext = try req.query.decode(StarIdContext.self)
+let galaxyId = UUID(starIdContext.galaxyId)!</code></pre>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h3 id="aid31517612-5650-4040-8068-a12ef7e27fe5showagalaxygiventheuuida"><a id="31517612-5650-4040-8068-a12ef7e27fe5">Show a galaxy given the UUID</a></h3>
+
+<p>Once the galaxy UUID has been decoded, a common code can be used to retrieve the galaxy and load the template. (See <em>showGalaxy</em> in GalaxyController.) Function <em>index</em> demonstrated how to read <em>all</em> galaxies from the database: <em>showGalaxy</em> demonstrates how to retrieve one galaxy given its UUID.</p>
+<pre><code class="swift">guard let galaxy = try await GalaxyModel.find(galaxyId, on: req.db) else {
+    ...
+}</code></pre>
+
+<p>The <em>let galaxy</em> will either have the requested galaxy or <em>nil</em> depending on whether the galaxy with the UUID given was found in the database or not. If it&#8217;s nil, the guard code will be executed; otherwise, the execution will continue.</p>
+
+<p>Since there is now a unique key (the primary key in this example), the Model.find function can be used to look up the galaxy.</p>
+<pre><code class="swift">let galaxy = try await GalaxyModel.find(galaxyId, on: req.db)</code></pre>
+
+<p>The <em>galaxy</em> is next passed to the GalaxyContext, then the context is passed to the template, and finally, that is what gets passed back to Vapor.</p>
+<pre><code class="swift">return req.templates.renderHtml(GalaxyShowTemplate(GalaxyContext(model: galaxy)))</code></pre>
+
+<h3 id="aidc4ca2448-cc48-43a9-bd56-38a1ddfcde18summaryoftheshowlinksandbuttona"><a id="c4ca2448-cc48-43a9-bd56-38a1ddfcde18">Summary of the Show Links and Button</a></h3>
+
+<p>The read cycle is now complete. You&#8217;ve seen three different ways to pass the galaxyId from one page to another. Star pages will be similar, but star pages will need to pass the galaxyId and the starId, plus we&#8217;ll pass the galaxyName (since we already have it) so that it can be used to display the galaxy name in star pages without having to do an extra database read just to get the name.</p>
+
+<blockquote>
+<p><strong>Point of Personal Preference</strong></p>
+
+<p>When updating a record, it&#8217;s easier for the user if the target is displayed on the page. if you ever updated two accounts, one for yourself and one for your partner <em>at the same time</em>, you know how easy it is to get them mixed up and enter data for one in the window for the other. Displaying the name of the person on the page being updated eliminates this problem.</p>
+
+<p>In this case, the name of the galaxy (the parent) is displayed on the star&#8217;s (the child) pages.</p>
+</blockquote>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h2 id="aidc1b25a9b-e2b7-4357-8192-fcea2cf58b6fshowagalaxypagea"><a id="c1b25a9b-e2b7-4357-8192-fcea2cf58b6f">Show a Galaxy Page</a></h2>
+
+<p>This page demonstrates a <em>show</em> page. Note that there are three ways to get to this page because I wanted to show the three ways to pass parameters in a GET call. In <em>Show Star</em>, there&#8217;s only one button, so the decode and the show can be done in one endpoint.</p>
+
+<p>A <em>show</em> page serves multiple functions:</p>
+
+<ul>
+<li>it shows detail for the object, allowing the user to verify visually that (s)he has the right object;</li>
+<li>from this page, an update can be performed;</li>
+<li>from this page, a delete can be performed, and</li>
+<li>other object related functions, <em>List Stars</em> in this case, or</li>
+<li>go back (<em>List All Galaxies</em>).</li>
+</ul>
+
+<figure>
+<img src="Resources/Images/show-a-galaxy-page.png" alt="Show A Galaxy Page" />
+<figcaption>Show A Galaxy Page</figcaption>
+</figure>
+
+<h3 id="aid75279c44-4cc0-4dc9-85bf-d27b12a568bdupdatea"><a id="75279c44-4cc0-4dc9-85bf-d27b12a568bd">Update</a></h3>
+
+<p>To operate the <em>Update</em> button, change anything in the input fields above, and click on the button. The update will be performed with no warning dialog (although one would be advised in a real app). (See <a href="#ef8712c5-fcf4-4590-86ff-39e3a482bde8"><em>POST Update</em> request using a <em>form</em></a></a> below.)</p>
+
+<ul>
+<li>The galaxy being updated is looked up first to verify its existence, and get the current state of the record.</li>
+<li>The galaxy is then updated with the input fields, excluding those fields which are not user updatable, such as the primary key and other control information.</li>
+<li>The galaxy is written back.</li>
+<li>The page transfers back to the <em>List All Galaxies</em> page.</li>
+</ul>
+
+<h3 id="aid3028b51f-45b7-4abb-b357-474c6ffecd75deletea"><a id="3028b51f-45b7-4abb-b357-474c6ffecd75">Delete</a></h3>
+
+<p>When the <em>Delete</em> button is clicked, the galaxy is looked up first to verify its existence and get the current state of the record. <yellow-highlight>Since the galaxy can have stars and the stars cannot exist without the galaxy, the stars (if any) must be deleted first.</yellow-highlight></p>
+
+<ul>
+<li>The galaxy being updated is looked up first to verify its existence, and get the current state of the record.</li>
+<li>The galaxy&#8217;s stars are deleted (if any).</li>
+<li>The galaxy is deleted.</li>
+<li>The page transfers back to the <em>List All Galaxies</em> page.</li>
+</ul>
+
+<h3 id="aidf0b229b1-e89b-4297-9db8-4a4aa776f9aaliststarsa"><a id="f0b229b1-e89b-4297-9db8-4a4aa776f9aa">List Stars</a></h3>
+
+<p>When the <em>List Stars</em> button is clicked, the page transfers to the <em>List All Stars</em> page.</p>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h3 id="aidef8712c5-fcf4-4590-86ff-39e3a482bde8postupdaterequestusingaformaa"><a id="ef8712c5-fcf4-4590-86ff-39e3a482bde8"><em>POST Update</em> request using a <em>form</em></a></a></h3>
+
+<p>This endpoint is reached through GalaxyShowTemplate <em>Update</em> button. When you make changes and click the <em>Update</em> button, the contents of the form are sent to the <em>update</em> function.</p>
+
+<figure>
+<img src="Resources/Images/show-a-galaxy-page.png" alt="Show A Galaxy" />
+<figcaption>Show A Galaxy</figcaption>
+</figure>
+
+<p>A simplified representation of the SwiftHtml coding in <em>GalaxyShowTemplate.swift</em> with field data is:</p>
+<pre><code class="swift">Form {
+    Input().type(.hidden).name(&quot;galaxyId&quot;).value(galaxyContext.galaxyId)
+    Input().type(.hidden).name(&quot;galaxyName&quot;).value(galaxyContext.name)
+    Input().type(.hidden).name(&quot;starId&quot;).value(&quot;&quot;) // for List Stars below
+    Table {
+        Tr {
+            Td { Input().type(.text).name(&quot;name&quot;).value(galaxyContext.name) }
+        }.style(&quot;background-color: #F0F0FF&quot;)
+        Tr {
+            Td { Input().type(.text).name(&quot;magnitude&quot;).value(String(galaxyContext.magnitude)) }
+        }.style(&quot;background-color: #F0F0FF&quot;)
+        Tr {
+            Td { Input().type(.text).name(&quot;distance&quot;).value(String(galaxyContext.distance)) }
+        }.style(&quot;background-color: #F0F0FF&quot;)
+        Tr {
+            Td { Input().type(.text).name(&quot;constellation&quot;).value(galaxyContext.constellation) }
+        }.style(&quot;background-color: #F0F0FF&quot;)
+        Tr {
+            Td {
+                Button(&quot;Update&quot;).type(.submit).name(&quot;update&quot;)
+                    .formaction(&quot;/galaxy/update&quot;).formmethod(.post)
+            }
+        }
+    }
+}.name(&quot;show-galaxy-form&quot;)</code></pre>
+
+<p>and a simplified representation of what it generates is:</p>
+<pre><code class="html">&lt;form name=&quot;show-galaxy-form&quot;&gt;
+	&lt;input type=&quot;hidden&quot; name=&quot;galaxyId&quot; value=&quot;3FD3A941-9B57-4A15-8A3E-1C0FA9D62FF1&quot;&gt;
+	&lt;input type=&quot;hidden&quot; name=&quot;galaxyName&quot; value=&quot;Milky Way Galaxy&quot;&gt;
+	&lt;input type=&quot;hidden&quot; name=&quot;starId&quot; value=&quot;&quot;&gt;
+	&lt;table&gt;
+		&lt;tr&gt;
+			&lt;td&gt;
+				&lt;input type=&quot;text&quot; name=&quot;name&quot; value=&quot;Milky Way Galaxy&quot;&gt;
+				&lt;input type=&quot;text&quot; name=&quot;magnitude&quot; value=&quot;-6.5&quot;&gt;
+				&lt;input type=&quot;text&quot; name=&quot;distance&quot; value=&quot;123&quot;&gt;
+				&lt;input type=&quot;text&quot; name=&quot;constellation&quot; value=&quot;Sagittarius&quot;&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;
+				&lt;button type=&quot;submit&quot; name=&quot;update&quot; formaction=&quot;/galaxy/update&quot;
+					formmethod=&quot;post&quot;&gt;Update&lt;/button&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/table&gt;
+&lt;/form&gt;</code></pre>
+
+<p>Note that there&#8217;s nothing special about this code other than<br/>
+- data we need to pass that won&#8217;t be shown to the user is in <em>hidden</em> fields, and<br/>
+- the <em>Update</em> button specifies <em>formmethod=&#8220;post&#8221;</em>.</p>
+
+<p>This implies two things: the data will be passed through the request <em>body</em> which is the last part of the request (as you can see below), and Vapor will decode it into <em>content</em>. Notice all the fields at the end of this request:</p>
+<pre><code class="script">request: POST /galaxy/update HTTP/1.1
+Host: localhost:8080
+Origin: http://localhost:8080
+Content-Type: application/x-www-form-urlencoded
+...
+Accept-Language: en-US,en;q=0.9
+galaxyId=3FD3A941-9B57-4A15-8A3E-1C0FA9D62FF1&amp;galaxyName=Milky+Way+Galaxy&amp;starId=&amp;name=Milky+Way+Galaxy&amp;magnitude=-6.5&amp;distance=123&amp;constellation=Sagittarius&amp;update=</code></pre>
+
+<p>We decode it into a <em>context</em> like this:</p>
+<pre><code class="swift">let galaxyContext = try req.content.decode(GalaxyContext.self)</code></pre>
+
+<p>galaxyContext then contains:</p>
+<pre><code class="script">GalaxyContext(galaxyId: &quot;3FD3A941-9B57-4A15-8A3E-1C0FA9D62FF1&quot;, name: &quot;Milky Way Galaxy&quot;, magnitude: -6.5, distance: 123, constellation: &quot;Sagittarius&quot;)</code></pre>
+
+<p>At this point, the possibility exists (through hacking or other interference) that the galaxyId is not valid, and besides, the galaxy has to be looked up in Fluent to post updates, so we use this code to update the galaxy, then write the new contents:</p>
+<pre><code class="swift">galaxyModel.update(update: galaxyContext)
+try await galaxyModel.save(on: req.db)
+return req.redirect(to: &quot;/galaxy/index&quot;)</code></pre>
+
+<p>Since there is nothing to display, we just go back to the <em>List All Galaxies</em> page.</p>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h3 id="aidee8f64fa-2b8d-4624-b1a7-7e3e833dfee1postdeleterequestusingaforma"><a id="ee8f64fa-2b8d-4624-b1a7-7e3e833dfee1"><em>POST Delete</em> request using a <em>form</em></a></h3>
+
+<p>This works similarly to the POST <em>Update</em> but decodes into <em>galaxyIdContext</em>. The other content is received but ignored by <em>decode</em>. We can do this because we only need the UUID.</p>
+
+<p>However, there&#8217;s a twist here: this galaxy may have stars, and if it does, they must be deleted first. To that end, the stars (if any) that are children of the galaxy must be read from the database. To do that, we use the following query:</p>
+<pre><code class="swift">if let wrappedGalaxy = try await GalaxyModel.query(on: req.db).with(\.$stars)
+	.filter(\.$id == UUID(uuidString: galaxyIdContext.galaxyId)!).first() {
+	... // delete stars and the galaxy
+} else {
+	throw GalaxyControllerError.missingGalaxy
+}</code></pre>
+
+<p>To delete the stars and galaxy, the return, use:</p>
+<pre><code class="swift">for star in wrappedGalaxy.stars {
+	//  Delete all the stars first or the galaxy delete will fail
+	try await star.delete(on: req.db)
+}
+
+// The stars have all supernova-ed; now the galaxy can go
+try await wrappedGalaxy.delete(on: req.db)
+return req.redirect(to: &quot;/galaxy/index&quot;)</code></pre>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h3 id="aid470fd552-7859-4aec-ae5c-89d4573a2d92postaddrequestusingaforma"><a id="470fd552-7859-4aec-ae5c-89d4573a2d92"><em>POST Add</em> request using a <em>form</em></a></h3>
+
+<p>Adding a new galaxy starts with the <em>Add - add a new galaxy</em> link on the home page, and it brings you to an empty galaxy form like this (although I filled in the fields for demonstration purposes):</p>
+
+<figure>
+<img src="Resources/Images/add-a-new-galaxy-page.png" alt="Add A New Galaxy" />
+<figcaption>Add A New Galaxy</figcaption>
+</figure>
+
+<p>When you click the <em>save</em> button, the contents of the form are sent to the <em>save</em> function in GalaxyController. The request looks like this:</p>
+<pre><code class="script">POST /galaxy/save HTTP/1.1
+Host: localhost:8080
+Origin: http://localhost:8080
+Content-Type: application/x-www-form-urlencoded
+...
+Accept-Language: en-US,en;q=0.9
+galaxyId=&amp;name=Small+Magellanic+Cloud+%28NGC+292%29&amp;magnitude=2.7&amp;distance=200&amp;constellation=Tucana&amp;submit=</code></pre>
+
+<p>Notice the line at the bottom: that&#8217;s the POST data in the <em>body</em> of the request, and Vapor decodes it into <em>req.content</em>, then we extract it using decode into a context thusly:</p>
+<pre><code class="swift">galaxyContext = try req.content.decode(GalaxyContext.self)</code></pre>
+
+<p>The <em>save</em> function creates a new record from the <em>galaxyContent</em>, then saves it into the database. After the new galaxy is saved, <em>result.content</em> will contain the UUID assigned to the new record in a JSON structure if we need it.</p>
+
+<figure>
+<img src="Resources/Images/list-all-galaxies-after-add-page.png" alt="Add A New Galaxy After Add" />
+<figcaption>Add A New Galaxy After Add</figcaption>
+</figure>
+
+<p>We can extract it directly into a String using:</p>
+<pre><code class="swift">newGalaxyUuid = try res.content.decode(String.self)</code></pre>
+
+<p>Don&#8217;t forget that you must declare <em>let newGalaxyUuid: String</em> outside of the do-catch, or it will produce a compiler warning and otherwise be lost (because of its scope). We&#8217;ll use the newGalaxyUuid in testing (named smallMagenicCloudUuid there).</p>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h2 id="aid582e1de9-bd73-446d-93a3-61a231b0f180addastarpagea"><a id="582e1de9-bd73-446d-93a3-61a231b0f180">Add a Star Page</a></h2>
+
+<figure>
+<img src="Resources/Images/add-a-new-star-page.png" alt="Add A Star Page" />
+<figcaption>Add A Star Page</figcaption>
+</figure>
+
+<p>The <em>Add a New Star</em> page works esentially the same as the <em>Add a New GalaxtY</em> page. (See <a href="#470fd552-7859-4aec-ae5c-89d4573a2d92"><em>POST Add</em> request using a <em>form</em></a>).</p>
+
+<figure>
+<img src="Resources/Images/list-all-stars-small-magellanic-cloud-page.png" alt="List All Stars After Add" />
+<figcaption>List All Stars After Add</figcaption>
+</figure>
+
+<p>Look for the <em>Nebula N81</em> in the Stars list.</p>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h2 id="aidc507e1d9-7ddf-41ab-bb64-fc22f3ee11a6listallstarspagea"><a id="c507e1d9-7ddf-41ab-bb64-fc22f3ee11a6">List All Stars Page</a></h2>
+
+<figure>
+<img src="Resources/Images/list-all-stars-milky-way-page.png" alt="List All Stars Page" />
+<figcaption>List All Stars Page</figcaption>
+</figure>
+
+<p>StarController follows the same basic pattern as GalaxyController, so there&#8217;s no reason to go through it in the same detail. Most of the controllers you&#8217;ll write for your app will resemble these, but with the variations that are needed for your specific tasks.</p>
+
+<p>Here are the differences between <em>GalaxyController</em> and <em>StarController</em>:</p>
+
+<ul>
+<li>One error message is different.</li>
+<li>The routes collection has only one <em>show</em> (a button).</li>
+<li>The <em>index</em>, <em>show</em>, <em>add</em>, <em>save</em>, and <em>delete</em> endpoints in the StarController require a StarIdContext, and the <em>update</em> endpoint expects a StarContext. Both contexts require a <em>galaxy_id</em>, a <em>galaxyName</em>, and a <em>starId</em>. In the case of <em>add</em> and <em>save</em>, the <em>starId</em> is an empty string because it&#8217;s unused in these two functions.</li>
+<li>The <em>index</em> function uses a different query from the one in GalaxyController because here the galaxy and all of its stars are going to be retrieved all in one operation. More on that is below.</li>
+</ul>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h3 id="aid1c107f53-534b-4836-b1e4-129c1f0c9c36howtoqueryagalaxyanditsstarsa"><a id="1c107f53-534b-4836-b1e4-129c1f0c9c36">How to Query a Galaxy and it&#8217;s Stars</a></h3>
+
+<p>The galaxy lookup in <em>GalaxyController&#8217;s showGalaxy</em> function to look up a single galaxy is a simple <em>find</em> query:</p>
+<pre><code class="swift">GalaxyModel.find(galaxyId, on: req.db)</code></pre>
+
+<p>The galaxy lookup in <em>StarController&#8217;s index</em> uses a long-form galaxy query:</p>
+<pre><code class="swift">GalaxyModel.query(on: req.db).filter(\.$id == galaxyId).first()</code></pre>
+
+<p>Those two queries do the same thing, but the <em>find</em> function is a nice shortcut. Each of them finds the galaxy whose primary key is <em>galaxyId</em>.</p>
+
+<p>To add the stars, a <em>with(&nbsp;)</em> is added. Yes, it&#8217;s that simple.</p>
+<pre><code class="swift">GalaxyModel.query(on: req.db).with(\.$stars).filter(\.$id == galaxyId).first()</code></pre>
+
+<p>Notice that the <em>first(&nbsp;)</em> function is used: it&#8217;s because only one galaxy is being looked up; the stars just come along for the ride. When we unwrap the galaxy into <em>galaxy</em>, <em>galaxy.stars</em> will have an array of <em>StarModels</em> that we can use to create a StarsContext.</p>
+<pre><code class="swift">let starsContext = StarsContext(many: galaxy.stars, parent: galaxy)</code></pre>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h2 id="aid1adfc405-a0e6-4d37-a7fd-62e24e9dd641showonestara"><a id="1adfc405-a0e6-4d37-a7fd-62e24e9dd641">Show One Star</a></h2>
+
+<p>When the <em>show</em> button is clicked on the <em>List All Stars</em> page, the <em>Show a Star</em> page displays.</p>
+
+<figure>
+<img src="Resources/Images/show-a-star-page.png" alt="Show A Star" />
+<figcaption>Show A Star</figcaption>
+</figure>
+
+<p>Notice that the <em>Galaxy ID</em> (the galaxy&#8217;s UUID) and the <em>Star ID</em> (the star&#8217;s UUID) are displayed here. These would never be displayed in a production app, but since this is a demonstration app, they&#8217;re displayed here so you can see what they look like.</p>
+
+<p>The <em>Update</em> and <em>Delete</em> stars buttons work like the corresponding galaxy buttons.</p>
+
+<p>If the galaxy has no stars yet, this page displays:</p>
+
+<figure>
+<img src="Resources/Images/list-all-stars-empty-page.png" alt="Galaxy With No Stars" />
+<figcaption>Galaxy With No Stars</figcaption>
+</figure>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h2 id="aid32db6b7a-ffd0-4de7-95f3-a824a739aef2testinga"><a id="32db6b7a-ffd0-4de7-95f3-a824a739aef2">Testing</a></h2>
+
+<h3 id="aid36973807-3365-43c1-8809-9eab1d4bbfdcafewwordsabouttestinga"><a id="36973807-3365-43c1-8809-9eab1d4bbfdc">A Few Words About Testing</a></h3>
+
+<p>Many developers recommend writing a test before writing the function being tested. When developing web apps with Swift+Vapor+Fluent+SwiftHtml, I find that writing the function first, then writing the test works out better because when the outputs are complex, I&#8217;m not <em>exactly</em> sure of what the result is going to look like until <em>after</em> the function is &#8220;working.&#8221;</p>
+
+<p>This, for me, is a question of following the path of least resistance because clients usually ask for changes during at least a few of the early write-review-revise cycles anyway. If I want to test and see if I got the right page, I just examine the title returned from the test. After I see what&#8217;s coming back from the endpoint, that&#8217;s easier to do.</p>
+
+<p>Following this path means tests exist to validate that the code still works after later fixes and modifications, as opposed to testing to see if the code performs as it was anticipated before writing the code. Too often developers make an insignificant change to fix something, test it manually, then commit the change without realizing that some other part of the code was affected and failed after the new version goes live. This is <em>exactly</em> the situation all managers fear. The costs of managing the disastrous release far exceed the costs of writing good tests.</p>
+
+<p>The tests here are incomplete because <em>Galaxy Revisited</em> is a demonstration app and the tests included with it are designed to teach principles of writing tests so you can write them for your app.</p>
+
+<p>The existing literature on writing Server Side Swift tests is inadequate, especially where testing of links and buttons is concerned, and <em>Galaxy Revisited</em> hopes to provide new solutions for that.</p>
+
+<blockquote>
+<p><strong>Note</strong></p>
+
+<p>When calling the <em>test(.GET, url, &#8230;)</em> function, it will do you the favor of adding a &#8220;/&#8221; at the beginning of the URL if yours doesn&#8217;t have one. The upshot is that if you have a bad link, i.e., one missing a &#8220;/&#8221; at the beginning, your tests will work fine, but your app will fail. It&#8217;s my opinion that testing software should not magically fix your errors during tests in such a way as to make a test pass when the app will fail. You&#8217;re welcome to your own opinion on this.</p>
+</blockquote>
+
+<p>The approach I&#8217;m taking here is, given a known endpoint (<em>/galaxy/index</em>, for example), to attempt to retrieve the page first. If the page retrieval fails, stop the tests for this endpoint (page); otherwise, test links and buttons to see if they retrieve the pages they&#8217;re linked to. Only one link of any given type gets tested, so if I retrieve a page with seven galaxies, only the first will be tested.</p>
+
+<p>I could have written tests to see if the database is working, but that would be redundant because the endpoint tests use the database, and therefore, test it, too. Also, I didn&#8217;t try to retrieve the records written by <em>add</em> or <em>save</em> directly from the database for the same reason.</p>
+
+<p><em>Galaxy Revisited</em> doesn&#8217;t have a bunch of testable helper methods, but I could have written tests for those if there were any.</p>
+
+<h3 id="aidf4935ac8-21a6-4d23-ada2-2cdf507b6986testinglinksandbuttonsonapagea"><a id="f4935ac8-21a6-4d23-ada2-2cdf507b6986">Testing Links and Buttons on a Page</a></h3>
+
+<p>Once the page HTML is retrieved, the big problem is extracting the target link or button. To help with this, <em>ControllerTests</em> extends <em>String</em> with some helper functions:</p>
+
+<ul>
+<li><p>cleanHtml: this function is used to remove redundant whitespace and newlines.</p></li>
+<li><p>findRegex: this function searches for an embedded string and returns it; if none is found, it returns <em>nil</em>. If the string being searched for doesn&#8217;t exist, or the wrong number of parameters is present, it adds an error message to the test results.</p></li>
+<li><p>findLink: this searches for an embedded <em>&lt;a name=&#8220;&#8230;&#8221;&gt;&#8230;&lt;/a&gt;</em> and returns the entire link.</p></li>
+<li><p>findHref: this searches for an embedded <em>href=&#8220;&#8230;&#8221;</em> and returns the contents of href.</p></li>
+<li><p>findForm: this searches for an embedded <em>&lt;form name=&#8220;&#8230;&#8221;&gt;&#8230;&lt;/form&gt;</em> and returns the entire form.</p></li>
+<li><p>findHidden: this searches for an embedded <em>&lt;input name=&#8220;&#8230;&#8221;/&gt;</em> and returns the entire input.</p></li>
+<li><p>findValue: this searches for an embedded <em>value=&#8220;&#8230;&#8221;</em> and returns the contents of value.</p></li>
+<li><p>findButton: this searches for an embedded <em>&lt;button name=&#8220;&#8230;&#8221;&gt;&#8230;&lt;/button&gt;</em> and returns the entire button.</p></li>
+<li><p>findFormaction: this searches for an embedded <em>formaction=&#8220;&#8230;&#8221;</em> and returns the contents of formaction.</p></li>
+</ul>
+
+<p>You can use these in your tests, too, Test them and discover how they work. You&#8217;ll find them very useful.</p>
+
+<p><em>ControllerTests</em> also has three functions that retrieve the pages, test the links, and test the buttons. Here are some examples, but look at the code to get a better idea of how they&#8217;re used.</p>
+
+<ul>
+<li>retrievePageHtml: given a URL, this retrieves and returns the page HTML or nil. If a page is retrieved, it validates the page by looking for the validationString within the page. <em>Galaxy Revisited</em> uses the page&#8217;s title.</li>
+</ul>
+<pre><code class="swift">let galaxyIndexPageHtml =
+try retrievePageHtml(
+    app: app,
+    url: &quot;/galaxy/index&quot;,
+    validationString: &quot;&lt;title&gt;List All Galaxies&lt;/title&gt;&quot;
+)</code></pre>
+
+<ul>
+<li>testLink: given the page HTML and a link name, extract the link and pass the URL to retrievePageHtml. If the URL isn&#8217;t valid, or the page doesn&#8217;t validate, errors will be recorded in the log file.</li>
+</ul>
+<pre><code class="swift">try testLink(
+    app,
+    html: galaxyIndexPageHtml,
+    name: &quot;show-1-link&quot;,
+    validationString: &quot;&lt;title&gt;Show A Galaxy&lt;/title&gt;&quot;
+)</code></pre>
+
+<ul>
+<li>testButton: this works the same as <em>testLink</em>, except that it looks for a button.</li>
+</ul>
+<pre><code class="swift">try testButton(
+    app,
+    html: galaxyIndexPageHtml,
+    formName: &quot;show-3-form&quot;,
+    submitName: &quot;show-3-submit&quot;,
+    hiddenInputs: [&quot;galaxyId&quot;],
+    validationString: &quot;&lt;title&gt;Show A Galaxy&lt;/title&gt;&quot;,
+    GalaxyIdContext()
+)</code></pre>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h2 id="aid3706d5ae-5b59-4465-b9c0-ab729a518055universallyuniqueidentifiersuuidsa"><a id="3706d5ae-5b59-4465-b9c0-ab729a518055">Universally Unique Identifiers (UUIDs)</a></h2>
+
+<p>UUIDs in Fluent are used by a record in one table to link to a record in another table. Depending on how these links are used, different relationships can be created. In a database, these UUIDs <strong>must never</strong> be changed or relationships will be broken. In <em>Galaxy Revisited</em>, when the database is re-created, either manually or during a test, all the tables are discarded, re-created, and re-loaded. All the relationships are re-created correctly, but with new UUIDs, meaning that you can&#8217;t depend on them to be the same as they were previously. You would never re-create UUIDs in a real application.</p>
+
+<p>Also, UUIDs are never displayed to users, except maybe for diagnostic purposes. Instead, you display the name of the data the UUID represents, i.e., you wouldn&#8217;t display the UUID (like 4ac343ac&#8211;7226&#8211;491e-a998&#8211;6fe3f11b7b3d) of a galaxy record, but the name of the galaxy (Milky Way).</p>
+
+<p>In <em>Galaxy Revisited</em>, the <em>show</em> pages display the UUID for diagnostic purposes because this is a demonstration application, not a production application.</p>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h2 id="aid0537ec6b-30bf-4d3d-a84b-6492e321461bdatatransferobjectsdtosa"><a id="0537ec6b-30bf-4d3d-a84b-6492e321461b">Data Transfer Objects (DTOs)</a></h2>
+
+<p>A Closer Look At <strong>Data Transfer Objects</strong></p>
+
+<p>A <em>Data Transfer Object</em> is, in its simplest form, just a struct with little if any functionality of its own. Say, for example, that you have a model, <strong>GalaxyModel</strong>, and you use it to read a <strong>Galaxy</strong> record from the database, and now you want to call another function with that <strong>Galaxy</strong> record. The <strong>Galaxy</strong> can be copied to another struct, say <strong>GalaxyContext</strong>, which can then be used to call the next function. We use the terminology Data Transfer Object to refer to that simple struct.</p>
+
+<p>&#8220;Wait a minute,&#8221; you say, &#8220;I can just pass the model because the <strong>GalaxyModel</strong> struct is the same as the proposed <strong>GalaxyContext</strong> struct.&#8221; The response to that is, &#8220;Yes, you could do that, but there are advantages to using the <strong>GalaxyContext</strong> to pass the <strong>Galaxy</strong> to the other function.&#8221;</p>
+
+<p>Here&#8217;s why we use DTOs:</p>
+
+<ul>
+<li><p>If we pass GalaxyModel to our other function, we may also be passing the capabilities that a GalaxyModel has: namely, reading and writing the database in this case. Passing that kind of capability to actors that don&#8217;t need it represents a security risk. By copying the Galaxy from the GalaxyModel to the GalaxyContext, we create a structure that doesn&#8217;t carry additional unnecessary functionality to the next function. Since GalaxyContext will be immutable, it&#8217;s also safe from accidental modification or modification by hacking.</p></li>
+<li><p>If we&#8217;re passing a lot of data out of the current scope, the data in a DTO can be compressed for transmission. This was, in fact, the original idea behind DTOs. Other people recognized the advantages DTOs have for other applications later. </p></li>
+<li><p>Additional context not in the Galaxy record can be added, such as the time it was retrieved and other related data. </p></li>
+<li><p>The DTO can contain limited functionality to convert data formats if needed, and the compression functions can also be part of the DTO. A simple example of this is, a UUID? found in the Galaxy record can be converted to a pure String when setting, or from a String to a UUID when getting. </p></li>
+<li><p>When we share a DTO instead of a model with a template in the <em>Galaxy Revisited</em> project, we don&#8217;t accidentally expose data like passwords or other sensitive information. </p></li>
+<li><p>Lastly, in <em>Vapor</em>, contexts are used to encode and decode data between pages. The benefit of this is that the compiler can validate them.</p></li>
+</ul>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h2 id="aid45bf0627-8fc0-4291-8f78-0e8a6dc5b15erungalaxyrevisitedonanamazonlinux2servera"><a id="45bf0627-8fc0-4291-8f78-0e8a6dc5b15e">Run Galaxy Revisited on an Amazon Linux 2 Server</a></h2>
+
+<p>This guide is for the reader who has never used Amazon Web Services (AWS) before and just wants to get started learning Server Side Swift. It goes through the process of setting up a web server with only an administrator (who has root privileges) and <em>no</em> users.</p>
+
+<p>The next step, setting up users and assigning them privileges using <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html">IAM</a> is left as an exercise for the reader.</p>
+
+<p>Keep in mind that the server&#8217;s root user will have <code>sudo</code> privileges, including <code>sudo -i</code> which signs on as root. As such, while this account may be used for learning Server Side Swift, if you want to put your work into production on this server, you&#8217;ll need to use <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html">IAM</a> to create user accounts that don&#8217;t have root privileges.</p>
+
+<p>So, let&#8217;s get started.</p>
+
+<h3 id="aid51fd8a5e-8260-4f98-8f16-ee5eae59b647startatthelightsailpagea"><a id="51fd8a5e-8260-4f98-8f16-ee5eae59b647">Start at the Lightsail page</a></h3>
+
+<ul>
+<li><p>Go to the <a href="https://lightsail.aws.amazon.com/">Lightsail sign-in page</a>.<br/>
+<img src="Resources/Images/aws/lightsail-login.png" alt="" /></p></li>
+<li><p>Click <code>Create a new AWS account</code> and follow the instructions to create your AWS account. This will be your <em>permanent</em> AWS account login that you&#8217;ll use for all AWS services, so keep the email address and password in a safe place.</p></li>
+</ul>
+
+<p>Once you have an AWS account:</p>
+
+<ul>
+<li>Enter your AWS root user mail address (the one you used to create your AWS account above) and sign in.</li>
+<li>If you are asked to do so, complete the &#8220;Security Check&#8221; (Captcha).</li>
+<li>This will take you to your &#8220;Home&#8221; page.</li>
+</ul>
+
+<figure>
+<img src="Resources/Images/aws/home-page-1.png" alt="" />
+</figure>
+
+<h4 id="aid5f61da11-cc42-4918-b52d-a190506d6899atthehomepageclickthecreateinstancebutton.a"><a id="5f61da11-cc42-4918-b52d-a190506d6899">At the <code>Home</code> page, click the <code>Create Instance</code> button.</a></h4>
+
+<figure>
+<img src="Resources/Images/aws/create-an-instance.png" alt="" />
+</figure>
+
+<ul>
+<li>At &#8220;Instance location,&#8221; choose the server you want to have your instance on.</li>
+<li>At &#8220;Select a platform,&#8221; choose <code>Linux/Unix</code>.</li>
+<li>At &#8220;Select a blueprint,&#8221; choose <code>OS Only</code>.</li>
+<li>After the page refreshes, choose <code>Amazon Linux 2</code>.</li>
+</ul>
+
+<h4 id="aid25500332-0d24-406d-b566-e5c4bfe9bb21creatingkeysa"><a id="25500332-0d24-406d-b566-e5c4bfe9bb21">Creating Keys</a></h4>
+
+<ul>
+<li>Scroll down to &#8220;SSH key pair manager,&#8221; click <code>Change SSH key pair</code>, and the &#8220;SSH key pair manager&#8221; will open up.</li>
+</ul>
+
+<figure>
+<img src="Resources/Images/aws/create-optional.png" alt="" />
+</figure>
+
+<blockquote>
+<p>A little note here:<br/>
+ The &#8220;Default key&#8221; will only work for the Amazon browser-based console. This console is the one you&#8217;ll use for emergencies if any. For logging in from a Linux or macOS &#8220;terminal&#8221; window, and for setting up an &#8220;sshfs&#8221; folder later, you&#8217;ll need to create another key pair for remote access. Also, create only one (1) key here.</p>
+</blockquote>
+
+<p>Note also that the client (you) retains the <code>private</code> key, and the server (AWS) retains only the <code>public</code> key. That&#8217;s why, after generation, the private key can only be downloaded once, and why AWS doesn&#8217;t remember it. It&#8217;s a security precaution that guarantees only you have the private key.</p>
+
+<ul>
+<li>Click the <code>Create new +</code> link.</li>
+</ul>
+
+<figure>
+<img src="Resources/Images/aws/select-a-region.png" alt="" />
+</figure>
+
+<ul>
+<li>Click the <code>Create</code> button to dismiss the dialog window.</li>
+</ul>
+
+<figure>
+<img src="Resources/Images/aws/create-ssh-pair.png" alt="" />
+</figure>
+
+<p>Choose a unique name for the new key: I recommend using one that relates to the name you&#8217;ll choose for the AWS instance: for example, &#8220;chicago-office-west&#8221; for &#8220;ChicagoOfficeWest&#8221; we&#8217;ll use below. You&#8217;ll be prompted to download the secret part of the key, and you only get ONE (1) chance. It&#8217;ll go to your Downloads folder, and we&#8217;ll move it later. It&#8217;ll be named &lt;your-key-pair-name&gt;.pem (~/Downloads/chicago-office-west.pem in this example).</p>
+
+<blockquote>
+<p>Be careful not to lose this key! You can only create one (1) root login for an instance. To create user logins later, refer to the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html">IAM User&#8217;s Guide</a>.</p>
+</blockquote>
+
+<figure>
+<img src="Resources/Images/aws/key-pair-created.png" alt="" />
+</figure>
+
+<p>After your key is downloaded (to your Downloads folder), you&#8217;ll go back to the &#8220;SSH key pair manager&#8221; page.</p>
+
+<figure>
+<img src="Resources/Images/aws/create-key-created.png" alt="" />
+</figure>
+
+<p>You&#8217;ll see your newly created key here. The &#8220;chicago-office-west&#8221; in the list refers both to the <em>public</em> key that AWS keeps, and the <em>private</em> key that you keep.</p>
+
+<figure>
+<img src="Resources/Images/aws/finder-downloads.png" alt="" />
+</figure>
+
+<p>That <em>private</em> key is here in your Downloads folder. Don&#8217;t worry about it being there. We&#8217;ll move it soon.</p>
+
+<h4 id="aidb8668941-f36e-437f-ab18-e97b04dc2a5cchoosingaplana"><a id="b8668941-f36e-437f-ab18-e97b04dc2a5c">Choosing a Plan</a></h4>
+
+<figure>
+<img src="Resources/Images/aws/choose-instance-plan.png" alt="" />
+</figure>
+
+<ul>
+<li>Under &#8220;Choose your instance plan,&#8221; select whichever one you prefer. If you want to just create one for the duration of studying this book, I recommend the $10 plan (this is the smallest plan that will work with GalaxyRevisited). If you plan to keep the instance after studying this book, pick a plan that&#8217;s right for your needs.</li>
+<li>Under &#8220;Identify your instance,&#8221; create a name that describes the site you&#8217;re creating: for example, &#8220;ChicagoOfficeWest,&#8221; or &#8220;JohnHancocksBlog.&#8221; If you plan on having more than one AWS server in the future, be sure you select a name carefully: you can only have one instance per unique name.</li>
+<li>Leave the &#8220;x&#8221; as 1, and ignore the tagging options.</li>
+<li>Click the <code>Create instance</code> button.</li>
+</ul>
+
+<h4 id="aid9b964e3b-8df9-494f-96ac-71ce90b249edyourinstanceisupandrunninga"><a id="9b964e3b-8df9-494f-96ac-71ce90b249ed">Your Instance Is Up And Running</a></h4>
+
+<figure>
+<img src="Resources/Images/aws/home-after-create.png" alt="" />
+</figure>
+
+<p>Your server creation is complete and your server is up and running.</p>
+
+<p>This is the &#8220;Home&#8221; page the way it will appear whenever you log into your AWS server.</p>
+
+<h4 id="aidb48ec3e7-fa28-4619-b771-1a63a4310afdcreatingastaticipaddressa"><a id="b48ec3e7-fa28-4619-b771-1a63a4310afd">Creating a Static IP Address</a></h4>
+
+<p>The next thing we need to do is create a static IP address for the instance. Otherwise, there could be problems if the dynamic IP were to change once in a while.</p>
+
+<ul>
+<li>Select the &#8220;Networking&#8221; tab to do this.</li>
+</ul>
+
+<figure>
+<img src="Resources/Images/aws/home-networking.png" alt="" />
+</figure>
+
+<ul>
+<li>Click the <code>Create static IP</code> button.</li>
+</ul>
+
+<figure>
+<img src="Resources/Images/aws/create-static-ip.png" alt="" />
+</figure>
+
+<p>At &#8220;Static IP location,&#8221; you&#8217;ll usually see the location where your server is running. Normally, you won&#8217;t change this.</p>
+
+<ul>
+<li>At &#8220;Attach to an instance,&#8221; pick yours (ChicagoOfficeWest in this tutorial).</li>
+<li>Under &#8220;Identify your static IP,&#8221; enter a more meaningful name for it (chicago-office-west-ip to match the server name in this example).</li>
+<li>Click the <code>Create</code> button to create the static IP.</li>
+</ul>
+
+<figure>
+<img src="Resources/Images/aws/static-ip-created.png" alt="" />
+</figure>
+
+<h4 id="aidfa96c869-b543-4e18-8cc9-d647868b86f2examiningthenewinstancea"><a id="fa96c869-b543-4e18-8cc9-d647868b86f2">Examining The New Instance</a></h4>
+
+<ul>
+<li>Click the <code>Home</code> button to go back to your home page.</li>
+</ul>
+
+<figure>
+<img src="Resources/Images/aws/home-before-keys.png" alt="" />
+</figure>
+
+<ul>
+<li>Click the name of your instance (ChicagoOfficeWest in this example), or &#8230;</li>
+</ul>
+
+<figure>
+<img src="Resources/Images/aws/home-select-manage.png" alt="" />
+</figure>
+
+<p>&#8230; click the <code>More</code> menu (three vertical dots at the top-right of the instance), and select <code>Manage</code>.</p>
+
+<figure>
+<img src="Resources/Images/aws/manage-page-view.png" alt="" />
+</figure>
+
+<p>Here you see your instance and the IP addresses associated with it. The &#8220;Connect using SSH&#8221; button brings up Amazon&#8217;s in-browser terminal window. This terminal is good for many things, but generally inadequate for developers (you can&#8217;t copy text from the window, for example). This is the browser you&#8217;ll use if something goes drastically wrong, and you need to get back into your instance to fix things.</p>
+
+<p>Don&#8217;t worry about the section labeled &#8220;Use your SSH client.&#8221; I&#8217;ll show you how to do that soon.</p>
+
+<blockquote>
+<p>Wait! What&#8217;s that other &#8220;Private IP&#8221; address in the upper right-hand corner? That&#8217;s an address you can use to communicate between multiple instances at AWS ( if you have more than one, and they need to communicate).</p>
+</blockquote>
+
+<figure>
+<img src="Resources/Images/aws/logged-in-to-instance.png" alt="AWS browser-based terminal" />
+<figcaption>AWS browser-based terminal</figcaption>
+</figure>
+
+<h4 id="aid51728c3d-b4f8-4d6a-959d-ce7bacc582ebsettinguptheclientyourcomputersterminalandsshfsa"><a id="51728c3d-b4f8-4d6a-959d-ce7bacc582eb">Setting up the client (your computer&#8217;s terminal and sshfs)</a></h4>
+
+<p>First, you have to move the private key you created to a safe place, usually ~/.ssh, then change its protections, and lastly, you can log in. Let&#8217;s look at how this is done.</p>
+
+<p>In the examples below, replace &#8220;chicago-office-west.pem&#8221; with your secret key&#8217;s name, and replace 44.224.174.213 with your instance&#8217;s public IP address.</p>
+
+<ul>
+<li>Open a terminal window.</li>
+<li>Move the secret key using <code>mv ~/Downloads/chicago-office-west.pem ~/.ssh</code>.</li>
+<li>Change the protections with <code>chmod 400 ~/.ssh/chicago-office-west.pem</code> or SSH won&#8217;t connect (a security feature),</li>
+<li>Start SSH with <code>ssh -i ~/.ssh/chicago-office-west.pem ec2-user@44.224.174.213</code>. The <code>-i</code> option tells SSH what key to use. AWS won&#8217;t use the default key (&#8220;id_rsa.pub&#8221;). That&#8217;s why we needed to create a key pair. Answer &#8220;yes&#8221; to the fingerprint question.</li>
+<li>To get out of the server, use <code>exit</code>.</li>
+</ul>
+
+<p>I know, it&#8217;s all starting to fall into place now. Who would have guessed all this?</p>
+
+<figure>
+<img src="Resources/Images/aws/logged-into-ec2-instance.png" alt="" />
+</figure>
+
+<p>And we&#8217;re in! Just to see if it&#8217;s working, we&#8217;ll create a test file.</p>
+
+<figure>
+<img src="Resources/Images/aws/create-a-test-file.png" alt="" />
+</figure>
+
+<ul>
+<li>Just copy the commands you see above to create and check the test file.</li>
+</ul>
+
+<figure>
+<img src="Resources/Images/aws/mount-using-ssh-and-test.png" alt="" />
+</figure>
+
+<p>And if you have <code>sshfs</code> installed (how to do this is beyond the scope of this document), you can use the commands above. (If you have macOS, just use <em>Cyberduck</em>.)<br/>
+<img src="Resources/Images/aws/cyberduck.png" alt="" /></p>
+
+<blockquote>
+<p>IMPORTANT NOTE \<br/>
+Your &#8220;root&#8221; user login is not recommended for production use. For setting up working logins, you should use <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html">IAM</a>. Setting up IAM is beyond the scope of this guide.</p>
+</blockquote>
+
+<h3 id="aid8bc06efc-2f30-425b-a65a-43ed44cb4addmysql8databaseservera"><a id="8bc06efc-2f30-425b-a65a-43ed44cb4add">MySQL 8 Database Server</a></h3>
+
+<p>To install MySQL, there&#8217;s <a href="https://techviewleo.com/how-to-install-mysql-8-on-amazon-linux-2/">a good article on TechView</a>.</p>
+
+<p>I&#8217;m going to summarize what we need from that article below.</p>
+
+<h4 id="aid8d84d5a7-4f39-406d-a102-fe49d12a73bdstartbycheckingthereleaseofyourec-2instancea"><a id="8d84d5a7-4f39-406d-a102-fe49d12a73bd">Start by checking the release of your EC&#8211;2 instance</a></h4>
+
+<p>You can check the release of your server by running the following command in the terminal. Amazon Linux is a derivative of CentOS 7 Linux server with a few extra repositories and packages for improved performance and integrations with other AWS cloud services. You can check the release of your server by running the following command in the terminal.</p>
+<pre><code class="script">$ cat /etc/os-release
+NAME=&quot;Amazon Linux&quot;
+VERSION=&quot;2&quot;
+ID=&quot;amzn&quot;
+ID_LIKE=&quot;centos rhel fedora&quot;
+VERSION_ID=&quot;2&quot;
+PRETTY_NAME=&quot;Amazon Linux 2&quot;
+ANSI_COLOR=&quot;0;33&quot;
+CPE_NAME=&quot;cpe:2.3:o:amazon:amazon_linux:2&quot;
+HOME_URL=&quot;https://amazonlinux.com/&quot;</code></pre>
+
+<h4 id="aidb7d5f596-df05-44d2-9e0a-65712e00c965installtherepositorya"><a id="b7d5f596-df05-44d2-9e0a-65712e00c965">Install the repository</a></h4>
+
+<p>Add <em>MySQL yum repository</em> to Amazon Linux 2.</p>
+<pre><code class="script">$ sudo yum install https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm</code></pre>
+
+<p>You can also view a list of configured repositories with the yum command.</p>
+<pre><code class="script">$ sudo yum repolist
+repo id                                   repo name                              status
+amzn2-core/2/x86_64                       Amazon Linux 2 core repository         27418
+amzn2extra-docker/2/x86_64                Amazon Extras repo for docker          56
+mysql-connectors-community/x86_64         MySQL Connectors Community             181+49
+mysql-tools-community/x86_64              MySQL Tools Community                  138
+mysql80-community/x86_64                  MySQL 8.0 Community Server             321
+repolist: 28114</code></pre>
+
+<p>The installation should display <em>Complete!</em> if all goes as planned.</p>
+
+<p>A new repository file should have been created inside the /etc/yum.repos.d directory</p>
+<pre><code class="script">$ ls /etc/yum.repos.d
+amzn2-core.repo  amzn2-extras.repo  mysql-community.repo  mysql-community-source.repo</code></pre>
+
+<h4 id="aidceaac5ea-c0a3-4e57-aaa8-3bd2bec6867finstallthemysqlpackageandstarttheservera"><a id="ceaac5ea-c0a3-4e57-aaa8-3bd2bec6867f">Install the MySQL package and start the server</a></h4>
+
+<p>Once the repository has been added, install MySQL 8 server packages on Amazon Linux 2.</p>
+<pre><code class="script">sudo amazon-linux-extras install epel -y
+sudo yum -y install mysql-community-server</code></pre>
+
+<p>This install should also display <em>Complete!</em> if all goes as planned. The next step is to start MySQL server services.</p>
+<pre><code class="script">sudo systemctl enable --now mysqld</code></pre>
+
+<p>Confirm that MySQL server service is started and running.</p>
+<pre><code class="script">$ systemctl status mysqld
+● mysqld.service - MySQL Server
+   Loaded: loaded (/usr/lib/systemd/system/mysqld.service; enabled; vendor preset: disabled)
+   Active: active (running) since Thu 2022-10-27 04:48:11 UTC; 15h ago
+     Docs: man:mysqld(8)
+           http://dev.mysql.com/doc/refman/en/using-systemd.html
+ Main PID: 4677 (mysqld)
+   Status: &quot;Server is operational&quot;
+   CGroup: /system.slice/mysqld.service
+           └─4677 /usr/sbin/mysqld
+
+Oct 27 04:48:04 ip-172-26-0-5.us-west-2.compute.internal systemd[1]: Starting MySQL Server...
+Oct 27 04:48:11 ip-172-26-0-5.us-west-2.compute.internal systemd[1]: Started MySQL Server.</code></pre>
+
+<h4 id="aid02eab657-2444-42c5-9ff8-82e54f662a86changethenewrootpasswordandaddauserpasswordforgalaxyrevisiteda"><a id="02eab657-2444-42c5-9ff8-82e54f662a86">Change the new root password and add a user password for Galaxy Revisited</a></h4>
+
+<p>A superuser account <em>&#8216;root’@’localhost&#8217;</em> is created with an initial password set and stored in the error log file. To reveal it, use the following command:</p>
+<pre><code class="script">$ sudo grep &apos;temporary password&apos; /var/log/mysqld.log
+2020-08-12T17:25:34.992227Z 6 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: BEw-U?DV,7eO</code></pre>
+
+<p>Use this initial password to harden the server.</p>
+<pre><code class="script">$ sudo mysql_secure_installation -p
+Enter password: &lt;INPUT-PRINTED-PASSWORD&gt; # BEw-U?DV,7eO in this example</code></pre>
+
+<p>Set a new, strong password for MySQL root: let&#8217;s use 3gU537vhnX00.</p>
+<pre><code class="script">The existing password for the user account root has expired. Please set a new password.
+New password: 3gU537vhnX00
+Re-enter new password: 3gU537vhnX00</code></pre>
+
+<p>Continue to answer the questions according to your use case and preferences.</p>
+<pre><code class="script">Remove anonymous users? (Press y|Y for Yes, any other key for No) : y
+Disallow root login remotely? (Press y|Y for Yes, any other key for No) : y
+Remove test database and access to it? (Press y|Y for Yes, any other key for No) : y
+Reload privilege tables now? (Press y|Y for Yes, any other key for No) : y</code></pre>
+
+<p>The database for Galaxy Revisited is more easily created now since we&#8217;re already here. Create a user named <em>coco</em> and use a password <em>Milky&#8211;1-Way</em>. This will match the values in <em>Sources/App/configure.swift</em>.</p>
+
+<p>outside of the app itself, since we&#8217;re already executing commands in the database.</p>
+<pre><code class="script">create user coco identified by &apos;Milky-1-Way&apos;;
+grant all privileges on galaxies.* to coco;
+create database galaxies;</code></pre>
+<pre><code class="script">$ mysql -uroot -p mysql
+Enter password: 3gU537vhnX00
+...
+Server version: 8.0.31 MySQL Community Server - GPL
+...
+mysql&gt; create user coco identified by &apos;Milky-1-Way&apos;;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql&gt; grant all privileges on galaxies.* to coco;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql&gt; create database galaxies;
+Query OK, 1 row affected (0.01 sec)
+
+mysql&gt; quit
+Bye
+$</code></pre>
+
+<h3 id="aid15a71478-a6e2-404c-9f88-1796360f6785installingswifta"><a id="15a71478-a6e2-404c-9f88-1796360f6785">Installing Swift</a></h3>
+
+<h4 id="aida43c71aa-1b5c-44b9-bfe1-998260572227downloadingswifta"><a id="a43c71aa-1b5c-44b9-bfe1-998260572227">Downloading Swift</a></h4>
+
+<p>Open the download releases webpage in your browser from <a href="https://swift.org/download/#releases">here</a>. Under <code>Platform</code>, right-click the <code>Amazon Linux 2</code> link and choose <code>Copy Link</code>. Download the compressed release file onto your server using curl or wget (wget is used in the example).</p>
+<pre><code class="shell"># wget &lt;the link from the download releases page&gt;
+
+# example:
+wget https://download.swift.org/swift-5.7-release/amazonlinux2/swift-5.7-RELEASE/swift-5.7-RELEASE-amazonlinux2.tar.gz</code></pre>
+
+<p>For instructions on how to use <code>wget</code> to check the <em>signature</em> of the downloaded file, refer back to the Swift download page.</p>
+
+<p>When the download is complete, you&#8217;ll get a message something like <code>2022-01-30 19:27:14 (5.46 MB/s) - ‘swift-5.7-RELEASE-amazonlinux2.tar.gz’ saved [579258668/579258668]</code>.</p>
+
+<p>You&#8217;ll need to know the <strong>tar-filename</strong> (<code>swift-5.7-RELEASE-amazonlinux2.tar.gz</code> in this example) in the next step. You can also just use <code>ls</code> to get the filename.</p>
+
+<h4 id="aid56bf8150-65e2-4d41-832a-f015d735923efinishingtheinstalla"><a id="56bf8150-65e2-4d41-832a-f015d735923e">Finishing the Install</a></h4>
+
+<p>You can now extract the downloaded archive using the <strong>tar</strong> command. This also can take a little time:</p>
+<pre><code class="shell"># untar the downloaded archive using:
+# tar xzf &lt;tar-filename&gt;
+
+# example:
+tar -xzf swift-5.7-RELEASE-amazonlinux2.tar.gz</code></pre>
+
+<p>This creates an <strong>extracted-folder</strong> <code>&lt;VERSION&gt;&lt;PLATFORM&gt;</code> in the same place as your archive (<code>swift-5.7-RELEASE-amazonlinux2</code> in this example).</p>
+
+<p>The last step is to export the location of the binary. The <strong>full pathname</strong> followed by <strong>/usr/bin</strong> is needed here. We need to put this into the Bash Profile so it&#8217;ll load the next time you log in:</p>
+<pre><code class="shell">## add the PATH command to the Bash Profile
+# echo &apos;export PATH=&quot;&lt;extracted-folder-full-pathname&gt;/usr/bin:${PATH}&quot;&apos; &gt;&gt; ~/.bash_profile
+## reload the Bash Profile
+# source .bash_profile
+
+# example:
+echo &apos;export PATH=&quot;$HOME/swift-5.7-RELEASE-amazonlinux2/usr/bin:${PATH}&quot;&apos; &gt;&gt; ~/.bash_profile
+source .bash_profile</code></pre>
+
+<h4 id="aid4e5e5b2a-bce6-46cd-96bc-dfae42761300verifyingswiftversiona"><a id="4e5e5b2a-bce6-46cd-96bc-dfae42761300">Verifying Swift version</a></h4>
+
+<p>Now you should be able to use Swift on either Mac or Linux. You can verify the installation by entering the following into the command line:</p>
+<pre><code class="shell">swift --version
+
+# displays:
+# swift-driver version: 1.26.21 Apple Swift version 5.7 (swiftlang-1300.0.47.5 clang-1300.0.29.30)
+# Target: arm64-apple-macosx12.0</code></pre>
+
+<p>And you can optionally remove the tar archive (you&#8217;ll probably never need it again, but it can always be re-downloaded if needed):</p>
+<pre><code class="shell"># rm &lt;tar-filename&gt;
+
+# example:
+rm swift-5.7-RELEASE-amazonlinux2.tar.gz</code></pre>
+
+<h3 id="aid5c86b8d2-6bb8-4ca3-a126-28b7d017e411installingswiftpackagemanagera"><a id="5c86b8d2-6bb8-4ca3-a126-28b7d017e411">Installing Swift Package Manager</a></h3>
+
+<p>That was pretty easy, and now I&#8217;d like to show you one more tool since it&#8217;s a cross-platform solution to manage Swift versions on your operating system.</p>
+
+<h4 id="aidef70d3d4-3e4a-4297-8e6e-fe6c883ef85binstallingdependanciesa"><a id="ef70d3d4-3e4a-4297-8e6e-fe6c883ef85b">Installing Dependancies</a></h4>
+
+<p>Before installing Swift Package Manager (SPM), we must install the required dependencies.</p>
+<pre><code class="shell"># e.g. Swift dependencies on Amazon Linux 2 (install as root using sudo).
+# For other distributions, refer back to the Swift download page.
+
+sudo amazon-linux-extras install epel
+sudo yum install \
+   binutils \
+   gcc \
+   git \
+   glibc-static \
+   gzip \
+   libbsd \
+   libcurl \
+   libedit \
+   libicu \
+   libstdc++-static \
+   libuuid \
+   libxml2 \
+   zlib-devel \
+   tar \
+   tzdata</code></pre>
+
+<p>Swift Version Manager (also called swiftenv) allows you to easily install and switch between multiple versions of Swift. It can be <a href="https://swiftenv.fuller.li/en/latest/installation.html">installed</a> on both platforms, you just have to clone it:</p>
+<pre><code class="shell">git clone https://github.com/kylef/swiftenv.git ~/.swiftenv</code></pre>
+
+<p>The next step is to configure the environment.</p>
+
+<p>If you&#8217;re using Linux, the default shell is probably Bash, as it is with Amazon Linux 2. You can enter the following commands to set up the environment for swiftenv:</p>
+<pre><code class="shell">echo &apos;export SWIFTENV_ROOT=&quot;$HOME/.swiftenv&quot;&apos; &gt;&gt; ~/.bash_profile
+echo &apos;export PATH=&quot;$SWIFTENV_ROOT/bin:$PATH&quot;&apos; &gt;&gt; ~/.bash_profile
+echo &apos;eval &quot;$(swiftenv init -)&quot;&apos; &gt;&gt; ~/.bash_profile
+source .bash_profile</code></pre>
+
+<p>Now you can list all the available Swift language versions:</p>
+<pre><code class="shell">swiftenv install --list</code></pre>
+
+<p>Run this command to install a specific Swift version:</p>
+<pre><code class="shell"># swiftenv install &lt;version&gt;
+
+# Example:
+swiftenv install 5.7</code></pre>
+
+<h3 id="aid5d492dd9-54b0-48ea-9005-6df5cbdda58bcloninggalaxyrevisitedfromgithuba"><a id="5d492dd9-54b0-48ea-9005-6df5cbdda58b">Cloning Galaxy Revisited from GitHub</a></h3>
+
+<p>To get the <em>Galaxy Revisited</em> project, just clone it from GitHub as follows:</p>
+<pre><code class="script">$ git clone https://github.com/mjwelchphd/GalaxyRevisited.git
+Cloning into &apos;GalaxyRevisited&apos;...
+remote: Enumerating objects: 182, done.
+...
+Resolving deltas: 100% (47/47), done.
+$</code></pre>
+
+<p>Next, <em>cd</em> into the <em>Galaxy Revisited</em> project and build it:</p>
+<pre><code class="script">$ cd GalaxyRevisited
+$ ls
+docker-compose.yml  Dockerfile  LICENSE  Package.resolved  Package.swift  Public  README.md  Resources  Sources  Tests
+$ swift build
+Fetching https://github.com/vapor/async-kit.git from cache
+Fetched https://github.com/vapor/async-kit.git (0.48s)
+...
+Creating working copy for https://github.com/vapor/fluent-mysql-driver
+Working copy of https://github.com/vapor/fluent-mysql-driver resolved at 4.1.0
+Building for debugging...
+[2323/2323] Linking Run
+Build complete! (343.14s)
+$</code></pre>
+
+<h4 id="aid7f8f8ca4-2ebd-4a11-ab18-6e8a89ccd0f0buildingandrunninga"><a id="7f8f8ca4-2ebd-4a11-ab18-6e8a89ccd0f0">Building and Running</a></h4>
+
+<p>You can build and run it using the Linux command line:</p>
+<pre><code class="shell">$ swift run &amp;</code></pre>
+
+<p>The terminal shows this:</p>
+<pre><code class="script">[1] 6534
+Building for debugging...
+Build complete! (0.35s)
+[ NOTICE ] Server starting on http://127.0.0.1:8080</code></pre>
+
+<p>The line &#8220;[1] 6534&#8221; says that the app is running as background job 1, and the PID is 6534.</p>
+
+<p>A &lt;return&gt; will show the $ prompt again.</p>
+
+<p>The run command builds the package first, then executes the Galaxy Revisited project <em>in the background</em> (that&#8217;s what the ampersand at the end of the command means). It&#8217;ll take some time to build everything the first time you build, but after the first time, only sources that change will need to be rebuilt, and builds will go fast.</p>
+
+<p>Alternatively, you can build the app first, then run it from the build folder by hand:</p>
+<pre><code class="shell">$ swift build</code></pre>
+
+<p>The terminal shows this:</p>
+<pre><code class="script">Building for debugging...
+Build complete! (0.35s)
+$</code></pre>
+
+<p>And to run:</p>
+<pre><code class="script">$ swift run &amp;</code></pre>
+
+<p>To test if your application is working, use curl in the foreground:</p>
+<pre><code class="script">$ curl localhost:8080</code></pre>
+
+<p>You&#8217;ll see a bunch of HTML starting with <em>&lt;!DOCTYPE html&gt;</em></p>
+
+<p>To stop the server, bring it to the foreground, then use &lt;ctrl-C&gt;.</p>
+<pre><code class="script">$ fg %1
+swift run GalaxyRevisited &lt;-- Server response
+^C
+$ jobs
+$</code></pre>
+
+<p>Notice that the <code>jobs</code> command produces no response because we stopped the server (which validates that we <em>did</em> stop the server).</p>
+
+<blockquote>
+<p>Note<br/>
+If you try to repeat the build first without stopping an app that&#8217;s running on port 8080, you&#8217;ll get a lengthy error with <span style="color: red;">&#8230; Address already in use (errno: 98) &#8230;</span> in it.</p>
+</blockquote>
+
+<h4 id="aid040b70f9-1910-43ec-b622-5cf79890c84faccessingfromabrowsera"><a id="040b70f9-1910-43ec-b622-5cf79890c84f">Accessing From A Browser</a></h4>
+
+<p>If you have Galaxy Revisited running on a local Linux or macOS computer that has a browser, visit http://localhost:8080/ in your browser. You should see the Hello Vapor! message.</p>
+
+<p>If the build completed, try running the app. It should look like this:</p>
+<pre><code class="script">[ INFO ] [Migrator] Starting prepare [database-id: mysql, migration: App.CreateGalaxy]
+[ INFO ] [Migrator] Finished prepare [database-id: mysql, migration: App.CreateGalaxy]
+[ INFO ] [Migrator] Starting prepare [database-id: mysql, migration: App.CreateStar]
+[ INFO ] [Migrator] Finished prepare [database-id: mysql, migration: App.CreateStar]
+[ NOTICE ] Server starting on http://127.0.0.1:8080</code></pre>
+
+<p>To stop it, use &lt;ctrl&gt;C.</p>
+
+<h4 id="aida3e7dac7-6273-4c78-948a-320a95f48a66updatinggalaxyrevisitedonawsafterinitialinstallationa"><a id="a3e7dac7-6273-4c78-948a-320a95f48a66">Updating Galaxy Revisited on AWS After Initial Installation</a></h4>
+
+<p>You can check for updates as follows. If there are updates, they will be installed into the project.</p>
+<pre><code class="script">$ git pull
+remote: Enumerating objects: 21, done.
+remote: Counting objects: 100% (21/21), done.
+remote: Compressing objects: 100% (5/5), done.
+remote: Total 11 (delta 5), reused 11 (delta 5), pack-reused 0
+Unpacking objects: 100% (11/11), 2.89 KiB | 269.00 KiB/s, done.
+From https://github.com/mjwelchphd/GalaxyRevisited
+   0493f1c..7cfb57a  main       -&gt; origin/main
+Updating 0493f1c..7cfb57a
+Fast-forward
+ Public/README.html                                        | 90 +++...---
+ README.md                                                 | 97 +++...---
+ Sources/App/Modules/Star/Controllers/StarController.swift |  1 +
+ 3 files changed, 154 insertions(+), 34 deletions(-)
+$</code></pre>
+
+<p>If there are no updates, you just get a message:</p>
+<pre><code class="script">Already up to date.
+$</code></pre>
+
+<p>You can check updates you&#8217;ve made with this:</p>
+<pre><code class="script">$ git status</code></pre>
+
+<p>If there are no updates, you&#8217;ll get:</p>
+<pre><code class="script">On branch main
+Your branch is up to date with &apos;origin/main&apos;.
+
+nothing to commit, working tree clean
+$</code></pre>
+
+<p>Otherwise, the updates will be listed:</p>
+<pre><code class="script">On branch main
+Your branch is up to date with &apos;origin/main&apos;.
+
+Changes not staged for commit:
+  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+  (use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)
+      modified:   Sources/App/Modules/Star/Controllers/StarController.swift
+
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)
+$</code></pre>
+
+<p>If you modify something which has a modification at the origin, you&#8217;ll be asked to merge the updates together when you execute a <em>git pull</em>. It&#8217;s beyond the scope of this document to explain how that is done.</p>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h3 id="aid084799b1-400d-4b79-bf89-a2d5ced10c3finstallingnginxa"><a id="084799b1-400d-4b79-bf89-a2d5ced10c3f">Installing Nginx</a></h3>
+
+<blockquote>
+<p>NGINX (pronounced &#8220;engine-X&#8221;) is open-source software for web serving, reverse proxying, caching, load balancing, media streaming, and more. It started as a web server designed for maximum performance and stability. In addition to its HTTP server capabilities, NGINX can also function as a proxy server for email (IMAP, POP3, and SMTP) and a reverse proxy and load balancer for HTTP, TCP, and UDP servers. &#8212; <a href="https://www.nginx.com/resources/glossary/nginx/">https://www.nginx.com/resources/glossary/nginx/</a></p>
+</blockquote>
+
+<p>Vapor will serve pages on port 8080, but you can&#8217;t see port 8080 from outside your machine environment. To see what your pages look like in a browser, you need a <em>reverse proxy web server</em>. Nginx is the fastest web server available and is used on over 400 million web servers in the world. We&#8217;ll use it to see our private port 8080 at the public port 80. Nginx also provides other valuable services, but the full capability of Nginx is beyond the scope of this document.</p>
+
+<p>So, let&#8217;s install Nginx!</p>
+
+<p>First, we&#8217;re going to enable <strong>Extra Packages for Enterprise Linux</strong> (EPEL), a set of additional packages for <a href="https://www.redhat.com/en/blog/whats-epel-and-how-do-i-use-it/">RedHat-based Linux</a> (like Amazon Linux 2). Use the commands below, and answer <strong>Y</strong> when prompted.</p>
+<pre><code class="script">sudo amazon-linux-extras enable epel
+sudo yum install epel-release</code></pre>
+
+<p>You should see the &#8220;Complete!&#8221; message at the end. Now we&#8217;re ready to install <code>Nginx</code> itself. We&#8217;re going to install it from the AWS repository, so we won&#8217;t get the latest version; the tradeoff is that it&#8217;ll be easier for now, and it&#8217;s perfectly adequate for our needs. Use the commands below and answer <strong>Y</strong> when prompted (you&#8217;ll be asked twice).</p>
+<pre><code class="script">sudo yum install nginx</code></pre>
+
+<p>To test your install, see the version, and start the actual Nginx server, use</p>
+<pre><code class="script">nginx -v
+sudo systemctl restart nginx.service</code></pre>
+
+<p>Look at your server with your browser (and remember to use HTTP, not HTTPS) by entering <code>http://&lt;your-aws-address&gt;/</code> and you should see the Nginx startup page.</p>
+
+<p>Next, we want to configure Nginx to forward our Vapor server to the open Internet. The configuration file we&#8217;re going to create is in <code>/etc</code>, so I suggest creating it with</p>
+<pre><code class="script">sudo nano /etc/nginx/conf.d/proxy.conf</code></pre>
+
+<p>and entering the text below:</p>
+<pre><code class="script">server {
+    listen 80;
+    location / {
+        proxy_pass http://localhost:8080/;
+    }
+}</code></pre>
+
+<p>Save the file with &lt;ctrl&gt;O and &lt;return&gt;, and &lt;ctrl&gt;X to get out.</p>
+
+<p>Now we can restart Nginx with</p>
+<pre><code class="script">sudo systemctl restart nginx</code></pre>
+
+<p>Now, start Galaxy Revisited again.</p>
+<pre><code class="script">swift run</code></pre>
+
+<p>You should see:</p>
+<pre><code class="script">[0/0] Build complete!
+[ NOTICE ] Server starting on http://127.0.0.1:8080</code></pre>
+
+<blockquote>
+<p>Note: Our Vapor project still runs on port 8080, and Nginx passes port 8080 both ways to and from port 80. This isolates Vapor from the client at one more level, and it means Vapor doesn&#8217;t have to implement TLS: that&#8217;s done by Nginx (but we didn&#8217;t set it up here).</p>
+</blockquote>
+
+<p>Now enter <code>http://&lt;your-aws-address&gt;/</code> into your browser, and you should get: <img src="Resources/Images/aws/welcome-page.png/" alt="" /></p>
+
+<p>If you&#8217;re using Xcode and the project&#8217;s on your local machine, enter <code>http://&lt;your-aws-address&gt;/</code> in your browser and you should see the &#8220;Hi there, welcome to my page!&#8221; shown above.</p>
+
+<p>Now enter <code>http://&lt;your-aws-address&gt;/hello</code> in your browser and see what you get. (You should get &#8220;Hello, World!&#8221;)</p>
+
+<p>Now your EC2 instance is a full-fledged Internet web server, and with Nginx, it&#8217;ll be much easier to test it to see if everything is as you expect it to be.</p>
+
+<blockquote>
+<p><strong>Warning</strong>: You&#8217;ll probably see your app reporting requests when you&#8217;re running your <code>myProject</code>, but didn&#8217;t do anything with your browser. There&#8217;re thousands of hackers trying to find websites to break into from countries all around the globe. They&#8217;re active 24/7 and they <strong>will</strong> find your <code>myProject</code> running and try to break into it (if you leave it running for a while). That&#8217;s what you&#8217;ll see. For now, there&#8217;s nothing for them here, so ignore them. In future chapters, you&#8217;ll learn how to protect your Swift website against hackers.</p>
+</blockquote>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h3 id="aid150500ab-3243-4a27-9526-61b157769741runninggalaxyrevisitedasadaemona"><a id="150500ab-3243-4a27-9526-61b157769741">Running Galaxy Revisited As A Daemon</a></h3>
+
+<p>To run the server continuously, you need to run it as a <em>daemon</em>, a task monitored by the system. If Galaxy Revisited stops for any reason, it&#8217;ll be automatically re-spawned.</p>
+
+<p>To do this, first, you need a <em>service</em> file. Create (or edit) it like this:</p>
+<pre><code class="script">sudo nano /lib/systemd/system/galaxy.service</code></pre>
+
+<p>And put this in it:</p>
+<pre><code class="script">[Unit]
+Description=Galaxy server daemon
+
+[Service]
+User=ec2-user
+Group=ec2-user
+WorkingDirectory=/home/ec2-user/GalaxyRevisited
+ExecStart=/home/ec2-user/GalaxyRevisited/.build/debug/Run
+Restart=always
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+
+<p>Change its permissions, reload the daemons (including this one), and enable it like this:</p>
+<pre><code class="script">chmod +x /lib/systemd/system/galaxy.service
+systemctl daemon-reload
+systemctl enable galaxy.service</code></pre>
+
+<p>Now you can start or stop Galaxy Revisited as a daemon like this:</p>
+<pre><code class="script">sudo systemctl start galaxy
+sudo systemctl stop galaxy
+systemctl -l status galaxy</code></pre>
+
+<blockquote>
+<p>Remember then Nginx is controlled separately, and both must be running to test. Normally, Nginx is always running, and if you don&#8217;t do anything to it, it will just run. But you can either run Galaxy Revisited using the <em>swift run</em> command when you&#8217;re working on it, or as a daemon when you just want to leave it running.</p>
+</blockquote>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h2 id="aid0ae85d5c-30aa-43a5-9dbf-c831af08de64authenticationa"><a id="0ae85d5c-30aa-43a5-9dbf-c831af08de64">Authentication</a></h2>
+
+<h3 id="aid50cf0b2c-4ab5-496b-a8f2-c7d25db1a4b0somenotesregardingauthenticationandsessionsa"><a id="50cf0b2c-4ab5-496b-a8f2-c7d25db1a4b0">Some Notes Regarding Authentication and Sessions</a></h3>
+
+<ul>
+<li>To do authentication, Galaxy Revisited has the following components:
+
+<ul>
+<li>a user controller that follows the pattern established in the Galaxy and Star modules, but with a few hard coded rules for <em>root</em> (User module);</li>
+<li>a sign-in template for entering the user name and pasword (SignInTemplate), and sign-in context (SignInContext);</li>
+<li>an authentication controller with sign-in and sign-out endpoints (UserAuthenticationController);</li>
+<li>a user credentials authenticator (UserCredentialsAuthenticator);</li>
+<li>a user session authenticator (UserSessionAuthenticator);</li>
+<li>an authenticated user context that represents the user login in <em>req.auth</em> (AuthenticatedUser); and</li>
+<li>a middleware that&#8217;s used in the User module&#8217;s routes to require a user with <em>administrator</em> privileges (EnsureAdminUserMiddleware).</li>
+</ul></li>
+</ul>
+
+<blockquote>
+<p><strong>Remember&#8230;</strong><br/>
+The authentication code here is <em>bare bones</em>. It demonstrates how to make authentication work, but lacks the sophistication of a production application.</p>
+</blockquote>
+
+<p>First, a few things about Vapor:</p>
+
+<ul>
+<li>the place where the user log-in is stored is <em>req.auth</em>;
+
+<ul>
+<li><em>req.auth</em> is nil when no user is logged in;</li>
+<li><em>req.auth</em> has an Optional(AuthenticatedUser) when a user is logged in;</li>
+</ul></li>
+<li>the place where session data is stored (if any) is <em>req.session.data</em>;
+
+<ul>
+<li>req.session has the session record; and</li>
+<li>req.session.data has any data put there since the start of the user session (i.e., last log-in);</li>
+</ul></li>
+<li>the name of the database table that holds the sessions is <em>_fluent_sessions</em>;
+
+<ul>
+<li>the table in MySQL:<br/>
+<img src="Resources/Images/fluent-sessions-table.png" alt="Fluent Sessions Table" /></li>
+<li>an <em>id</em>, a UUID used by Vapor to identify the individual session record;</li>
+<li>a <em>key</em>, a random token that the browser saves in its cookie, and that Vapor uses to look up the session belonging to the browser; and,</li>
+<li><em>data</em>, a JSON encoded string to hold key/value pairs. When a user is logged in, one of the key/value pairs in the <em>data</em> field is <em>AuthenticatedUserSession</em> and that has the user&#8217;s <em>UUID</em> as its value (in Vapor code, it&#8217;s called sessionID).</li>
+</ul></li>
+</ul>
+
+<p>The User module works like the Galaxy or Star controllers, so there&#8217;s no need to go over the programming. GalaxyRevisited enters two users for testing, <em>root</em> and <em>admin</em>. They&#8217;re both set as administrators.</p>
+
+<p>The Home (Welcome) page has the <em>Sign In</em> and <em>Sign Out</em> links on it. In addition, when an authorized user is logged in, the <em>List All Users</em> link will be displayed.<br/>
+<table><tr>
+<td><b>No One Logged In</b></td>
+<td><b>Logging In</b></td>
+<td><b>Admin Logged In</b></td>
+</tr><tr>
+<td><authentication><img src="Resources/Images/noone-logged-in.png"/></authentication></td>
+<td><authentication><img src="Resources/Images/logging-in.png"/></authentication></td>
+<td><authentication><img src="Resources/Images/logged-in-with-admin.png"/></authentication></td>
+</tr></table></p>
+
+<h4 id="aid64fadbde-1e14-4034-a7dd-7049c0b14a15thesigninflowgoeslikethis:a"><a id="64fadbde-1e14-4034-a7dd-7049c0b14a15">The <em>Sign In</em> flow goes like this:</a></h4>
+
+<ul>
+<li>You click the <em>Sign In</em> link and the log-in page opens.</li>
+<li>You enter your username and password and click the <em>Log In</em> button.</li>
+<li>That takes you to the <em>UserAuthenticationController.signInAction</em> endpoint.</li>
+<li>That endpoint performs a <em>logout</em> to be sure no other user is logged in.</li>
+<li>Next, the UserCredentialsAuthenticator().authenticate is called to validate the credentials.
+
+<ul>
+<li>The authenticator looks up the user and validates the password against the passwordHash.</li>
+<li>If it fails, the (now empty) <em>req.auth</em> is left empty, and the authenticator returns</li>
+<li>if it passes, an AuthenticatedUser is created, you&#8217;re logged in (and the AuthenticatedUser is put into req.auth).</li>
+</ul></li>
+<li>The endpoint tests <em>req.auth</em> to see if you were authenticated.</li>
+<li>if you were authenticated, you are returned to the Home (Welcome) page.</li>
+<li>If you were <em>not</em> authenticated, an error is returned and you&#8217;re redirected back to the log-in page.</li>
+</ul>
+
+<h4 id="aid02a29c9a-ad7a-4569-9ff3-b703781332bfwhenyouarelogged-inandreturntoanotherendpoint:a"><a id="02a29c9a-ad7a-4569-9ff3-b703781332bf">When you are logged-in and return to another endpoint:</a></h4>
+
+<ul>
+<li>When Vapor receives a request, <em>middleware</em> (UserSessionAuthenticator) looks at the <em>req.auth</em> to see if a user is logged in.</li>
+<li>If you&#8217;re logged in, the middleware looks your name up to validates that you&#8217;re still authorized.</li>
+<li>If you&#8217;re still in the database, you&#8217;re logged in (and the AuthenticatedUser is put into req.auth).</li>
+<li>This step only validates the session and your logged-in status.</li>
+</ul>
+
+<h4 id="aidde81c311-b390-4a5c-a5de-c366798c023awhentheendpointyouwanttoaccesshasauthorizationmiddleware:a"><a id="de81c311-b390-4a5c-a5de-c366798c023a">When the endpoint you want to access has authorization middleware:</a></h4>
+
+<ul>
+<li>When Vapor calls the endpoint router.</li>
+<li>The router calls its middleware (which is <em>EnsureAdminUserMiddleware</em> for <em>User</em>).</li>
+<li>The middleware (in this example) looks up the user to obtain the <em>administrator</em> flag.</li>
+<li>If the flag is &#8220;Y&#8221;, the router activates the endpoint.</li>
+<li><p>If the flag is <em>not</em> &#8220;Y&#8221;, the request is denied access to the endpoint. </p>
+
+<blockquote>
+<p><strong>Note</strong><br/>
+You can put any authorization rules you want for the endpoint group in the middleware. The <em>administrator</em> flag is in Galaxy Revisited only to demonstrate the methodology. The most common method for authorization is to create a <em>roles</em> table which specifies what level of access each role has, and each user would, in turn, be assigned to a specific role. Implementing such a scheme is trivial and beyond the scope of this document.</p>
+</blockquote></li>
+</ul>
+
+<h4 id="aid7fade7c6-8903-4221-925e-9d8c091b75d2miscellaneousnotesa"><a id="7fade7c6-8903-4221-925e-9d8c091b75d2">Miscellaneous Notes</a></h4>
+
+<ul>
+<li><p>User authentication for a website requires a way to remember that you&#8217;re logged on, and for that, Vapor provides <em>sessions</em>. <em>Sessions</em> are used to provide continuity from one page to another. <a href="#50cf0b2c-4ab5-496b-a8f2-c7d25db1a4b0">(The session file is described above)</a>.</p></li>
+<li>When a request is received, Vapor:
+
+<ul>
+<li>gets the cookie token from the browser (if any) and uses it to find the associated session record using the <em>key</em> field from the table <strong>_fluent_sessions</strong>; if no session record matches, a new session record is created;</li>
+<li>the data field in the session record contains a JSON string. Initially, the JSON string is empty (<em>{}</em>);</li>
+<li>When a user is logged into the session, an <em>_AuthenticatedUserSession</em> key is added to the <em>data</em> field with a value User.id of the user associated with that session;</li>
+<li>a <em>middleware</em> (UserSessionAuthenticator) is called and it looks up the user in the UserModel using the <em>sessionID</em> (the user.id)
+
+<ul>
+<li>if the user is found, a <em>AuthenticatedUser</em> is created and logged-in (the AuthenticatedUser object is put into the req.auth).</li>
+<li>if the user isn&#8217;t found, no action is taken (leaving <em>no</em> user logged in).</li>
+</ul></li>
+</ul></li>
+<li><p>A session in Vapor can remember string pairs (key, value) in <em>req.session.data</em> for the duration of the session, but once the user logs off, the session is destroyed, and hence, the string pairs are lost. In other words, the session can remember the pairs <em>only for the duration</em> of the session. (The Vapor code for this is <em>req.session.data</em>.)</p></li>
+<li><p>There can only be one session with one user at a time from a given browser. So, for example, if you open the browser and log in, a session is created. If you then open another window or tab in the browser, it&#8217;ll already be logged in because it shares the same session. This, in part, is because the browser has only one cookie per URL, so there&#8217;s no facility for it to support multiple simultaneous logins from the same browser, but with different users. When one window or tab logs out, all windows and tabs are logged out, but the other windows and tabs don&#8217;t automatically refresh, so an action in another window or tab can result in an authorization failure. Note that this isn&#8217;t true using two browsers on different machines because they have independent cookie stores.</p>
+
+<blockquote>
+<p><strong>Beware</strong><br/>
+If you log in as different user when you have multiple windows or tabs already open, the new user will aquire ownership of <em>all</em> the windows and tabs. That means that the authorizations of the other windows and tabs also changes accordingly and can lead to unexpected authorization failures.</p>
+</blockquote></li>
+<li><p>In order to log in a different user, the current user must be logged off. In GalaxyRevisited, the sign-on function logs out any previously logged in user so that it&#8217;s not necessary to log out of the current user first. Remember, though, the previously logged-in users session (and any data saved in that session) will be lost. If you want to have stuff that survives the log-out process, create a separate <em>preferences</em> capability.</p></li>
+<li><p>Something that needs to be addressed is user <em>authorization</em> which differs from <em>authentication</em>. Authentication is the process of identifying the user as one of ours; authorization is the process of identifying the resources for which this <em>authenticated</em> user is authorized. In Galaxy Revisited I only created a very simple <em>administrator</em> vs. <em>user</em> system to demonstrate the methology of blocking links for which a given user has <em>no</em> access.</p></li>
+</ul>
+
+<p>The Vapor location <em>req.auth</em> holds a list of authentications. Galaxy Revisited has only one, <em>AuthenticatedUser</em>, but it&#8217;s possible to define different kinds such as <em>AuthenticatedUser</em>, <em>AuthenticatedAdministrator</em>, <em>AuthenticatedManager</em> and so forth. An alternate method is to create a <em>RolesModel</em> where a user can be assigned a role, and a role, in turn, lists the authorizations for that role. Since the decision as to which to use, eithier of these or some other is beyond the scope of this document, Galaxy Revisited only implements administrators and users.</p>
+
+<p>Notice that to get an <em>AuthenticatedUser</em> from <em>req.auth</em>, the call</p>
+<pre><code class="swift">let authenticatedUser = req.auth.get(AuthenticatedUser.self)</code></pre>
+
+<p>is used, but if we had more authorization contexts as suggested above, we could have had others also, and we&#8217;d make the selection in the same way.&#8217;</p>
+
+<p>.get_ function can get an <em>AuthenticatedUser</em>, but we could also have created an <em>AuthenticatedAdministrator</em> ir order to differentiate between user and administrators, but more importantly, the ability to deliver more information through <em>reg.auth.get(AuthenticatedAdministrator)</em> than <em>reg.auth.get(AuthenticatedUser)</em>.</p>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h3 id="aidc8bdd09e-b06c-40cc-992e-4681437eee4cusingjwtsforauthenticationa"><a id="c8bdd09e-b06c-40cc-992e-4681437eee4c">Using JWTs for Authentication</a></h3>
+
+<ul>
+<li><p>The process would work like this from a browser:</p>
+
+<ul>
+<li><p>The user logs on by sending his username and password. </p></li>
+<li><p>We look it up, and if it verifies, we generate <em>and sign</em> a JWT. We use our private key to sign the JWT, so the receiver <em>could</em> validate it against our published public key (but browsers don&#8217;t do that, at least not yet). </p></li>
+<li><p>The browser stores the JWT as a cookie and sends it with every request going forward. </p></li>
+<li><p>We receive a request from the user, including the JWT, and we verify the JWT. If we stored the user&#8217;s ID in the JWT as encrypted data, we can decrypt it and recover the user&#8217;s name, so we don&#8217;t have to look it up. </p></li>
+<li><p>What we don&#8217;t have is the session, so we&#8217;re forced to use the JWT just like an ordinary cookie to look up the session. If we previously stored the user information in the session, we didn&#8217;t need it in the JWT.</p></li>
+<li><p>Bottom line: we saved <em>nothing</em>. In this use case, there&#8217;s no advantage in using a JWT as essentially a random session token.</p></li>
+</ul></li>
+<li><p>On the other hand, an advantage of a cookie is that it can be revoked on the server side. A JWT, once issued, can&#8217;t be revoked. It&#8217;ll be valid until it expires, so it&#8217;s often given a short (5 minute to 20 minute) lifetime for security reasons, but that means it may have to be renewed frequently.</p></li>
+<li><p>The session values HttpOnly, Secure, and SameSite can be set in the HTTP header to increase security of the cookie. (In Vapor they default to their most permissive values. Although it&#8217;s configurable in Vapor, it&#8217;s difficult; however, since we&#8217;ll be using a proxy server, it&#8217;s probably true that the Vapor application is only accessible on the local machine, and doesn&#8217;t need to use those settings.)</p></li>
+<li><p>Sadly, neither cookies nor tokens (including JWT) can verify that you&#8217;re talking to the user you think you&#8217;re talking to. If a thief has access to the cookie, Bearer Token, or JWT, it&#8217;s game over. If the thief can steal the user&#8217;s private key, it&#8217;s game over! Happily, such scenarios are very unlikely, so for most applications, the usual cookie will work fine with the standard protections, and we can even add some of our own, if we want (but that&#8217;s beyond the scope of what we&#8217;re doing here).</p></li>
+<li><p>Bottom line: for single site access, cookies are as good as tokens, even if the token is a JWT; if you use HttpOnly, Secure, and SameSite headers in the proxy server, you can minimize to risk of theft of the cookie.</p>
+
+<blockquote>
+<p>Well, that&#8217;s the real trick, isn&#8217;t it? &#8212; Hans Solo</p>
+</blockquote></li>
+</ul>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<!--section-break-section-break-section-break-section-break-section-break-section-break-->
+
+<h3 id="aid1f7cee76-b24b-474b-b2b5-8d080f7b7f3banoteaboutconvenienceinitsa"><a id="1f7cee76-b24b-474b-b2b5-8d080f7b7f3b">A Note About Convenience Inits</a></h3>
+
+<p>There are two kinds of inits: a <em>designated</em> init and a <em>convenience</em> init. The difference between the two is:</p>
+
+<ul>
+<li>a designated init <em>instantiates a new object</em>, whereas</li>
+<li>a convenience init <em>calls a designated init to instantiate a new object</em>.</li>
+</ul>
+
+<p>Inside a designated init, the instance (self) has already been created and you can do whatever computing you want, but you must initialize all the instance&#8217;s variables.</p>
+
+<p>Inside a convenience init, the instance hasn&#8217;t yet been created: you must call a designated init before you can initialize the instance&#8217;s (self&#8217;s) variables. Before you call the designated init, the instance doesn&#8217;t yet exist, so you can&#8217;t reference it&#8217;s variables, but otherwise, you can do whatever computing you want. After you call the designated init, you can do whatever computing you want including modifing any of the instance&#8217;s variables (via self) (those of type <em>var</em>, of course because those of type <em>let</em> will be frozen).</p>
+
+<p>Many people ask, &#8220;then why do I need the keyword <em>convenience</em>? Can&#8217;t Swift figure it out?&#8221; The answer is that unless you use the keyword <em>convenience</em>, the init will default to a designated init, and Swift could probably figure out which kind of init it&#8217;s looking at, but the use of the keyword convenience makes your intent very clear. And the next question is: &#8220;can&#8217;t I just use a regular init?&#8221;, and the answer is: yes, probably, but convenience inits are DRYer and more easily understood because they are making a variation of a previously defined designated init.</p>
+
+<h2 id="aid334d5d93-c2c8-49ed-b09e-665580866f4daddingamenua"><a id="334d5d93-c2c8-49ed-b09e-665580866f4d">Adding a Menu</a></h2>
+
+<p>To add a menu, you only need a small amount of HTML and a bunch of CSS. The menu in Galaxy Revisited is documented in <a href="https://www.w3schools.com/howto/howto_css_dropdown_navbar.asp">W3Schools&#8217;s How TO - Dropdown Navbar</a> and consists of two parts: the HTML and the CSS.</p>
+
+<p>The HTML for Galaxy Revisited is in <em>Sources/App/Templates/MenuTemplate.swift</em>, and the CSS is in <em>Public/Resources/Css/Menu.css</em>. Note that the CSS for the menu is kept in a different file from the CSS for the README in order to avoid clashes between the two, and it just makes maintenance simpler.</p>
+
+<p>The first line of <em>MenuTemplate</em> is the link that brings in the CSS when the browser loads the page. The rest of the HTML is a variation of the W3Schools example.</p>
+
+<p>MenuTemplate conforms to <em>TemplateRepresentable</em> and can be added to any other page that is <em>TemplateRepresentable</em>. For example, in <em>UserAddTemplate</em>, it&#8217;s added directly below the &lt;body&gt; tag.</p>
+<pre><code class="swift">/// Template for the user add page.
+@TagBuilder
+func render(_ req: Request) -&gt; Tag {
+    Html {
+        Head { Title(&quot;Add A User&quot;) }
+        Body {
+            MenuTemplate().render(req)
+            H1(&quot;Add a New User&quot;)
+            ...
+        }
+    }
+}</code></pre>
+
+<p>Normally, the &lt;link &#8230;&gt; tag would be in the &lt;head&gt;&#8230;&lt;/head&gt; section at the top of the page, but it works fine in the body, too. Since the menu generates an @TagBuilder Tag, it just gets added to the host page&#8217;s Tags. The ability to do this makes it easy to break up HTML into reusable sections. We can simply add this menu to the top of every page.</p>
+
+<p>You could probably put the menu code inline so adding it to each page would not be necessary, but I&#8217;ve found in my experience that to do so is not always helpful. For example, you may want to create a report that can be printed, and you don&#8217;t want the menu on that page.</p>
+
+<p>The menu will display on the page wherever it appears in the HTML, so you can put a menu anywhere you want on a page. There&#8217;s a large selection of menu forms, so be sure to look through the W3Schools documentation.</p>
+
+<pre><code>/// Template for the user index page.  
+@TagBuilder  
+func render(_ req: Request) -&gt; Tag {
+</code></pre>
+
+<p>SwiftHtml is a dynamic HTML builder: the menu is created at runtime, so menu items can be determined at runtime. For example, some items may be available to everyone, others only to users who are logged in, and yet others only for administrators.</p>
+
+<blockquote>
+<p><strong>Note</strong> An endpoint that&#8217;s only available to administrators must be protected as <a id="de81c311-b390-4a5c-a5de-c366798c023a">demonstrated earlier using middleware</a>. Simply excluding the endpoint from a menu won&#8217;t stop a hacker from typing in the endpoint manually.</p>
+</blockquote>
+
+<p>The Galaxy Revisited menu demonstrates two simple forms, a menubar item with no dropdown, a some with dropdowns.</p>
+
+<p><a href="#contents">back to contents</a><hr/></p>
+<center>&#8212; Fin &#8212;</center>
+
+</body>
+</html>
