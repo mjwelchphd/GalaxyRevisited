@@ -14,7 +14,7 @@ let package = Package(
         .package(url: "https://github.com/vapor/fluent", from: "4.4.0"),
 //        .package(url: "https://github.com/vapor/fluent-sqlite-driver", from: "4.1.0"),
         .package(url: "https://github.com/vapor/fluent-mysql-driver.git", from: "4.0.0-beta"),
-        .package(url: "https://github.com/binarybirds/swift-html", from: "1.6.11")
+        .package(url: "https://github.com/binarybirds/swift-html", from: "1.7.0")
     ],
     targets: [
         .target(name: "App", dependencies: [

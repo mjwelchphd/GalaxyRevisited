@@ -22,21 +22,3 @@ extension SwiftHtml.A {
         attribute("name", value)
     }
 }
-
-extension SwiftHtml.Button {
-
-    /// Defines the HTTP method for sending data to the action URL (for type="submit" and type="image").
-    /// This is a bugfix for version 1.6.11 and before.
-    func formmethod(_ value: Method = .get) -> Self {
-        attribute("formmethod", value.rawValue)
-    }
-}
-
-extension SwiftHtml.Input {
-
-    /// Defines the HTTP method for sending data to the action URL (for type="submit" and type="image").
-    /// This is a bugfix for version 1.6.11 and before.
-    func formmethod(_ value: Method = .get) -> Self {
-        attribute("formmethod", value.rawValue)
-    }
-}

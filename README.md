@@ -393,6 +393,8 @@ func endPoint(_ req: Request) async throws -> Response {
 
 ## <a id="169212cd-5a8c-4188-a99d-a0fd34529d04">Writing HTML Using SwiftHtml</a>
 
+> Note that SwiftHtml requires version 1.7.0 or greater. That version is specified in the Package.swift file.
+
 GalaxyRevisited renders HTML docs using a brand new domain-specific library (DSL) called SwiftHtml and the Vapor web framework. The code is pretty straightforward, especially if you know a bit about HTML. The SwiftHtml library tries to follow the naming conventions as closely as possible, so if you've written HTML before this syntax should be very familiar, except that you don't have to write opening and closing tags: instead, we utilize the Swift compiler to do the boring repetitive tasks for us.
 
 Since we're using a DSL in Swift, the compiler can type-check everything at build-time: this way it's 100% sure that our HTML code won't have syntax issues. Of course, you can still make semantic mistakes, but that's also possible if you're not using a DSL.

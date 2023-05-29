@@ -149,8 +149,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/binarybirds/swift-html",
       "state" : {
-        "revision" : "e07678a77d296e66fa891a9d4d08acc4471d1783",
-        "version" : "1.6.11"
+        "revision" : "f4fa5bc83fbee8dbd301c6fbb3969437415adad0",
+        "version" : "1.7.0"
       }
     },
     {
